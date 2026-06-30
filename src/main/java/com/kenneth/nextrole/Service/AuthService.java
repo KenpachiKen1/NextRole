@@ -7,6 +7,7 @@ import com.kenneth.nextrole.dto.auth.AuthResponse;
 import com.kenneth.nextrole.dto.auth.LoginRequest;
 import com.kenneth.nextrole.dto.auth.RegisterUserRequest;
 import com.kenneth.nextrole.security.JwtService;
+import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +56,11 @@ public class AuthService {
     Register function
      */
 
+    /*
+    My create user function, no need for one in UserService
+     */
+
+    @Transactional
     public AuthResponse register (RegisterUserRequest request){
 
         //Checking if the email already exists
@@ -75,6 +81,7 @@ public class AuthService {
         // Now we generate the token using spring security UserDetails shape
         return getAuthResponse(user);
     }
+
 
     public AuthResponse login (LoginRequest request){
         authenticationManager.authenticate(

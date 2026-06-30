@@ -3,6 +3,13 @@ package com.kenneth.nextrole.Service;
 
 import com.kenneth.nextrole.Model.User;
 import com.kenneth.nextrole.Repository.UserRepository;
+import com.kenneth.nextrole.dto.user.UpdateUserRequest;
+import com.kenneth.nextrole.dto.user.UserResponse;
+import com.kenneth.nextrole.exception.EmailAlreadyExistsException;
+import com.kenneth.nextrole.exception.UsernameAlreadyExistsException;
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,22 +18,56 @@ import java.util.Optional;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
-    public UserService( UserRepository userRepository ){
+    public UserService( UserRepository userRepository){
         this.userRepository = userRepository;
     }
 
 
-    //When I start making my DTO's these will change most likely
-    public User createUser (User user){
-        return userRepository.save(user);
+    public UserResponse toResponse(User user){
+        return UserResponse.builder().id(user.getId()).
+                username(user.getUsername())
+                .email(user.getEmail())
+                .profilePhoto(user.getProfilePhoto())
+                .status(user.getCustomer().getSubscriptionStatus()).build();
     }
 
-    public User updateUser (User user){
-        return userRepository.save(user);
+    /*
+    Pass the email from the controller to here to authenticate.
+     */
+
+    public UserResponse getUserProfile(User user){
+        return toResponse(user);
     }
 
 
+    @Transactional
+    public UserResponse updateCurrentUser(UpdateUserRequest request, String email){
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new EntityNotFoundException("User not found")); //global Exception handler auto calls it
+
+        if (request.getUsername() != null) {
+            if (userRepository.existsByUsernameIgnoreCase(request.getUsername())
+                    && !user.getUsername().equalsIgnoreCase(request.getUsername())) {
+                throw new UsernameAlreadyExistsException("Username already in use");
+            }
+            user.setUsername(request.getUsername());
+        }
+
+        if (request.getEmail() != null) {
+            if (userRepository.existsByEmail(request.getEmail())
+                    && !user.getEmail().equalsIgnoreCase(request.getEmail())) {
+                throw new EmailAlreadyExistsException("Email already in use!");
+            }
+            user.setEmail(request.getEmail());
+        }
+
+        if (request.getProfilePhoto() != null) {
+            user.setProfilePhoto(request.getProfilePhoto());
+        }
+
+        user = userRepository.save(user);
+        return toResponse(user);
+    }
     public List<User> getAllUsers(){
         return userRepository.findAll();
     }
@@ -40,11 +81,14 @@ public class UserService {
     }
 
 
-    public void deleteAccount(Long userId, String rawPassword){
-        User user = userRepository.findById(userId).orElseThrow();
+    public void deleteAccount(String email){
 
-        //set this up once i have password hashing set up.
+        User user = userRepository.findByEmail(email).
+                orElseThrow(() -> new EntityNotFoundException("User not found"));
 
+        userRepository.delete(user);
+
+        SecurityContextHolder.clearContext();
     }
     public boolean existsByUsernameIgnoreCase(String username){
         return userRepository.existsByUsernameIgnoreCase(username);

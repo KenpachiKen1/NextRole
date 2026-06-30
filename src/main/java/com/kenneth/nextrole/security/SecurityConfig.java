@@ -24,6 +24,10 @@ public class SecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
     }
 
+
+    /*
+    Essentially telling springboot which end points require authentication and which don't
+     */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

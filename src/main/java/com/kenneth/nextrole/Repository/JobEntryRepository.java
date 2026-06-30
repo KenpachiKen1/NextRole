@@ -11,10 +11,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JobEntryRepository extends JpaRepository<JobEntry, Long> {
 
-    List<JobEntry> findByUserId(Long userId); //list the applications for a given user.
+    Optional<JobEntry> findByIdAndUser_Id(Long entryId, Long userId);
 
-    void deleteByUserIdAndJobPostingId(Long userId, Long jobPostingId);
-
+    List<JobEntry> findByUser_Id(Long userId);
+    void deleteByUser_IdAndJobPosting_Id(Long userId, Long jobPostingId);
     //if a user wants to find the jobs they applied to containing their input
     List<JobEntry> findByJobPosting_TitleContainingIgnoreCaseAndUser_Id(String title, Long userId);
 

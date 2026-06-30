@@ -19,6 +19,7 @@ import java.util.List;
 @AllArgsConstructor //all args constructor with complete body
 @NoArgsConstructor //no argument constructor
 @Builder //builds out the user -> think Model.objects.create... from django
+@Table(name = "users")
 public class User {
 
     @Id
@@ -30,16 +31,23 @@ public class User {
     private String email;
     private LocalDateTime createdAt;
 
+
+
     @Column(nullable = true)
     private String profilePhoto;
 
     @Column(nullable = false)
-    private String password;
-    @Builder.Default //sets the default value to FREE all the time just in case, builder can be finnicky
-    @Enumerated(EnumType.STRING) //converts enums to strings for the database, without it then it'd be 0 1 2...
-    @Column(nullable = false)
-    private SubscriptionStatus status = SubscriptionStatus.FREE;
 
+    private String firstName;
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
+    private String password;
+
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Customer customer; //each user will automatically have a customer account created
 
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //mappedBy tells jpa that the resumes are own by the User

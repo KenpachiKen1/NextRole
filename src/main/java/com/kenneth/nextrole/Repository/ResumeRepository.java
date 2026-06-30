@@ -21,4 +21,5 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
     List<Resume> findByUserId (Long userId); //shows all Resume's held by the user's ID
 
 
+    void deleteByIdAndUserId(Long id, Long id1);
 }

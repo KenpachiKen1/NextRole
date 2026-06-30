@@ -9,10 +9,6 @@ public interface CompanyRepository extends JpaRepository<Company, Long> {
 
     /*
     Some queries I may want
-
-    exists by Company (boolean)
-    exists by Company Photo (boolean)
-    exists by Company Website
      */
 
     //Optional is for data i need but ensures i handle it if it doesn't exist, loads in entire entity

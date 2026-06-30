@@ -7,6 +7,7 @@ import com.kenneth.nextrole.dto.jobposting.CreateJobPostingRequest;
 import com.kenneth.nextrole.dto.jobposting.JobPostingResponse;
 import com.kenneth.nextrole.dto.jobposting.UpdateJobPostingRequest;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -38,6 +39,7 @@ public class JobPostingService {
     /*
         Future updates would probably be that my agent would rescrape the job posting if it's still available.
      */
+    @Transactional
     public JobPostingResponse createJobPosting(CreateJobPostingRequest request, Company company){
         JobPosting jp = JobPosting.builder().
                 title(request.getTitle()).
@@ -48,6 +50,8 @@ public class JobPostingService {
         jp = jobPostingRepository.save(jp);
         return toResponse(jp);
     }
+
+    @Transactional
     public JobPostingResponse updateJobPosting(Long postingId, UpdateJobPostingRequest request){
         JobPosting jp = jobPostingRepository.findById(postingId)
                 .orElseThrow(() -> new EntityNotFoundException("Job Posting not found"));
