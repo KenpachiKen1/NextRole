@@ -16,7 +16,7 @@ public class ResumeResponse {
 
     private String resumeTitle;
 
-    private String resumeUrl;
+    private Long fileSize;
 
     private LocalDateTime uploadedAt;
 

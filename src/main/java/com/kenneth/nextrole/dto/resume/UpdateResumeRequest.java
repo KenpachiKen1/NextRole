@@ -8,9 +8,7 @@ import lombok.Setter;
 @Getter @Setter
 public class UpdateResumeRequest {
 
-
-    private String resumeUrl;
-
+    private Long fileSize;
     private String resumeTitle;
 
 }

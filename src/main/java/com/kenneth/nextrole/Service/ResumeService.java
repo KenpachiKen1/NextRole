@@ -31,7 +31,7 @@ public class ResumeService {
         return ResumeResponse.builder()
                 .id(resume.getId())
                 .resumeTitle(resume.getResumeTitle())
-                .resumeUrl(resume.getResumeUrl())
+                .fileSize(resume.getFileSize())
                 .uploadedAt(resume.getUploadedAt())
                 .build();
     }
@@ -52,7 +52,7 @@ public class ResumeService {
     @Transactional
     public ResumeResponse createResume (CreateResumeRequest request, User user){
         Resume resume = Resume.builder().user(user).
-                resumeUrl(request.getResumeUrl()).
+                fileSize(request.getFileSize()).
                 resumeTitle(request.getResumeTitle()).
                 uploadedAt(LocalDateTime.now()).build();
 
@@ -80,9 +80,10 @@ public class ResumeService {
                 resume.setResumeTitle(request.getResumeTitle());;
             }
 
-        if(request.getResumeUrl() != null){
-                resume.setResumeUrl(request.getResumeUrl());
-            }
+
+        if(request.getFileSize() != null){
+            resume.setFileSize(request.getFileSize());
+        }
 
 
        resume = resumeRepository.save(resume);

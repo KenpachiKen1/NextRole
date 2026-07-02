@@ -24,8 +24,6 @@ public class Resume {
     private Long id;
 
     @Column(nullable = false)
-    private String resumeUrl;
-    @Column(nullable = false)
     private String resumeTitle;
 
     private LocalDateTime uploadedAt;
@@ -33,10 +31,13 @@ public class Resume {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @Column(nullable = false)
+    private String s3ObjectKey;
 
+    private Long fileSize;
     @Override
     public String toString(){
-        return String.format("Resume ID: %d, Name: %s, resume Url: %s", id, resumeTitle, resumeUrl);
+        return String.format("Resume ID: %d, Name: %s, resume Url: %d", id, resumeTitle, fileSize);
 
     }
 

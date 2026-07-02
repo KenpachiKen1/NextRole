@@ -9,8 +9,7 @@ import lombok.Setter;
 public class CreateResumeRequest { //this is for creating the resume
 
     @NotNull
-    private String resumeUrl;
-
+    private Long fileSize;
     @NotNull
     private String resumeTitle;
 
