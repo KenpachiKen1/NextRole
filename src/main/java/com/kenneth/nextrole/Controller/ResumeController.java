@@ -6,6 +6,7 @@ import com.kenneth.nextrole.Service.ResumeService;
 import com.kenneth.nextrole.dto.resume.CreateResumeRequest;
 import com.kenneth.nextrole.dto.resume.ResumeResponse;
 import com.kenneth.nextrole.dto.resume.UpdateResumeRequest;
+import com.kenneth.nextrole.dto.resume.ViewSingleResumeResponse;
 import com.kenneth.nextrole.security.CustomUserPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -26,16 +27,16 @@ public class ResumeController {
     }
 
     @PostMapping("/createResume")
-    public ResponseEntity<ResumeResponse> createResume(@Valid @RequestBody CreateResumeRequest request, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
+    public ResponseEntity<ResumeResponse> uploadResume(@Valid @RequestBody CreateResumeRequest request, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
         User user = customUserPrincipal.getUser();
         ResumeResponse response = resumeService.createResume(request, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping("/showcaseResume/{id}/")
-    public ResponseEntity<ResumeResponse> showResume(@PathVariable Long id, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
+    public ResponseEntity<ViewSingleResumeResponse> showResume(@PathVariable Long id, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
         User user = customUserPrincipal.getUser();
-        ResumeResponse response = resumeService.getResume(id, user);
+        ViewSingleResumeResponse response = resumeService.getResume(id, user);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

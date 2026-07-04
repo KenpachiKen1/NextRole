@@ -1,13 +1,16 @@
 package com.kenneth.nextrole.awsApps;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.Duration;
 
 import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
@@ -22,7 +25,10 @@ Build custom exception, have file limit sizes as well, nothing more than 5MB.
 /*
 Very minimal as of right now, only needs delete, upload, and reading functionality.
  */
-public class s3Service {
+
+
+@Service
+public class S3Service {
 
     private final Region region = Region.US_EAST_1;
     private final S3Presigner presigned = S3Presigner.builder().region(region).build();
@@ -35,10 +41,10 @@ public class s3Service {
     /*
     For viewing specific files related to the user.
      */
-    public String getPresignedUrl(String resumeName){
+    public String getPresignedUrl(String objectKey){
         GetObjectRequest request = GetObjectRequest.builder().
                 bucket(bucket).
-                key(resumeName).build();
+                key(objectKey).build();
         GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder().signatureDuration(Duration.ofMinutes(15)).
                 getObjectRequest(request).build();
 
@@ -89,6 +95,12 @@ public class s3Service {
         } catch (S3Exception e) {
             throw new RuntimeException("failed to delete object from bucket", e);
         }
+    }
+    //Reading a specific resume's content to pass it to resume parser
+    public InputStream getResumeStream(String objectKey){
+        GetObjectRequest request = GetObjectRequest.builder().key(objectKey).bucket(bucket).build();
+
+        return s3.getObject(request, ResponseTransformer.toInputStream());
     }
 
 
