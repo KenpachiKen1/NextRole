@@ -96,7 +96,6 @@ class JobPostingServiceTest {
         ArgumentCaptor<Company> captor = ArgumentCaptor.forClass(Company.class);
         verify(companyRepository).save(captor.capture());
         assertThat(captor.getValue().getName()).isEqualTo("NewCo");
-        // never looked up a company that doesn't exist yet
         verify(companyRepository, never()).findByName(any());
     }
 
@@ -125,7 +124,6 @@ class JobPostingServiceTest {
 
         jobPostingService.createJobPosting(request);
 
-        // should reuse the existing keyword row, never create a new one
         verify(keywordRepository, never()).save(any());
     }
 
@@ -158,12 +156,7 @@ class JobPostingServiceTest {
         verify(keywordRepository).save(any(Keyword.class));
     }
 
-    /*
-     This test used to prove a bug: JobPosting.salary was a primitive double,
-     so a null salary from the extractor threw an NPE. Now that
-     JobPosting.salary is a boxed Double, null should flow through cleanly —
-     this test locks that fix in place so nobody accidentally reverts it.
-    */
+
     @Test
     void createJobPosting_handlesNullSalary_whenNotListedInPosting() throws Exception {
         CreateJobPostingRequest request = new CreateJobPostingRequest();
@@ -192,7 +185,6 @@ class JobPostingServiceTest {
         JobPostingResponse response = jobPostingService.createJobPosting(request);
 
         assertThat(response).isNotNull();
-        // if JobPostingResponse.salary is also nullable Double, you can add:
-        // assertThat(response.getSalary()).isNull();
+
     }
 }
