@@ -22,4 +22,6 @@ public class JobPostingResponse {
     private Long companyId;
 
     private String companyName;
+
+    private String reqCode;
 }

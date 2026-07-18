@@ -1,4 +1,4 @@
-package com.kenneth.nextrole.awsApps.agent;
+package com.kenneth.nextrole.awsApps.dto;
 
 
 import lombok.Builder;

@@ -10,6 +10,8 @@ import lombok.Setter;
 import lombok.AllArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 
 @Getter @Setter
@@ -40,6 +42,14 @@ public class Resume {
         return String.format("Resume ID: %d, Name: %s, resume Url: %d", id, resumeTitle, fileSize);
 
     }
+
+    @ManyToMany
+    @JoinTable(
+            name = "resume_keywords",
+            joinColumns = @JoinColumn(name = "resume_id"),
+            inverseJoinColumns = @JoinColumn(name = "keyword_id")
+    )
+    private Set<Keyword> resumeKeywords = new HashSet<>();
 
 
 }

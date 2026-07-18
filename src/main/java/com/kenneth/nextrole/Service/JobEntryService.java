@@ -45,7 +45,11 @@ public class JobEntryService {
                         : null). //in case they didn't upload a resume
                 appliedAt(je.getAppliedAt()).jobTitle(je.getJobPosting().getTitle()).
                 status(je.getStatus()).notes(je.getNotes()).
-                resumeTitle(je.getResumeUsed().getResumeTitle()).build();
+                resumeTitle(
+                        je.getResumeUsed() != null
+                                ? je.getResumeUsed().getResumeTitle()
+                                : null
+                ).build();
     }
 
     @Transactional

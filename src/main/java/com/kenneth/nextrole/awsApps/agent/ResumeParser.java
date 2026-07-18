@@ -1,30 +1,48 @@
 package com.kenneth.nextrole.awsApps.agent;
 
+import com.kenneth.nextrole.Model.Resume;
+import com.kenneth.nextrole.Model.User;
+import com.kenneth.nextrole.Repository.ResumeRepository;
 import com.kenneth.nextrole.awsApps.S3Service;
+import com.kenneth.nextrole.awsApps.dto.ParsedResume;
+import com.kenneth.nextrole.exception.ResumeNotFoundException;
 import org.apache.pdfbox.Loader;
 import org.apache.pdfbox.io.RandomAccessReadBuffer;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
 
+
+@Service
 public class ResumeParser {
 
 
     private final S3Service service;
-
-    public ResumeParser(S3Service service){
+    private final ResumeRepository repository;
+    public ResumeParser(S3Service service, ResumeRepository repository){
         this.service = service;
+        this.repository = repository;
     }
 
-    public String extractResumeText(String objectKey) throws IOException {
+    public ParsedResume buildParsedResume(String text, int pageCount, int characterCount){
+        return ParsedResume.builder().text(text).pageCount(pageCount).characterCount(characterCount).build();
+    }
+    public ParsedResume parseResumePDF(User user, String objectKey) throws IOException {
+
+        if(!repository.existsByUserIdAndS3ObjectKey(user.getId(), objectKey)){
+            throw new ResumeNotFoundException("The requested resume does not belong to the user.");
+        }
+
         try (InputStream stream = service.getResumeStream(objectKey);
              PDDocument document = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(stream)); //
         ){
             // Wrap the InputStream into a RandomAccessReadBuffer required by PDFBox 3
             PDFTextStripper stripper = new PDFTextStripper();
-            return stripper.getText(document).trim();
+            String text = stripper.getText(document).trim();
+            return buildParsedResume(text, document.getNumberOfPages(), text.length());
         } catch (IOException e){
             throw new IOException("Could not parse resume", e);
         }

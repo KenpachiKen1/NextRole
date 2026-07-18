@@ -12,7 +12,7 @@ public class CreateJobPostingRequest {
     private String location;
     private Double salary;
     private String postingUrl;
-
+    private String employmentType;
     private Long companyId;
     private String requisitionCode;
 

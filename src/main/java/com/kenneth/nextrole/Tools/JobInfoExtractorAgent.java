@@ -1,6 +1,7 @@
 package com.kenneth.nextrole.Tools;
 
 
+import com.kenneth.nextrole.Tools.dto.JobExtractionResponse;
 import org.json.JSONArray;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,7 +16,7 @@ import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 /*
 The purpose of this class is to do two things.
 
@@ -32,6 +33,9 @@ public class JobInfoExtractorAgent {
                     .credentialsProvider(DefaultCredentialsProvider.builder().build())
                     .region(region)
                     .build();
+
+
+
 
     private static final String system_prompt = """
                 You are an expert Job Posting Extraction AI.
@@ -55,15 +59,12 @@ public class JobInfoExtractorAgent {
                   "location": null,
                   "employmentType": null,
                   "salary": null,
+                  "companyWebsite": null
                   "requisitionCode": null,
-                  "experienceLevel": null,
-                  "responsibilities": [],
                   "requiredSkills": [],
                   "preferredSkills": [],
-                  "minimumQualifications": [],
-                  "preferredQualifications": [],
-                  "benefits": [],
                   "jobDescription": null
+             
                 }
                 
                 Rules:
@@ -93,7 +94,47 @@ public class JobInfoExtractorAgent {
                     - Internship
                     - Temporary""";
 
-    public String extractText(String URL) throws IOException {
+
+    public JobExtractionResponse generateJobDetails(String url) throws IOException {
+        try{
+            String jsonResponse = invokeClaude(url);
+            ObjectMapper mapper = new ObjectMapper();
+
+            return mapper.readValue(jsonResponse, JobExtractionResponse.class);
+
+        }catch (SdkClientException e) {
+            System.err.printf("Error: %s", e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+    }
+
+
+
+    private String invokeClaude (String url) throws IOException {
+        var modelId = "anthropic.claude-3-haiku-20240307-v1:0";
+        String text = extractText(url);
+        String nativeRequest = buildClaudeRequest(text);
+
+        try {
+            var response = client.invokeModel(
+                    request -> request
+                            .modelId(modelId)
+                            .body(SdkBytes.fromUtf8String(nativeRequest))
+            );
+            var responseBody = new JSONObject(response.body().asUtf8String());
+            return new JSONPointer("/content/0/text").queryFrom(responseBody).toString();
+
+        } catch (SdkClientException e) {
+            System.err.printf("ERROR: Can't invoke '%s'. Reason: %s", modelId, e.getMessage());
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+
+    private String extractText(String URL) throws IOException {
         try{
             //Creating the doc, accessing the URL with a userAgent to prevent being blocked by bot security. Timeout is for page load
             Document doc = Jsoup.connect(URL).
@@ -118,27 +159,8 @@ public class JobInfoExtractorAgent {
         }
     }
 
-    public String generateJobDetails(String url) throws IOException {
 
 
-            var modelId = "anthropic.claude-3-haiku-20240307-v1:0";
-            String text = extractText(url);
-            String nativeRequest = buildClaudeRequest(text);
-
-            try{
-                var response = client.invokeModel(
-                        request -> request
-                                .modelId(modelId)
-                                .body(SdkBytes.fromUtf8String(nativeRequest))
-                );
-                var responseBody = new JSONObject(response.body().asUtf8String());
-                return new JSONPointer("/content/0/text").queryFrom(responseBody).toString();
-            }catch (SdkClientException e) {
-                System.err.printf("ERROR: Can't invoke '%s'. Reason: %s", modelId, e.getMessage());
-                throw new RuntimeException(e);
-            }
-
-    }
 
     private String buildClaudeRequest(String postingText) {
 
@@ -171,6 +193,7 @@ public class JobInfoExtractorAgent {
         body.put("messages", messages);
         return body;
     }
+
 
 
 }

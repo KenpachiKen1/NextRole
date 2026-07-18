@@ -23,7 +23,7 @@ public class CompanyService {
         return CompanyResponse.builder()
                 .id(company.getId())
                 .name(company.getName())
-                .companyPhoto(company.getCompanyPhoto())
+
                 .companyWebsite(company.getCompanyWebsite())
                 .build();
     }
@@ -36,7 +36,6 @@ public class CompanyService {
 
         Company company = Company.builder()
                 .name(request.getName())
-                .companyPhoto(request.getCompanyPhoto())
                 .companyWebsite(request.getCompanyWebsite())
                 .build();
 

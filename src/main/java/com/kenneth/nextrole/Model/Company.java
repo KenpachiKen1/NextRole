@@ -22,7 +22,6 @@ public class Company {
 
     @Column(unique = true, nullable = false)
     private String name;
-    private String companyPhoto;
     private String companyWebsite;
 
 

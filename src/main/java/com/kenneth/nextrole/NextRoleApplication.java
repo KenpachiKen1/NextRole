@@ -3,7 +3,7 @@ package com.kenneth.nextrole;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication //telling app its a springboot project
+@SpringBootApplication //telling app it's a spring boot project
 public class NextRoleApplication {
 
     public static void main(String[] args) {

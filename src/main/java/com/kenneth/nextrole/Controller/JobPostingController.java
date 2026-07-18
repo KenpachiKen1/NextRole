@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -65,19 +66,19 @@ public class JobPostingController {
         return ResponseEntity.status(HttpStatus.OK).body(job);
     }
 
-    /**
-     * Create a job posting
-     * For now, this is intended for agent/admin/internal use.
-     *
-     * POST /api/job-postings
-     */
-//    @PostMapping("/create-job-posting")
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public JobPostingResponse createJobPosting(
-//            @Valid @RequestBody CreateJobPostingRequest request
-//    ) {
-//        return jobPostingService.createJobPosting(request);
-//    }
+//    /**
+//     * Create a job posting
+//     * For now, this is intended for agent/admin/internal use.
+//     *
+//     * POST /api/job-postings
+//     */
+   @PostMapping("/create-job-posting")
+   @ResponseStatus(HttpStatus.CREATED)
+   public JobPostingResponse createJobPosting(
+            @Valid @RequestBody CreateJobPostingRequest request) throws IOException {
+       return jobPostingService.createJobPosting(request);
+
+    }
 
     /**
      * Update a job posting

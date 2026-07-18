@@ -35,6 +35,7 @@ public class JobEntry {
 
 
     @Enumerated(EnumType.STRING)
+    @Builder.Default
     private JobStatus status = JobStatus.SUBMITTED;
 
     private LocalDateTime appliedAt;

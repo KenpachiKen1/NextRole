@@ -40,7 +40,7 @@ public class Customer {
     @Builder.Default
     private SubscriptionStatus subscriptionStatus = SubscriptionStatus.FREE;
 
-
+    @Builder.Default
     private LocalDateTime currentPeriodEnd = null;
 
     private boolean cancelAtPeriodEnd;

@@ -2,7 +2,12 @@ package com.kenneth.nextrole.Service;
 
 import com.kenneth.nextrole.Model.Company;
 import com.kenneth.nextrole.Model.JobPosting;
+import com.kenneth.nextrole.Model.Keyword;
+import com.kenneth.nextrole.Repository.CompanyRepository;
 import com.kenneth.nextrole.Repository.JobPostingRepository;
+import com.kenneth.nextrole.Repository.KeywordRepository;
+import com.kenneth.nextrole.Tools.JobInfoExtractorAgent;
+import com.kenneth.nextrole.Tools.dto.JobExtractionResponse;
 import com.kenneth.nextrole.dto.jobposting.CreateJobPostingRequest;
 import com.kenneth.nextrole.dto.jobposting.JobPostingResponse;
 import com.kenneth.nextrole.dto.jobposting.UpdateJobPostingRequest;
@@ -10,16 +15,23 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class JobPostingService {
 
     private final JobPostingRepository jobPostingRepository;
+    private final JobInfoExtractorAgent agent;
+    private final CompanyRepository companyRepository;
+    private final KeywordRepository keywordRepository;
 
-    public JobPostingService(JobPostingRepository jobPostingRepository) {
+    public JobPostingService(JobPostingRepository jobPostingRepository, JobInfoExtractorAgent agent, CompanyRepository companyRepository, KeywordRepository keywordRepository) {
+        this.agent = agent;
         this.jobPostingRepository = jobPostingRepository;
-
+        this.companyRepository = companyRepository;
+        this.keywordRepository = keywordRepository;
     }
 
     private JobPostingResponse toResponse(JobPosting jp) {
@@ -31,6 +43,7 @@ public class JobPostingService {
                 .postingUrl(jp.getPostingUrl())
                 .companyId(jp.getCompany().getId())
                 .companyName(jp.getCompany().getName())
+                .reqCode(jp.getRequisitionCode())
                 .build();
     }
 
@@ -40,13 +53,55 @@ public class JobPostingService {
         Future updates would probably be that my agent would rescrape the job posting if it's still available.
      */
     @Transactional
-    public JobPostingResponse createJobPosting(CreateJobPostingRequest request, Company company){
+    public JobPostingResponse createJobPosting(CreateJobPostingRequest request) throws IOException {
+        JobExtractionResponse rp = agent.generateJobDetails(request.getPostingUrl());
+
+
+        Company company;
+        if (companyRepository.existsByName(rp.getCompanyName())){
+             company = companyRepository.findByName(rp.getCompanyName()).orElseThrow(() -> new EntityNotFoundException("This company doesn't exist"));
+        }else{
+            company = Company.builder().companyWebsite(rp.getCompanyWebsite()).name(rp.getCompanyName()).build();
+            company = companyRepository.save(company);
+        }
+
         JobPosting jp = JobPosting.builder().
-                title(request.getTitle()).
-                salary(request.getSalary()).
-                company(company).location(request.getLocation()).postingUrl(request.getPostingUrl()).
-                requisitionCode(request.getRequisitionCode())
+                title(rp.getJobTitle()).
+                salary(rp.getSalary()).
+                company(company).location(rp.getLocation()).postingUrl(request.getPostingUrl()).
+                requisitionCode(rp.getRequisitionCode())
                 .build();
+
+        for (String word : rp.getPreferredSkills()){
+                Keyword keyword =
+                        keywordRepository.findByKeyword(word)
+                                .orElseGet(() ->
+                                        keywordRepository.save(
+                                                Keyword.builder()
+                                                        .keyword(word)
+                                                        .build()
+                                        )
+                                );
+                jp.getPreferredKeywords().add(keyword);
+
+        }
+
+
+        for (String word : rp.getRequiredSkills()){
+            Keyword keyword =
+                    keywordRepository.findByKeyword(word)
+                            .orElseGet(() ->
+                                    keywordRepository.save(
+                                            Keyword.builder()
+                                                    .keyword(word)
+                                                    .build()
+                                    )
+                            );
+
+            jp.getRequiredKeywords().add(keyword);
+
+        }
+
         jp = jobPostingRepository.save(jp);
         return toResponse(jp);
     }
