@@ -10,6 +10,7 @@ import com.kenneth.nextrole.dto.resume.ViewSingleResumeResponse;
 import com.kenneth.nextrole.security.CustomUserPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -26,13 +27,23 @@ public class ResumeController {
         this.resumeService = resumeService;
     }
 
-    @PostMapping("/createResume")
-    public ResponseEntity<ResumeResponse> uploadResume(@Valid @RequestBody CreateResumeRequest request, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
-        User user = customUserPrincipal.getUser();
-        ResumeResponse response = resumeService.createResume(request, user);
+    @PostMapping(
+            value = "/createResume",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<ResumeResponse> uploadResume(
+            @Valid @ModelAttribute CreateResumeRequest request,
+            @AuthenticationPrincipal CustomUserPrincipal principal
+    ) {
+
+        User user = principal.getUser();
+
+        System.out.println(user.getEmail());
+        ResumeResponse response =
+                resumeService.createResume(request, user);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-
     @GetMapping("/showcaseResume/{id}/")
     public ResponseEntity<ViewSingleResumeResponse> showResume(@PathVariable Long id, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
         User user = customUserPrincipal.getUser();
@@ -63,6 +74,8 @@ public class ResumeController {
                                                                @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
         User user = customUserPrincipal.getUser();
 
+        System.out.println("in delete function");
+        System.out.println(user.getEmail());
         List< ResumeResponse > response =  resumeService.deleteUserResume(id,user);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

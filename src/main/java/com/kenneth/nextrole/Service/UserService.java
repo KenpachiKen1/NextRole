@@ -12,8 +12,6 @@ import jakarta.transaction.Transactional;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -26,6 +24,7 @@ public class UserService {
     public UserResponse toResponse(User user){
         return UserResponse.builder().id(user.getId()).
                 username(user.getUsername())
+                .first_name(user.getFirstName()).last_name(user.getLastName())
                 .email(user.getEmail())
                 .profilePhoto(user.getProfilePhoto())
                 .status(user.getCustomer().getSubscriptionStatus()).build();
@@ -68,18 +67,6 @@ public class UserService {
         user = userRepository.save(user);
         return toResponse(user);
     }
-    public List<User> getAllUsers(){
-        return userRepository.findAll();
-    }
-
-    public Optional<User> findByEmail(String email){
-        return userRepository.findByEmail(email);
-    }
-
-    public Optional <User> findByUsernameIgnoreCase(String username){
-            return userRepository.findByUsernameIgnoreCase(username);
-    }
-
 
     public void deleteAccount(String email){
 
@@ -90,11 +77,5 @@ public class UserService {
 
         SecurityContextHolder.clearContext();
     }
-    public boolean existsByUsernameIgnoreCase(String username){
-        return userRepository.existsByUsernameIgnoreCase(username);
-    }
 
-    public boolean existsByEmail(String email){
-        return userRepository.existsByEmail(email);
-    }
 }

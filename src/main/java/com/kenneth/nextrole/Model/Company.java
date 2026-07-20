@@ -26,6 +26,7 @@ public class Company {
 
 
     @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    @Builder.Default
     private List<JobPosting> jobPostings = new ArrayList<>();
 
     @Override

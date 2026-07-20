@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.apache.commons.io.FilenameUtils;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 @Service
 public class ResumeService {
@@ -71,6 +69,7 @@ public class ResumeService {
      */
     @Transactional
     public ResumeResponse createResume (CreateResumeRequest request, User user){
+        System.out.println("Entered createResume()");
 
         String objectKey = genObjectKey(user, request.getFile());
 
@@ -104,7 +103,7 @@ public class ResumeService {
         String uuid = UUID.randomUUID().toString();
         String original_file = file.getOriginalFilename();
         String extension = FilenameUtils.getExtension(original_file);
-        return "users/"+user.getId()+"resumes/"+uuid+"/"+extension;
+        return "users/" + user.getId() + "/resumes/" + uuid + "." + extension;
     }
     @Transactional
     public ResumeResponse updateResume(UpdateResumeRequest request, User user, Long resumeId){
@@ -116,7 +115,7 @@ public class ResumeService {
         }
 
         if(request.getResumeTitle() != null){
-                resume.setResumeTitle(request.getResumeTitle());;
+                resume.setResumeTitle(request.getResumeTitle());
             }
 
 
@@ -137,11 +136,11 @@ public class ResumeService {
         Resume resume = resumeRepository.findById(id).
                 orElseThrow(() -> new ResumeNotFoundException("Resume not found"));
 
-        if(resume.getUser() != user){
+        if(!resume.getUser().getId().equals(user.getId())){
             throw new AccessDeniedException("This resume is not yours");
         }
-        service.deleteResume(resume.getS3ObjectKey());
 
+        service.deleteResume(resume.getS3ObjectKey());
         resumeRepository.deleteByIdAndUserId(id, user.getId());
 
         return resumeRepository.findByUserId(user.getId())
@@ -156,13 +155,7 @@ public class ResumeService {
                 .map(this::toResponse)
                 .toList();
     }
-    public Optional<Resume> findResumeTitleAndUserId (String resumeTitle, Long userId){
-        return resumeRepository.findByResumeTitleAndUserId(resumeTitle, userId);
-    }
 
-    public List<Resume> findByUserId(Long userId){
-        return resumeRepository.findByUserId(userId); //returns the list of resume's
-    }
 
 
 

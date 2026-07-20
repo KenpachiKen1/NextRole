@@ -15,4 +15,6 @@ public class UserResponse {
     private String email;
     private String profilePhoto;
     private SubscriptionStatus status;
+    private String first_name;
+    private String last_name;
 }

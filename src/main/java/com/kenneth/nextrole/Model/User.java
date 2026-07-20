@@ -1,7 +1,6 @@
 package com.kenneth.nextrole.Model;
 
 
-import com.kenneth.nextrole.SubscriptionStatus;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,7 +32,6 @@ public class User {
 
 
 
-    @Column(nullable = true)
     private String profilePhoto;
 
     @Column(nullable = false)
@@ -51,6 +49,7 @@ public class User {
 
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //mappedBy tells jpa that the resumes are own by the User
+    @Builder.Default
     private List<Resume> resumes = new ArrayList<>();
 
     @Override

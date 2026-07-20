@@ -3,11 +3,9 @@ package com.kenneth.nextrole.Controller;
 import com.kenneth.nextrole.Service.CompanyService;
 import com.kenneth.nextrole.dto.company.CompanyResponse;
 import com.kenneth.nextrole.dto.company.CreateCompanyRequest;
-import com.kenneth.nextrole.security.CustomUserPrincipal;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -38,16 +36,16 @@ public class CompanyController {
      * Get all companies
      */
     @GetMapping("/getAllCompanies")
-    public ResponseEntity<List<CompanyResponse>> getAllCompanies(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal) {
-        return ResponseEntity.status(HttpStatus.OK).body(companyService.listAllCompanies(customUserPrincipal.getUser()));
+    public ResponseEntity<List<CompanyResponse>> getAllCompanies() {
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.listAllCompanies());
     }
 
     /**
      * Get one company by id
      */
     @GetMapping("/{companyId}")
-    public ResponseEntity<CompanyResponse> getCompanyById(@PathVariable Long companyId, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal) {
-        return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompanyById(companyId, customUserPrincipal.getUser()));
+    public ResponseEntity<CompanyResponse> getCompanyById(@PathVariable Long companyId) {
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompanyById(companyId));
     }
 
     /**
@@ -56,7 +54,7 @@ public class CompanyController {
      * GET /api/companies/search?name=Google
      */
     @GetMapping("/search")
-    public ResponseEntity<CompanyResponse> getCompanyByName(@RequestParam String name, @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal) {
-        return ResponseEntity.status(HttpStatus.OK).body(companyService.findByName(name, customUserPrincipal.getUser()));
+    public ResponseEntity<CompanyResponse> getCompanyByName(@RequestParam String name) {
+        return ResponseEntity.status(HttpStatus.OK).body(companyService.findByName(name));
     }
 }

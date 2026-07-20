@@ -1,11 +1,11 @@
 package com.kenneth.nextrole.awsApps;
 
+import com.kenneth.nextrole.exception.S3StorageException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.core.sync.ResponseTransformer;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
 
@@ -30,13 +30,15 @@ Very minimal as of right now, only needs delete, upload, and reading functionali
 @Service
 public class S3Service {
 
-    private final Region region = Region.US_EAST_1;
-    private final S3Presigner presigned = S3Presigner.builder().region(region).build();
+    private final S3Presigner presigned;
+    private final S3Client s3;
+    private final String bucket;
 
-    private final S3Client s3 = S3Client.builder().region(region).build();
-
-    @Value("${aws.s3.bucket}")
-    private String bucket;
+    public S3Service(S3Presigner presigned, S3Client s3, @Value("${aws.s3.bucket}") String bucket) {
+        this.presigned = presigned;
+        this.s3 = s3;
+        this.bucket = bucket;
+    }
 
     /*
     For viewing specific files related to the user.
@@ -76,9 +78,9 @@ public class S3Service {
                     )
             );
         } catch (IOException e) {
-            throw new RuntimeException("Failed to read uploaded file.", e);
+            throw new RuntimeException("Failed to read uploaded file.");
         } catch (S3Exception e) {
-            throw new RuntimeException("Failed to upload file to S3.", e);
+            throw new S3StorageException("Failed to upload file.");
         }
     }
 
@@ -93,7 +95,7 @@ public class S3Service {
         try {
             s3.deleteObject(request);
         } catch (S3Exception e) {
-            throw new RuntimeException("failed to delete object from bucket", e);
+            throw new S3StorageException("failed to delete resume");
         }
     }
     //Reading a specific resume's content to pass it to resume parser

@@ -1,6 +1,5 @@
 package com.kenneth.nextrole.awsApps.agent;
 
-import com.kenneth.nextrole.Model.Resume;
 import com.kenneth.nextrole.Model.User;
 import com.kenneth.nextrole.Repository.ResumeRepository;
 import com.kenneth.nextrole.awsApps.S3Service;
@@ -17,12 +16,12 @@ import java.io.InputStream;
 
 
 @Service
-public class ResumeParser {
+public class ResumeParserService {
 
 
     private final S3Service service;
     private final ResumeRepository repository;
-    public ResumeParser(S3Service service, ResumeRepository repository){
+    public ResumeParserService(S3Service service, ResumeRepository repository){
         this.service = service;
         this.repository = repository;
     }
@@ -37,7 +36,7 @@ public class ResumeParser {
         }
 
         try (InputStream stream = service.getResumeStream(objectKey);
-             PDDocument document = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(stream)); //
+             PDDocument document = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(stream))
         ){
             // Wrap the InputStream into a RandomAccessReadBuffer required by PDFBox 3
             PDFTextStripper stripper = new PDFTextStripper();

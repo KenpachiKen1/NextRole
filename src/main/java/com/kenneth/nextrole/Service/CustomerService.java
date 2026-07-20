@@ -4,6 +4,7 @@ import com.kenneth.nextrole.Model.Customer;
 import com.kenneth.nextrole.Model.User;
 import com.kenneth.nextrole.Repository.CustomerRepository;
 import com.kenneth.nextrole.SubscriptionStatus;
+import com.kenneth.nextrole.exception.CustomerNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,7 +30,7 @@ public class CustomerService {
 
     public Customer getByStripeCustomerId(String stripeCustomerId) {
         return customerRepository.findByStripeCustomerId(stripeCustomerId)
-                .orElseThrow(() -> new RuntimeException("Customer not found"));
+                .orElseThrow(() -> new CustomerNotFoundException("Customer not found"));
     }
 
     public void updateSubscriptionStatus(Customer customer, SubscriptionStatus status) {

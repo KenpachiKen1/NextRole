@@ -49,6 +49,8 @@ public class Resume {
             joinColumns = @JoinColumn(name = "resume_id"),
             inverseJoinColumns = @JoinColumn(name = "keyword_id")
     )
+
+    @Builder.Default
     private Set<Keyword> resumeKeywords = new HashSet<>();
 
 

@@ -11,10 +11,8 @@ import java.io.IOException;
 import org.json.JSONObject;
 import org.json.JSONPointer;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.exception.SdkClientException;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 import com.fasterxml.jackson.databind.ObjectMapper;
 /*
@@ -27,13 +25,11 @@ The purpose of this class is to do two things.
 
 @Service
 public class JobInfoExtractorAgent {
-    private final Region region = Region.US_EAST_1;
-    private final BedrockRuntimeClient client =
-            BedrockRuntimeClient.builder()
-                    .credentialsProvider(DefaultCredentialsProvider.builder().build())
-                    .region(region)
-                    .build();
+    private final BedrockRuntimeClient client;
 
+    public JobInfoExtractorAgent(BedrockRuntimeClient client){
+        this.client = client;
+    }
 
 
 

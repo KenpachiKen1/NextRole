@@ -4,7 +4,7 @@ package com.kenneth.nextrole.awsApps;
 import com.kenneth.nextrole.Model.JobPosting;
 import com.kenneth.nextrole.Model.User;
 import com.kenneth.nextrole.awsApps.agent.BedrockService;
-import com.kenneth.nextrole.awsApps.agent.ResumeParser;
+import com.kenneth.nextrole.awsApps.agent.ResumeParserService;
 import com.kenneth.nextrole.awsApps.dto.InterviewPrepResponse;
 import com.kenneth.nextrole.awsApps.dto.ParsedResume;
 import com.kenneth.nextrole.awsApps.dto.ResumeFeedbackResponse;
@@ -13,7 +13,6 @@ import com.kenneth.nextrole.security.CustomUserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,10 +28,10 @@ public class AWSController {
      bedrock METHODS HERE
      */
 
-    private final ResumeParser parser;
+    private final ResumeParserService parser;
     private final BedrockService service;
 
-    public AWSController(ResumeParser parser, BedrockService service){
+    public AWSController(ResumeParserService parser, BedrockService service){
         this.parser = parser;
         this.service = service;
     }

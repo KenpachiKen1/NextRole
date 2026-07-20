@@ -3,44 +3,29 @@ package com.kenneth.nextrole.awsApps.agent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenneth.nextrole.Model.JobPosting;
-import com.kenneth.nextrole.Model.Resume;
 import com.kenneth.nextrole.awsApps.dto.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONPointer;
 import org.springframework.stereotype.Service;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.core.SdkBytes;
 import software.amazon.awssdk.core.exception.SdkClientException;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.bedrockruntime.BedrockRuntimeClient;
 
-import java.io.IOException;
 
 
 @Service
 public class BedrockService {
 
-
-    private final Region region = Region.US_EAST_1;
-    private final BedrockRuntimeClient client =
-            BedrockRuntimeClient.builder()
-                    .credentialsProvider(DefaultCredentialsProvider.builder().build())
-                    .region(region)
-                    .build();
+    private final BedrockRuntimeClient client;
     private final PromptBuilder promptBuilder;
-    private String SYSTEM_PROMPT;
     private final ObjectMapper mapper;
-    public BedrockService(PromptBuilder p, ObjectMapper mapper ){
+
+    public BedrockService(BedrockRuntimeClient client, PromptBuilder p, ObjectMapper mapper){
+        this.client = client;
         this.promptBuilder = p;
         this.mapper = mapper;
     }
-
-
-
-
-
-
     private String invokeClaude(String systemPrompt, String userPrompt){
 
         var modelId = "anthropic.claude-3-haiku-20240307-v1:0";
@@ -72,23 +57,23 @@ public class BedrockService {
 
     public ResumeFeedbackResponse reviewResume(ParsedResume resume) throws JsonProcessingException{
 
-            String systemPrompt =
-                    promptBuilder.getResumeFeedbackPrompt();
+        String systemPrompt =
+                promptBuilder.getResumeFeedbackPrompt();
 
-            String userPrompt =
-                    """
-                    Candidate Resume
-                    ----------------
-                    
-                    %s
-                    """.formatted(resume.getText());
+        String userPrompt =
+                """
+                Candidate Resume
+                ----------------
+                
+                %s
+                """.formatted(resume.getText());
 
-            String json =
-                    invokeClaude(systemPrompt, userPrompt);
+        String json =
+                invokeClaude(systemPrompt, userPrompt);
 
 
 
-            return mapper.readValue(json, ResumeFeedbackResponse.class);
+        return mapper.readValue(json, ResumeFeedbackResponse.class);
 
     }
 

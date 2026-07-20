@@ -1,10 +1,10 @@
 package com.kenneth.nextrole.Service;
 
 import com.kenneth.nextrole.Model.Company;
-import com.kenneth.nextrole.Model.User;
 import com.kenneth.nextrole.Repository.CompanyRepository;
 import com.kenneth.nextrole.dto.company.CompanyResponse;
 import com.kenneth.nextrole.dto.company.CreateCompanyRequest;
+import com.kenneth.nextrole.exception.CompanyAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class CompanyService {
     @Transactional
     public CompanyResponse registerCompany(CreateCompanyRequest request) {
         if (companyRepository.existsByName(request.getName())) {
-            throw new IllegalArgumentException("Company already exists");
+            throw new CompanyAlreadyExistsException("Company already exists");
         }
 
         Company company = Company.builder()
@@ -43,20 +43,20 @@ public class CompanyService {
         return toResponse(company);
     }
 
-    public List<CompanyResponse> listAllCompanies(User user) {
+    public List<CompanyResponse> listAllCompanies() {
         return companyRepository.findAll()
                 .stream()
                 .map(this::toResponse)
                 .toList();
     }
 
-    public CompanyResponse getCompanyById(Long companyId, User user) {
+    public CompanyResponse getCompanyById(Long companyId) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new EntityNotFoundException("Company not found"));
         return toResponse(company);
     }
 
-    public CompanyResponse findByName(String name, User user) {
+    public CompanyResponse findByName(String name) {
         Company company = companyRepository.findByName(name)
                 .orElseThrow(() -> new EntityNotFoundException("Company not found"));
         return toResponse(company);
