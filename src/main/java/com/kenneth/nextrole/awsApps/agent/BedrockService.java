@@ -3,7 +3,9 @@ package com.kenneth.nextrole.awsApps.agent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kenneth.nextrole.Model.JobPosting;
+import com.kenneth.nextrole.Repository.JobPostingRepository;
 import com.kenneth.nextrole.awsApps.dto.*;
+import com.kenneth.nextrole.exception.JobPostingNotFoundException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONPointer;
@@ -20,30 +22,39 @@ public class BedrockService {
     private final BedrockRuntimeClient client;
     private final PromptBuilder promptBuilder;
     private final ObjectMapper mapper;
-
-    public BedrockService(BedrockRuntimeClient client, PromptBuilder p, ObjectMapper mapper){
+    private final JobPostingRepository repository;
+    private static final String SONNET_MODEL =
+            "us.anthropic.claude-sonnet-4-5-20250929-v1:0";
+    public BedrockService(BedrockRuntimeClient client, PromptBuilder p, ObjectMapper mapper, JobPostingRepository repository){
         this.client = client;
         this.promptBuilder = p;
         this.mapper = mapper;
+        this.repository = repository;
     }
     private String invokeClaude(String systemPrompt, String userPrompt){
-
-        var modelId = "anthropic.claude-3-haiku-20240307-v1:0";
         String nativeRequest = buildClaudeRequest(userPrompt, systemPrompt);
         try {
             var response = client.invokeModel(
                     request -> request
-                            .modelId(modelId)
+                            .modelId(SONNET_MODEL)
                             .body(SdkBytes.fromUtf8String(nativeRequest))
             );
             var responseBody = new JSONObject(response.body().asUtf8String());
-            return new JSONPointer("/content/0/text").queryFrom(responseBody).toString();
+
+            String stopReason = responseBody.optString("stop_reason", "");
+            if ("max_tokens".equals(stopReason)) {
+                throw new RuntimeException(
+                        "Claude response was truncated (hit max_tokens). Increase max_tokens or shorten the prompt."
+                );
+            }
+
+            String text = new JSONPointer("/content/0/text").queryFrom(responseBody).toString();
+            return stripMarkdownFence(text);
 
         } catch (SdkClientException e) {
-            System.err.printf("ERROR: Can't invoke '%s'. Reason: %s", modelId, e.getMessage());
+            System.err.printf("ERROR: Can't invoke '%s'. Reason: %s", SONNET_MODEL, e.getMessage());
             throw new RuntimeException(e);
         }
-
     }
 
     private String buildClaudeRequest(String userPrompt, String systemPrompt) {
@@ -77,7 +88,19 @@ public class BedrockService {
 
     }
 
-    public ResumeTailoringResponse tailorResume(ParsedResume resume, JobPosting jp) throws JsonProcessingException {
+    private String stripMarkdownFence(String json){
+        json = json.trim();
+        if (json.startsWith("```")) {
+            json = json.replaceFirst("^```(?:json)?", "");
+            json = json.replaceFirst("```$", "");
+            json = json.trim();
+        }
+        return json;
+    }
+
+    public ResumeTailoringResponse tailorResume(ParsedResume resume, Long jobPostingId) throws JsonProcessingException {
+
+        JobPosting jp = this.repository.findById(jobPostingId).orElseThrow(() -> new JobPostingNotFoundException("Job Posting not found"));
         String systemPrompt =
                 promptBuilder.getResumeTailoringPrompt();
 
@@ -112,7 +135,9 @@ public class BedrockService {
     }
 
 
-    public InterviewPrepResponse interviewPrepResponse(ParsedResume resume, JobPosting jp) throws JsonProcessingException {
+    public InterviewPrepResponse interviewPrepResponse(ParsedResume resume, Long jobPostingId) throws JsonProcessingException {
+
+        JobPosting jp = this.repository.findById(jobPostingId).orElseThrow(() -> new JobPostingNotFoundException("Job Posting not found"));
         String systemPrompt =
                 promptBuilder.getInterviewPrompt();
 
@@ -155,7 +180,7 @@ public class BedrockService {
         JSONObject body = new JSONObject();
 
         body.put("anthropic_version", "bedrock-2023-05-31");
-        body.put("max_tokens", 600);
+        body.put("max_tokens", 2000);
         body.put("temperature", 0.1);
 
         body.put("system", systemPrompt);

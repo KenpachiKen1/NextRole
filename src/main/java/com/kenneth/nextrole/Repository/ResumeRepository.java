@@ -21,7 +21,7 @@ public interface ResumeRepository extends JpaRepository<Resume, Long> {
     List<Resume> findByUserId (Long userId); //shows all Resume's held by the user's ID
 
 
-    boolean existsByUserIdAndS3ObjectKey(Long userId, String S3ObjectKey);
+    boolean existsByUserIdAndId(Long userId, Long resumeId);
 
     void deleteByIdAndUserId(Long id, Long id1);
 }

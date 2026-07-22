@@ -1,5 +1,6 @@
 package com.kenneth.nextrole.awsApps.agent;
 
+import com.kenneth.nextrole.Model.Resume;
 import com.kenneth.nextrole.Model.User;
 import com.kenneth.nextrole.Repository.ResumeRepository;
 import com.kenneth.nextrole.awsApps.S3Service;
@@ -29,13 +30,16 @@ public class ResumeParserService {
     public ParsedResume buildParsedResume(String text, int pageCount, int characterCount){
         return ParsedResume.builder().text(text).pageCount(pageCount).characterCount(characterCount).build();
     }
-    public ParsedResume parseResumePDF(User user, String objectKey) throws IOException {
+    public ParsedResume parseResumePDF(User user, Long resumeId) throws IOException {
 
-        if(!repository.existsByUserIdAndS3ObjectKey(user.getId(), objectKey)){
+
+        if(!repository.existsByUserIdAndId(user.getId(), resumeId)){
             throw new ResumeNotFoundException("The requested resume does not belong to the user.");
         }
 
-        try (InputStream stream = service.getResumeStream(objectKey);
+        Resume resume = repository.findById(resumeId).orElseThrow(() -> new ResumeNotFoundException("This resume doesn't exist"));
+
+        try (InputStream stream = service.getResumeStream(resume.getS3ObjectKey());
              PDDocument document = Loader.loadPDF(RandomAccessReadBuffer.createBufferFromStream(stream))
         ){
             // Wrap the InputStream into a RandomAccessReadBuffer required by PDFBox 3

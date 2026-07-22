@@ -102,6 +102,7 @@ Rules:
                            - Professionalism
                            - Technical communication
                            - Strength of accomplishments
+                        8. Make sure your response is concise, about a sentence or two for each point you want to make.
                         
                         Required Output
                         ---------------

@@ -4,6 +4,7 @@ import com.kenneth.nextrole.Model.Company;
 import com.kenneth.nextrole.Repository.CompanyRepository;
 import com.kenneth.nextrole.dto.company.CompanyResponse;
 import com.kenneth.nextrole.dto.company.CreateCompanyRequest;
+import com.kenneth.nextrole.exception.CompanyAlreadyExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -65,7 +66,7 @@ class CompanyServiceTest {
         when(companyRepository.existsByName("Anthropic")).thenReturn(true);
 
         assertThatThrownBy(() -> companyService.registerCompany(request))
-                .isInstanceOf(IllegalArgumentException.class)
+                .isInstanceOf(CompanyAlreadyExistsException.class)
                 .hasMessageContaining("already exists");
 
         verify(companyRepository, never()).save(any());
