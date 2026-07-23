@@ -1,0 +1,8 @@
+export enum SubscriptionStatus {
+  FREE = 'FREE',
+  SUBSCRIBED = 'SUBSCRIBED',
+  PENDING = 'PENDING',
+  TRIALING = 'TRIALING',
+  CANCELED = 'CANCELED',
+  PAST_DUE = 'PAST_DUE',
+}
