@@ -14,7 +14,8 @@ export class Resume {
   private fb = inject(FormBuilder);
 
   selectedResumeId!: number;
-
+  selectedResume!: ViewSingleResumeResponse
+  user_resume_list!: ResumeResponse[]
   openEditResume(resume: ResumeResponse) {
     this.selectedResumeId = resume.id;
     this.updateResumeForm.patchValue({
@@ -22,8 +23,9 @@ export class Resume {
     })
   }
 
+  //would be the modal confirmation button
   openDeleteResume(resume: ResumeResponse) {
-    
+    this.selectedResumeId = resume.id
   }
   addResumeForm = this.fb.group({
     resumeTitle: [this.fb.nonNullable.control('', Validators.required)],
@@ -50,7 +52,6 @@ export class Resume {
       const update: UpdateResumeRequest = this.updateResumeForm.getRawValue();
       this.resumeService.updateResume(this.selectedResumeId, update).subscribe({
         next: (response) => {
-          console.log(response);
           this.updateResumeForm.patchValue({
             resumeTitle: response.resumeTitle,
           });
@@ -63,10 +64,34 @@ export class Resume {
       });
     }
   }
+  
+  viewSingleResume(resume: ResumeResponse) {
+    this.selectedResumeId = resume.id
+  }
 
+  resumeDetails() {
+    this.resumeService.viewSingleResume(this.selectedResumeId).subscribe({
+      next: (response) => {
+        this.selectedResume = response
+      },
+      error:(err)=> {
+        console.log(err)
+      },
+    })
+  }
   deleteResume() {
+    this.resumeService.deleteResume(this.selectedResumeId).subscribe({
+      next: (response) => {
+        this.user_resume_list = response //updated resume-list
+      },
+      error: (err) => {
+        console.log(err)
+      },
+    })
     
   }
+
+  //this should return the new updated list of resumes. change api code later.
   onSubmit() {
     if (this.addResumeForm.valid) {
       const resume: CreateResumeRequest = {

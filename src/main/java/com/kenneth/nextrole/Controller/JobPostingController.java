@@ -27,7 +27,7 @@ public class JobPostingController {
      * Get all job postings
      * GET /api/job-postings
      */
-    @GetMapping("/allJobs")
+    @GetMapping("/list-jobs/")
     public ResponseEntity <List<JobPostingResponse>> getAllJobPostings() {
         List <JobPostingResponse> job = jobPostingService.getAllJobPostings();
         return ResponseEntity.status(HttpStatus.OK).body(job);
@@ -38,7 +38,7 @@ public class JobPostingController {
      * Get one job posting by id
      * GET /api/job-postings/{id}
      */
-    @GetMapping("/{id}")
+    @GetMapping("/job/{id}/")
     public ResponseEntity<JobPostingResponse> getJobPostingById(@PathVariable Long id) {
         JobPostingResponse job = jobPostingService.getJobPostingById(id);
         return ResponseEntity.status(HttpStatus.OK).body(job);

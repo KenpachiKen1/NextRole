@@ -59,7 +59,8 @@ public class JobInfoExtractorAgent {
                   "requisitionCode": null,
                   "requiredSkills": [],
                   "preferredSkills": [],
-                  "jobDescription": null
+                  "jobDescription": null,
+                  "companyPhoto" : null
              
                 }
                 

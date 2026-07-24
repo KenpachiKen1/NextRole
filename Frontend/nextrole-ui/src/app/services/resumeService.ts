@@ -26,28 +26,36 @@ export class ResumeService {
   viewSingleResume(id: number) {
     const headers = this.getHeaders();
     return this.http.get<ViewSingleResumeResponse>
-      (`${this.apiUrl}/showcaseResume/${id}/`, { headers })
+      (`${this.apiUrl}/showcaseResume/${id}/`,
+        {
+          headers: headers
+        })
   }
 
 
   // change backend version to patch
   updateResume(id: number, request: UpdateResumeRequest) {
     const headers = this.getHeaders();
-    return this.http.patch<ResumeResponse>
-      (`${this.apiUrl}/updateResume/${id}/`, request, { headers })
+    return this.http.patch<ResumeResponse>(`${this.apiUrl}/updateResume/${id}/`, request, {
+      headers: headers,
+    });
   }
 
   resumeList() {
     const headers = this.getHeaders()
     return this.http.get<ResumeResponse[]>( //list of resume items
-      `${this.apiUrl}/resume-list`, {headers}
-    )
+      `${this.apiUrl}/resume-list`,
+      {
+        headers: headers,
+      },
+    );
   }
 
   deleteResume(id: number) {
     const headers = this.getHeaders();
-    return this.http.delete<ResumeResponse[]>
-      (`${this.apiUrl}/deleteResume/${id}/`, { headers });
+    return this.http.delete<ResumeResponse[]>(`${this.apiUrl}/deleteResume/${id}/`, {
+      headers: headers,
+    });
   }
 
   

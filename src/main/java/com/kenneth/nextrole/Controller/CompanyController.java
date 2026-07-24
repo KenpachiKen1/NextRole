@@ -21,6 +21,10 @@ public class CompanyController {
     }
 
     /**
+     * Prolly gonna delete this createCompany soon.
+     */
+
+    /**
      * Create a company
      * For now, mostly useful for internal/admin/agent testing
      */
@@ -35,7 +39,7 @@ public class CompanyController {
     /**
      * Get all companies
      */
-    @GetMapping("/getAllCompanies")
+    @GetMapping("/list")
     public ResponseEntity<List<CompanyResponse>> getAllCompanies() {
         return ResponseEntity.status(HttpStatus.OK).body(companyService.listAllCompanies());
     }
@@ -43,7 +47,7 @@ public class CompanyController {
     /**
      * Get one company by id
      */
-    @GetMapping("/{companyId}")
+    @GetMapping("/{companyId}/")
     public ResponseEntity<CompanyResponse> getCompanyById(@PathVariable Long companyId) {
         return ResponseEntity.status(HttpStatus.OK).body(companyService.getCompanyById(companyId));
     }
