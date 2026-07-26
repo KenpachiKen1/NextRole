@@ -1,4 +1,4 @@
-crepackage com.kenneth.nextrole.Controller;
+package com.kenneth.nextrole.Controller;
 
 
 import com.kenneth.nextrole.Model.User;
