@@ -1,0 +1,23 @@
+<div 
+    class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition"
+    (click)="openResume()">
+
+
+    <h2 class="text-xl font-semibold">
+        {{resume.resumeTitle}}
+    </h2>
+
+
+    <p class="text-sm text-gray-500 mt-2">
+        Uploaded:
+        {{resume.uploadedAt}}
+    </p>
+
+
+    <p class="text-sm text-gray-500">
+        Size:
+        {{resume.fileSize / 1024 / 1024 }} MB
+    </p>
+
+
+</div>

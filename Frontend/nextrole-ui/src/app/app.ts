@@ -6,6 +6,7 @@ import { Modal } from './components/global/modal/modal';
 import { Inputs } from './components/global/input/input';
 import { CreateResumeModal } from './components/resume/create-resume-modal/create-resume-modal';
 import { Resume } from './pages/resume/resume';
+
 @Component({
   selector: 'app-root',
   standalone: true,

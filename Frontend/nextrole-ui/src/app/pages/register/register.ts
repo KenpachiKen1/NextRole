@@ -23,12 +23,17 @@ export class Register {
   });
 
   onSubmit() {
+     console.log('REGISTER CLICKED');
     if (this.signupForm.valid) {
+        console.log('FORM VALID');
+
       const user: RegisterRequest = this.signupForm.getRawValue();
 
       this.authService.register(user).subscribe({
+
+
         next: (response) => {
-          console.log('registered!', response);
+          localStorage.setItem("access_token", response.token)
         },
 
         error: (err) => {

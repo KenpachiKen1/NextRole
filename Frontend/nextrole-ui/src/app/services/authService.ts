@@ -12,6 +12,9 @@ export class AuthService {
     private apiUrl = 'http://localhost:8080/api/auth';
     
     register(user: RegisterRequest) {
+
+        console.log('Calling backend');
+
         return this.http.post<AuthResponse>(
             `${this.apiUrl}/register`,
             user

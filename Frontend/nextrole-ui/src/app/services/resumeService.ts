@@ -7,7 +7,7 @@ import { CreateResumeRequest, UpdateResumeRequest, ViewSingleResumeResponse, Res
 })
 export class ResumeService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8000/api/resume';
+  private apiUrl = 'http://localhost:8080/api/resume';
 
   getHeaders() {
     const headers = new HttpHeaders({

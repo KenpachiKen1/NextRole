@@ -1,0 +1,45 @@
+<div class="w-full h-full min-h-105 rounded-xl bg-gray-100 overflow-hidden flex items-center justify-center">
+
+
+@if(isLoading){
+
+
+    <p class="text-gray-400">
+
+        Loading preview...
+
+    </p>
+
+
+}
+
+@else if(safePreviewUrl){
+
+
+    <iframe
+
+        [src]="safePreviewUrl"
+
+        class="w-full h-full border-0"
+
+        title="Resume preview">
+
+    </iframe>
+
+
+}
+
+@else{
+
+
+    <p class="text-gray-400">
+
+        No preview available
+
+    </p>
+
+
+}
+
+
+</div>

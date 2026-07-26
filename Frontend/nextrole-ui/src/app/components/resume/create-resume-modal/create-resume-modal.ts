@@ -22,7 +22,6 @@ export class CreateResumeModal {
   private fb = inject(FormBuilder);
 
   @Output() close = new EventEmitter<void>();
-
   closeModal() {
     this.close.emit();
   }
@@ -38,6 +37,8 @@ export class CreateResumeModal {
     resumeTitle: ['', Validators.required],
     file: this.fb.control<File | null>(null, Validators.required),
   });
+
+  @Output() resumeCreated = new EventEmitter<void>();
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -73,6 +74,7 @@ export class CreateResumeModal {
           setTimeout(() => {
             //JUST FOR STATE TESTING REMOVE
             this.isCreatingResume = false;
+            this.resumeCreated.emit();
           }, 3000);
         },
 

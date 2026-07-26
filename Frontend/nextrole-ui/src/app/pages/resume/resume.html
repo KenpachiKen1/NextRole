@@ -1,16 +1,93 @@
-
-<app-button
-    variant="create"
-    (click)="showCreateResumeModal = true">
-
-    Create Resume
-
-</app-button>
+<div class="p-6">
 
 
-@if(showCreateResumeModal) {
+    <div class="flex items-center justify-between mb-6">
 
-    <app-create-resume-modal (close)="showCreateResumeModal = false">
+
+        <h2 class="text-2xl font-bold">
+            My Resumes
+        </h2>
+
+
+
+        <app-button
+            variant="create"
+            (click)="showCreateResumeModal = true">
+
+            Create Resume
+
+        </app-button>
+
+
+    </div>
+
+
+
+
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+
+        @for(resume of user_resume_list(); track resume.id){
+
+
+            <app-resume-card
+
+                [resume]="resume"
+
+                (selected)="openResumeDetail($event)">
+
+            </app-resume-card>
+
+
+        }
+
+
+    </div>
+
+
+</div>
+
+
+
+
+
+@if(showCreateResumeModal){
+
+
+    <app-create-resume-modal
+
+        (close)="showCreateResumeModal = false"
+
+        (resumeCreated)="loadResumes()">
+
     </app-create-resume-modal>
+
+
+}
+
+
+
+
+
+@if(selectedResumeForModal){
+
+    <app-resume-detail-modal
+
+        [resume]="selectedResumeForModal"
+
+        [previewUrl]="previewUrl()"
+
+        [isLoading]="isLoadingPreview()"
+
+        (preview)="previewResume($event)"
+
+        (edit)="handleEditFromModal($event)"
+
+        (delete)="handleDeleteFromModal($event)"
+
+        (tailor)="handleTailorFromModal($event)">
+
+    </app-resume-detail-modal>
 
 }

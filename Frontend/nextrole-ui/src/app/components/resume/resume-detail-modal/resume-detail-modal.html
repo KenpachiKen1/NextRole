@@ -1,0 +1,119 @@
+<app-modal>
+
+
+<div class="flex w-225 h-150 gap-6">
+
+
+    <!-- PREVIEW -->
+
+    <div class="w-3/5">
+
+
+        <app-resume-previewer
+
+            [previewUrl]="previewUrl"
+
+            [isLoading]="isLoading">
+
+        </app-resume-previewer>
+
+
+    </div>
+
+
+
+
+
+    <!-- DETAILS -->
+
+    <div class="w-2/5 flex flex-col justify-between">
+
+
+        <div>
+
+
+            <h2 class="text-2xl font-bold">
+
+                {{resume.resumeTitle}}
+
+            </h2>
+
+
+
+            <p class="text-sm text-gray-500 mt-2">
+
+                Uploaded:
+                {{resume.uploadedAt}}
+
+            </p>
+
+
+
+            <p class="text-sm text-gray-500">
+
+                Size:
+                {{resume.fileSize / 1024 / 1024}}
+                MB
+
+            </p>
+
+
+        </div>
+
+
+
+
+
+
+        <div class="flex flex-col gap-3">
+
+
+            <app-button
+                variant="secondary"
+                (click)="previewResume()">
+
+                Preview
+
+            </app-button>
+
+
+
+            <app-button
+                variant="create"
+                (click)="editResume()">
+
+                Edit
+
+            </app-button>
+
+
+
+            <app-button
+                variant="danger"
+                (click)="deleteResume()">
+
+                Delete
+
+            </app-button>
+
+
+
+            <app-button
+                variant="secondary"
+                (click)="tailorResume()">
+
+                AI Tailor
+
+            </app-button>
+
+
+        </div>
+
+
+    </div>
+
+
+</div>
+
+
+</app-modal>
