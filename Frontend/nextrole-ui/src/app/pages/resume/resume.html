@@ -1,1 +1,16 @@
-<p>resume works!</p>
+
+<app-button
+    variant="create"
+    (click)="showCreateResumeModal = true">
+
+    Create Resume
+
+</app-button>
+
+
+@if(showCreateResumeModal) {
+
+    <app-create-resume-modal (close)="showCreateResumeModal = false">
+    </app-create-resume-modal>
+
+}

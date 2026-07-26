@@ -1,0 +1,154 @@
+<app-modal (close)="closeModal()">
+
+    <div class="flex w-225 h-150">
+
+
+        <!-- LEFT SIDE -->
+        <div class="w-3/5 flex flex-col items-center justify-center gap-4">
+
+
+            <img 
+                src="curriculum-vitae.png" 
+                alt="Resume icon"
+                class="w-40 h-40" />
+
+
+            <app-button 
+                variant="secondary"
+                (click)="fileInput.click()">
+
+                Choose a resume
+
+            </app-button>
+
+
+
+            @if(selectedFile) {
+
+                <div class="text-sm text-gray-600 text-center">
+
+                    Selected:
+                    <span class="font-medium text-gray-800">
+                        {{ selectedFile.name }}
+                    </span>
+
+                </div>
+
+            }
+
+
+
+            <input 
+                #fileInput
+                type="file"
+                accept=".pdf"
+                class="hidden"
+                (change)="onFileSelected($event)"
+            />
+
+
+        </div>
+
+
+
+
+        <!-- RIGHT SIDE -->
+        <div class="w-2/5 flex flex-col items-end py-2">
+
+
+            <!-- INPUT + INFO SECTION -->
+            <div class="flex-1 w-full flex flex-col justify-center items-start gap-6">
+
+
+                <div class="w-1/2">
+
+                    <app-input
+                        label="Resume Name"
+                        placeholder="Enter resume name"
+                        [control]="addResumeForm.controls.resumeTitle">
+                    </app-input>
+
+                </div>
+
+
+
+                <ul class="text-sm text-gray-500 space-y-2 w-4/5 list-disc pl-5">
+
+
+                    <li>
+                        Free plan:
+                        <span class="font-semibold text-gray-700">
+                            3 resume uploads max
+                        </span>
+                        — deleting one doesn't free up a slot
+                    </li>
+
+
+                    <li>
+                        Each resume can't be more than
+                        <span class="font-semibold text-gray-700">
+                            5 MB
+                        </span>
+                    </li>
+
+
+                    <li>
+                        <span class="text-indigo-600 font-semibold">
+                            NextRole Plus
+                        </span>
+                        gets you unlimited uploads and AI-tailored resumes
+                    </li>
+
+
+                </ul>
+
+
+            </div>
+
+
+
+
+            <!-- ERROR + BUTTON SECTION -->
+            <div class="w-full flex flex-col items-end gap-3">
+
+
+                @if(createResumeError) {
+
+                    <p class="text-lg text-red-500">
+                        {{ createResumeErrorMessage }}
+                    </p>
+
+                }
+
+
+
+                <app-button
+                    variant="create"
+                    (click)="onSubmit()">
+
+
+                    @if(isCreatingResume) {
+
+                        Creating...
+
+                    }
+                    @else {
+
+                        Add Resume
+
+                    }
+
+
+                </app-button>
+
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</app-modal>

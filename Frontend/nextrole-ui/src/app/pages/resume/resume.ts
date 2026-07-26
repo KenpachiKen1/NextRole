@@ -2,10 +2,12 @@ import { Component, inject} from '@angular/core';
 import { ResumeService } from '../../services/resumeService';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { Button } from '../../components/global/button/button';
+import { CreateResumeModal } from '../../components/resume/create-resume-modal/create-resume-modal';
 import { ResumeResponse, ViewSingleResumeResponse, UpdateResumeRequest, CreateResumeRequest } from '../../models/resume.model';
 @Component({
   selector: 'app-resume',
-  imports: [],
+  imports: [Button, CreateResumeModal],
   templateUrl: './resume.html',
   styleUrl: './resume.css',
 })
@@ -14,18 +16,25 @@ export class Resume {
   private fb = inject(FormBuilder);
 
   selectedResumeId!: number;
-  selectedResume!: ViewSingleResumeResponse
-  user_resume_list!: ResumeResponse[]
+  selectedResume!: ViewSingleResumeResponse;
+  user_resume_list!: ResumeResponse[];
+
+  selectedFileName = '';
+  isCreatingResume = false;
+  createResumeError = '';
+
+  showCreateResumeModal = false;
+
   openEditResume(resume: ResumeResponse) {
     this.selectedResumeId = resume.id;
     this.updateResumeForm.patchValue({
-      resumeTitle: resume.resumeTitle
-    })
+      resumeTitle: resume.resumeTitle,
+    });
   }
 
   //would be the modal confirmation button
   openDeleteResume(resume: ResumeResponse) {
-    this.selectedResumeId = resume.id
+    this.selectedResumeId = resume.id;
   }
   addResumeForm = this.fb.group({
     resumeTitle: [this.fb.nonNullable.control('', Validators.required)],
@@ -36,16 +45,17 @@ export class Resume {
     const input = event.target as HTMLInputElement;
 
     if (input.files && input.files.length > 0) {
+      const file = input.files[0];
       this.addResumeForm.patchValue({
         file: input.files[0],
       });
+      this.selectedFileName = file.name;
     }
   }
 
   updateResumeForm = this.fb.nonNullable.group({
     resumeTitle: ['', Validators.required],
   });
-
 
   updateResume() {
     if (this.updateResumeForm.valid) {
@@ -64,49 +74,29 @@ export class Resume {
       });
     }
   }
-  
+
   viewSingleResume(resume: ResumeResponse) {
-    this.selectedResumeId = resume.id
+    this.selectedResumeId = resume.id;
   }
 
   resumeDetails() {
     this.resumeService.viewSingleResume(this.selectedResumeId).subscribe({
       next: (response) => {
-        this.selectedResume = response
+        this.selectedResume = response;
       },
-      error:(err)=> {
-        console.log(err)
+      error: (err) => {
+        console.log(err);
       },
-    })
+    });
   }
   deleteResume() {
     this.resumeService.deleteResume(this.selectedResumeId).subscribe({
       next: (response) => {
-        this.user_resume_list = response //updated resume-list
+        this.user_resume_list = response; //updated resume-list
       },
       error: (err) => {
-        console.log(err)
+        console.log(err);
       },
-    })
-    
-  }
-
-  //this should return the new updated list of resumes. change api code later.
-  onSubmit() {
-    if (this.addResumeForm.valid) {
-      const resume: CreateResumeRequest = {
-        file: this.addResumeForm.value.file!,
-        resumeTitle: this.addResumeForm.value.resumeTitle!,
-      };
-
-      this.resumeService.createResume(resume).subscribe({
-        next: (response) => {
-          console.log(response);
-        },
-        error: (err) => {
-          console.log(err);
-        },
-      });
-    }
+    });
   }
 }

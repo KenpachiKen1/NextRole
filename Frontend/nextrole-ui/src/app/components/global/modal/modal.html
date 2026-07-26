@@ -1,0 +1,11 @@
+
+
+<div class="fixed inset-0 bg-black/50 flex items-center justify-center">
+    <div class="relative bg-white rounded-2xl shadow-2xl p-6">
+        <button class="text-black hover:text-gray-400 hover: cursor-pointer absolute top-4 right-4 font-bold" (click)="close.emit()" >
+            X
+        </button>
+
+        <ng-content></ng-content>
+    </div>
+</div>
