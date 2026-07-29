@@ -26,8 +26,7 @@ public class UserService {
                 username(user.getUsername())
                 .first_name(user.getFirstName()).last_name(user.getLastName())
                 .email(user.getEmail())
-                .profilePhoto(user.getProfilePhoto())
-                .status(user.getCustomer().getSubscriptionStatus()).build();
+                .profilePhoto(user.getProfilePhoto()).build();
     }
 
     /*

@@ -1,1 +1,11 @@
-<p>dashboard-layout works!</p>
+<div class="grid grid-cols-[232px_1fr] grid-rows-[64px_1fr] min-h-screen">
+
+    <app-sidebar class="row-span-2"></app-sidebar>
+
+    <app-navbar></app-navbar>
+
+    <main class="bg-[#F6F2E9] overflow-y-auto p-7">
+        <router-outlet></router-outlet>
+    </main>
+
+</div>
