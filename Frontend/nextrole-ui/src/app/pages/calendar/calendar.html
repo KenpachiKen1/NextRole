@@ -15,15 +15,35 @@
     </div>
 
 </div>
-<div class="grid grid-cols-7 gap-1">
-
-    @for (day of grid(); track day.date) {
-        <div
-            class="border border-solid border-black p-10"
-            [class.bg-green-500]="day.isCurrentDay"
-            [class.bg-gray-300]="!day.isCurrentDay">
-            {{ day.date.getDate() }}
-        </div>
-    }
-
+<div class="bg-white border border-[#E4DDCC] rounded-xl overflow-hidden">
+<div class="grid grid-cols-7 border-b border-[#E4DDCC]">
+        @for (day of daysOfTheWeek; track day) {
+            <div class="text-center text-[11px] font-medium uppercase tracking-wider text-[#8A8F99] py-2.5">
+            {{ day }}
+            </div>
+        }
 </div>
+<div class="grid grid-cols-7">
+    @for (day of grid(); track day.date) {
+      <div
+        class="min-h-24 border-r border-b border-[#E4DDCC] p-2 nth-[7n]:border-r-0"
+        [ngClass]="{
+          'bg-white': day.isCurrentMonth,
+          'bg-[#FAF8F2]': !day.isCurrentMonth
+        }">
+
+        <span
+          class="inline-flex items-center justify-center w-5 h-5 rounded-full font-mono text-xs"
+          [ngClass]="{
+            'bg-[#1B2430] text-[#F3E9CD]': day.isCurrentDay,
+            'text-[#8A8F99]': !day.isCurrentDay && !day.isCurrentMonth,
+            'text-[#1B2430]': !day.isCurrentDay && day.isCurrentMonth
+          }">
+          {{ day.date.getDate() }}
+        </span>
+
+      </div>
+    }
+  </div>
+</div>
+ 
