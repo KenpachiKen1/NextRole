@@ -29,7 +29,8 @@
                 "output": "/assets/"
               }
             ],
-            "styles": ["src/theme.less", "src/styles.css"]
+            "styles": ["src/theme.less", "src/styles.css"],
+            "polyfills": ["zone.js"]
           },
           "configurations": {
             "production": {

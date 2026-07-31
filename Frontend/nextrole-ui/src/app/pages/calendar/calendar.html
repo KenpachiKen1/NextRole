@@ -1,1 +1,29 @@
-<p>calendar works!</p>
+<div class="flex items-center justify-between text-white p-5 pl-5">
+
+    <div class="text-4xl font-semibold text-black">
+        {{ displayDate() | date: 'MMMM y' }}    
+    </div>
+
+    <div class="flex gap-2">
+        <app-button (click)="prevMonth()">
+            Previous
+        </app-button>
+
+        <app-button (click)="nextMonth()">
+            Next
+        </app-button>
+    </div>
+
+</div>
+<div class="grid grid-cols-7 gap-1">
+
+    @for (day of grid(); track day.date) {
+        <div
+            class="border border-solid border-black p-10"
+            [class.bg-green-500]="day.isCurrentDay"
+            [class.bg-gray-300]="!day.isCurrentDay">
+            {{ day.date.getDate() }}
+        </div>
+    }
+
+</div>

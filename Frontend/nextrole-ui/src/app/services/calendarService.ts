@@ -1,40 +1,58 @@
-import { inject, Injectable } from '@angular/core';
-
+import { Injectable } from '@angular/core';
+import { CalendarDay } from '../models/calendar.models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CalendarService {
+  getGridCalendarDays(year: number, month: number): CalendarDay[] {
+  
+    const targetMonthIndex = month;
 
-getGridCalendarDays(year: number, month: number): Date[] {
-  const days: Date[] = [];
+    const firstDayOfWeek = new Date(year, targetMonthIndex, 1).getDay();
 
-  const targetMonthIndex = month - 1; //date does 0 based indexing
+    const startDate = new Date(year, targetMonthIndex, 1);
+    startDate.setDate(startDate.getDate() - firstDayOfWeek);
 
-  const firstDayOfWeek = new Date(year, targetMonthIndex, 1).getDay();
+    const today = new Date();
+    const totalGridCells = 42;
 
-  const startDate = new Date(year, targetMonthIndex, 1);
-  startDate.setDate(startDate.getDate() - firstDayOfWeek);
+    const days: CalendarDay[] = [];
 
-  const totalGridCells = 42;
+    for (let i = 0; i < totalGridCells; i++) {
+      const cellDate = new Date(startDate);
 
-  for (let i = 0; i < totalGridCells; i++) {
-    days.push(new Date(startDate));
-    startDate.setDate(startDate.getDate() + 1);
+      days.push({
+        date: cellDate,
+        jobEntries: [],
+        isCurrentMonth: cellDate.getMonth() === targetMonthIndex,
+        isCurrentDay: this.isSameDay(cellDate, today),
+      });
+
+      startDate.setDate(startDate.getDate() + 1);
+    }
+
+    return days;
   }
 
-  return days;
-}
+  
+  private isSameDay(a: Date, b: Date): boolean {
+    return (
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth() === b.getMonth() &&
+      a.getDate() === b.getDate()
+    );
+  }
 
-    pastOrPresentDay(today = new Date(), gridDate: Date): boolean {
-        const target = new Date(gridDate.getTime());
-        const current = new Date(today.getTime());
+  pastOrPresentDay(today = new Date(), gridDate: Date): boolean {
+    const target = new Date(gridDate.getTime());
+    const current = new Date(today.getTime());
 
-        // Normalize both dates to midnight
-        target.setHours(0, 0, 0, 0);
-        current.setHours(0, 0, 0, 0);
+    // Normalize both dates to midnight
+    target.setHours(0, 0, 0, 0);
+    current.setHours(0, 0, 0, 0);
 
-        // Less than or equal to now safely checks past or present
-        return target.getTime() <= current.getTime();
-    }
+    // Less than or equal to now safely checks past or present
+    return target.getTime() <= current.getTime();
+  }
 }
