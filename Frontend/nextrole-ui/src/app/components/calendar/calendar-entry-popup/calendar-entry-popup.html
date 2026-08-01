@@ -1,0 +1,39 @@
+@if(selectedDay){
+    <div class="fixed inset-0 bg-[#1B2430]/55 flex justify-end z-50" (click)="close.emit()">
+        <div class="w-85 h-full bg-[#F6F2E9] p-6 shadow-[-8px_0_24px_rgba(0,0,0,0.12)] overflow-y-auto"  (click)="$event.stopPropagation()">
+            <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider MB-0.5">
+                {{selectedDay.date | date: 'EEEE'}}
+            </p>
+             <h2 class="font-semibold text-xl text-[#1B2430] mb-4" style="font-family:'Fraunces',serif;">
+                {{ selectedDay.date | date: 'MMMM d, y' }}
+            </h2>
+             @for (entry of selectedDay.jobEntries; track entry.id) {
+                <div class="bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5">
+        
+                <p class="font-semibold text-sm text-[#1B2430] mb-1.5">{{ entry.jobTitle }}</p>
+        
+                <span
+                    class="text-white text-[11px] font-medium px-2.5 py-0.5 rounded-full inline-block"
+                    [style.background-color]="jobStatusInfo[entry.status].color">
+                    {{ jobStatusInfo[entry.status].label }}
+                </span>
+        
+                <p class="font-mono text-[11px] text-[#8A8F99] mt-2">
+                    Resume: {{ entry.resumeTitle }}
+                </p>
+        
+                <div class="flex gap-2 mt-2.5">
+                    <button class="text-[11px] text-[#C97F0A] font-medium" (click)="editEntry.emit(entry)">Edit</button>
+                    <button class="text-[11px] text-[#B7412C] font-medium" (click)="deleteEntry.emit(entry.id)">Delete</button>
+                </div>
+        
+                </div>
+        }
+            <button
+                class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg mt-2"
+                (click)="addEntry.emit(selectedDay.date)">
+                + Add entry
+            </button>
+        </div>
+    </div>
+}

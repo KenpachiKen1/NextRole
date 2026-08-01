@@ -1,0 +1,125 @@
+<div class="fixed inset-0 bg-[#1B2430]/55 flex justify-end z-50" (click)="cancel()">
+  <div class="w-85 h-full bg-[#F6F2E9] p-6 shadow-[-8px_0_24px_rgba(0,0,0,0.12)] overflow-y-auto" (click)="$event.stopPropagation()">
+
+    <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-0.5">New entry</p>
+    <h2 class="font-semibold text-xl text-[#1B2430] mb-5" style="font-family:'Fraunces',serif;">
+      {{ initialDate | date: 'MMMM d, y' }}
+    </h2>
+
+    @switch (currentStep()) {
+
+      @case ('choose-posting') {
+        <p class="text-sm text-[#5B6270] mb-3">Search for a role or add a new one!</p>
+
+        <button
+          class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5 text-sm font-medium text-[#1B2430]"
+          (click)="goTo('search-posting')">
+          Search existing postings
+        </button>
+
+        <button
+          class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 text-sm font-medium text-[#1B2430]"
+          (click)="goTo('add-posting-method')">
+          Add a new posting
+        </button>
+      }
+
+      @case ('search-posting') {
+        <p class="text-sm text-[#5B6270] mb-3">Search by company or job title</p>
+
+        <input
+          type="text"
+          placeholder="e.g. Meridian Analytics"
+          class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-3"/>
+        <p class="text-xs text-[#8A8F99] italic">Search results will appear here.</p>
+      }
+
+      @case ('add-posting-method') {
+        <p class="text-sm text-[#5B6270] mb-3">How would you like to add it?</p>
+
+        <button
+          class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5 text-sm font-medium text-[#1B2430]"
+          (click)="goTo('manual-posting-form')">
+          Enter details manually
+        </button>
+
+        <button
+          class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 text-sm font-medium text-[#1B2430]"
+          (click)="goTo('scrape-loading')">
+          Paste a job URL
+        </button>
+      }
+
+      @case ('manual-posting-form') {
+        <p class="text-sm text-[#5B6270] mb-3">Posting details</p>
+
+        <input type="text" placeholder="Company" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-2.5"/>
+        <input type="text" placeholder="Job title" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-2.5"/>
+        <input type="text" placeholder="Posting URL (optional)" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-4"/>
+
+        <button
+          class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg"
+          (click)="confirmNewPosting(0)">
+          Continue
+        </button>
+      }
+
+      @case ('scrape-loading') {
+        <div class="flex flex-col items-center justify-center py-10 text-sm text-[#8A8F99]">
+          Scraping posting details…
+        </div>
+      }
+
+      @case ('scrape-review') {
+        <p class="text-sm text-[#5B6270] mb-3">Review before continuing</p>
+
+        <input type="text" placeholder="Company" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-2.5"/>
+        <input type="text" placeholder="Job title" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-4"/>
+
+        <button
+          class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg"
+          (click)="confirmNewPosting(0)">
+          Confirm
+        </button>
+      }
+
+      @case ('pick-resume') {
+        <p class="text-sm text-[#5B6270] mb-3">Which resume did you use?</p>
+
+        @for (resume of resumes; track resume.id) {
+          <button
+            class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5 text-sm font-medium text-[#1B2430]"
+            (click)="selectResume(resume.id)">
+            {{ resume.resumeTitle }}
+          </button>
+        }
+      }
+
+      @case ('notes-and-status') {
+        <p class="text-sm text-[#5B6270] mb-3">Notes and status</p>
+
+        <select
+          class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-3"
+          (change)="status.set($any($event.target).value)">
+          @for (s of jobStatuses; track s.key) {
+            <option [value]="s.key">{{ s.label }}</option>
+          }
+        </select>
+
+        <textarea
+          rows="4"
+          placeholder="Notes"
+          class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-4"
+          (input)="notes.set($any($event.target).value)"></textarea>
+
+        <button
+          class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg"
+          (click)="submit()">
+          Add entry
+        </button>
+      }
+
+    }
+
+  </div>
+</div>

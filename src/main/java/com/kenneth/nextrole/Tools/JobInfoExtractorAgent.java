@@ -3,6 +3,7 @@ package com.kenneth.nextrole.Tools;
 
 import com.kenneth.nextrole.Tools.dto.JobExtractionResponse;
 import org.json.JSONArray;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import java.io.IOException;
@@ -134,15 +135,20 @@ public class JobInfoExtractorAgent {
     private String extractText(String URL) throws IOException {
         try{
             //Creating the doc, accessing the URL with a userAgent to prevent being blocked by bot security. Timeout is for page load
-            Document doc = Jsoup.connect(URL).
-                    userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36").
-                    timeout(10000).get();
+            Connection.Response response = Jsoup.connect(URL)
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")
+                    .timeout(10000)
+                    .execute();
+
+            System.out.println("Status Code: " + response.statusCode());
+            System.out.println("Status Message: " + response.statusMessage());
+
+            Document doc = response.parse();
+
+            System.out.println("Page Title: " + doc.title());
 
             String title = doc.title();
-
-            doc.body();
-            String pageText =
-                    doc.body().text();
+            String pageText = doc.body().text();
 
             return """
             Job Posting Title:
@@ -151,8 +157,11 @@ public class JobInfoExtractorAgent {
             Job Posting:
             %s
             """.formatted(title, pageText);
+
+
         } catch (IOException e){
-            throw new IOException("Error parsing website", e);
+            e.printStackTrace();
+            throw e;
         }
     }
 

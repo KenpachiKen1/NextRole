@@ -15,6 +15,20 @@
     </div>
 
 </div>
+<div class="flex"> 
+ <ul class="flex flex-wrap gap-x-6 gap-y-2 list-none m-2 p-0">
+  @for (status of jobStatuses; track status.key) {
+    <li class="flex items-center gap-2">
+      <span
+        class="w-3 h-3 rounded-full shrink-0"
+        [style.background-color]="status.color">
+      </span>
+
+      <span>{{ status.label }}</span>
+    </li>
+  }
+</ul>
+</div>
 <div class="bg-white border border-[#E4DDCC] rounded-xl overflow-hidden">
 <div class="grid grid-cols-7 border-b border-[#E4DDCC]">
         @for (day of daysOfTheWeek; track day) {
@@ -26,11 +40,12 @@
 <div class="grid grid-cols-7">
     @for (day of grid(); track day.date) {
       <div
-        class="min-h-24 border-r border-b border-[#E4DDCC] p-2 nth-[7n]:border-r-0"
+        class="min-h-24 border-r border-b border-[#E4DDCC] p-2 nth-[7n]:border-r-0  hover:bg-[#FAF8F2] cursor-pointer"
         [ngClass]="{
           'bg-white': day.isCurrentMonth,
           'bg-[#FAF8F2]': !day.isCurrentMonth
-        }">
+        }"
+        (click)="openDay(day)">
 
         <span
           class="inline-flex items-center justify-center w-5 h-5 rounded-full font-mono text-xs"
@@ -46,4 +61,25 @@
     }
   </div>
 </div>
- 
+
+<app-calendar-entry-popup
+    [selectedDay]="selectedDay()"
+    (close)="closeDayPopup()"
+    (deleteEntry)="handleDeleteEntry($event)"
+    (editEntry)="handleEditEntry($event)"
+    (addEntry)="openAddEntryFlow($event)">
+</app-calendar-entry-popup>
+
+@if (newEntryDate()) {
+  <app-calendar-add-entry-flow
+      [initialDate]="newEntryDate()"
+      (close)="closeAddEntryFlow()"
+      (submitted)="addEntry($event)">
+  </app-calendar-add-entry-flow>
+}
+
+<app-edit-job-entry-form
+    [entry]="editingEntry()"
+    (close)="closeEditForm()"
+    (submitted)="handleEditSubmit($event)">
+</app-edit-job-entry-form>

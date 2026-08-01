@@ -1,8 +1,51 @@
 // Custom Theming for NG-ZORRO
 // For more information: https://ng.ant.design/docs/customize-theme/en
-@import '../node_modules/ng-zorro-antd/ng-zorro-antd.less';
 
-// Override less variables to here
-// View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
+@layer ng-zorro {
 
-// @primary-color: #1890ff;
+  @import '../node_modules/ng-zorro-antd/ng-zorro-antd.less';
+
+  // Override less variables to here
+  // View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less
+
+  // ---- NextRole dashboard theme ----
+  @primary-color: #1B2430;
+  @link-color: @primary-color;
+
+  @success-color: #3F7D5C;
+  @warning-color: #C97F0A;
+  @error-color: #B7412C;
+  @info-color: #B9932A;
+
+  @text-color: #1B2430;
+  @text-color-secondary: #5B6270;
+  @heading-color: #1B2430;
+  @disabled-color: #8A8F99;
+
+  @border-color-base: #E4DDCC;
+  @border-color-split: #E4DDCC;
+  @border-radius-base: 8px;
+
+  @background-color-light: #F6F2E9;
+  @background-color-base: #F6F2E9;
+  @component-background: #FFFFFF;
+
+  @font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  @code-family: 'IBM Plex Mono', monospace;
+
+  @font-size-base: 14px;
+  @box-shadow-base: 0 4px 16px rgba(27, 36, 48, 0.08);
+
+  h1, h2, h3, h4,
+  .ant-typography h1,
+  .ant-typography h2,
+  .ant-typography h3,
+  .ant-typography h4,
+  .ant-modal-title,
+  .ant-card-head-title,
+  .ant-page-header-heading-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+  }
+
+}

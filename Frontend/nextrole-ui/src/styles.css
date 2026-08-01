@@ -1,9 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
 
+@layer ng-zorro, theme, base, components, utilities;
+
 @import 'tailwindcss';
 
 html,
 body {
   background-color: #F6F2E9;
   min-height: 100%;
+}
+
+::view-transition-group(root) {
+  animation: none;
+}
+
+::view-transition-old(main-content),
+::view-transition-new(main-content) {
+  animation-duration: 250ms;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(main-content) {
+  animation-name: slide-out;
+}
+::view-transition-new(main-content) {
+  animation-name: slide-in;
+}
+
+@keyframes slide-out {
+  to { opacity: 0; transform: translateY(-8px); }
+}
+@keyframes slide-in {
+  from { opacity: 0; transform: translateY(8px); }
 }
