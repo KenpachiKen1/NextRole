@@ -2,11 +2,13 @@ package com.kenneth.nextrole.Tools;
 
 
 import com.kenneth.nextrole.Tools.dto.JobExtractionResponse;
+import com.kenneth.nextrole.exception.JobParseException;
 import org.json.JSONArray;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import java.io.IOException;
+import java.net.URI;
 
 
 import org.json.JSONObject;
@@ -27,8 +29,19 @@ The purpose of this class is to do two things.
 @Service
 public class JobInfoExtractorAgent {
     private final BedrockRuntimeClient client;
+    private final AshbyExtractor ashbyExtractor;
+    private final LeverExtractor leverExtractor;
+    private final PlaywrightExtractor playwrightExtractor;
+    private final GreenhouseExtractor greenhouseExtractor;
 
-    public JobInfoExtractorAgent(BedrockRuntimeClient client){
+    public JobInfoExtractorAgent(BedrockRuntimeClient client, AshbyExtractor
+                                         ashbyExtractor, LeverExtractor leverExtractor,
+                                 GreenhouseExtractor greenhouseExtractor,
+                                 PlaywrightExtractor playwrightExtractor){
+        this.ashbyExtractor = ashbyExtractor;
+        this.greenhouseExtractor = greenhouseExtractor;
+        this.leverExtractor = leverExtractor;
+        this.playwrightExtractor = playwrightExtractor;
         this.client = client;
     }
 
@@ -133,39 +146,24 @@ public class JobInfoExtractorAgent {
 
 
     private String extractText(String URL) throws IOException {
-        try{
-            //Creating the doc, accessing the URL with a userAgent to prevent being blocked by bot security. Timeout is for page load
-            Connection.Response response = Jsoup.connect(URL)
-                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36")
-                    .timeout(10000)
-                    .execute();
-
-            System.out.println("Status Code: " + response.statusCode());
-            System.out.println("Status Message: " + response.statusMessage());
-
-            Document doc = response.parse();
-
-            System.out.println("Page Title: " + doc.title());
-
-            String title = doc.title();
-            String pageText = doc.body().text();
-
-            return """
-            Job Posting Title:
-            %s
-            
-            Job Posting:
-            %s
-            """.formatted(title, pageText);
+        URI uri = URI.create(URL);
+        String host = uri.getHost();
 
 
-        } catch (IOException e){
-            e.printStackTrace();
-            throw e;
+        if (host == null){
+            throw new IllegalArgumentException("A valid url is required");
         }
+
+        return switch (host) {
+            case "boards.greenhouse.io", "job-boards.greenhouse.io" -> this.greenhouseExtractor.extract(URL);
+            case "jobs.lever.co" -> this.leverExtractor.extract(URL);
+            case "jobs.ashbyhq.com" -> this.ashbyExtractor.extract(URL);
+            default -> throw new JobParseException( //default will be updated to use a playwright for webscraping.
+                    "Unsupported job provider: " + host
+            );
+        };
+
     }
-
-
 
 
     private String buildClaudeRequest(String postingText) {
