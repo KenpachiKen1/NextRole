@@ -2,8 +2,10 @@ package com.kenneth.nextrole.Tools;
 import com.kenneth.nextrole.exception.JobParseException;
 import com.microsoft.playwright.*;
 import com.microsoft.playwright.options.LoadState;
+import org.springframework.stereotype.Component;
 
 
+@Component
 public class PlaywrightExtractor implements JobExtractor {
 
     @Override

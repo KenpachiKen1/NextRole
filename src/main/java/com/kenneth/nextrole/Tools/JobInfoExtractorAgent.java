@@ -49,20 +49,22 @@ public class JobInfoExtractorAgent {
 
     private static final String system_prompt = """
                 You are an expert Job Posting Extraction AI.
-                
+               \s
                 Your job is to extract structured information from a job posting.
-                
+               \s
                 You MUST return ONLY valid JSON.
-                
+               \s
                 Do NOT include:
                 - Markdown
                 - Triple backticks
                 - Explanations
                 - Notes
                 - Additional text before or after the JSON
-                
+               \s
+               \s
+               \s
                 Use the following schema exactly:
-                
+               \s
                 {
                   "companyName": null,
                   "jobTitle": null,
@@ -74,12 +76,11 @@ public class JobInfoExtractorAgent {
                   "requiredSkills": [],
                   "preferredSkills": [],
                   "jobDescription": null,
-                  "companyPhoto" : null
-             
+            \s
                 }
-                
+               \s
                 Rules:
-                
+               \s
                 - If a field cannot be determined, return null.
                 - Arrays should be empty [] if no information is available.
                 - Preserve wording where reasonable.
@@ -87,43 +88,48 @@ public class JobInfoExtractorAgent {
                 - Extract only information that exists in the posting.
                 - jobDescription should be a concise summary (2-4 paragraphs), not the entire posting.
                 - requiredSkills should contain technologies, programming languages, frameworks, and tools.
-                - experienceLevel should be values like:
-                    - Internship
-                    - Entry Level
-                    - Associate
-                    - Mid Level
-                    - Senior
-                    - Staff
-                    - Principal
-                    - Manager
-                    - Director
-                    - Executive
+                - Give only one salary amount not a range, also omit the currency symbol just the plain number.
                 - employmentType should be values like:
                     - Full Time
                     - Part Time
                     - Contract
                     - Internship
-                    - Temporary""";
+                    - Temporary
+          
+                    RETURN ONLY JSON
+            """
+
+            ;
 
 
     public JobExtractionResponse generateJobDetails(String url) throws IOException {
-        try{
+        try {
             String jsonResponse = invokeClaude(url);
+            String cleaned = stripMarkdownFences(jsonResponse);
+
             ObjectMapper mapper = new ObjectMapper();
+            return mapper.readValue(cleaned, JobExtractionResponse.class);
 
-            return mapper.readValue(jsonResponse, JobExtractionResponse.class);
-
-        }catch (SdkClientException e) {
+        } catch (SdkClientException e) {
             System.err.printf("Error: %s", e.getMessage());
             throw new RuntimeException(e);
         }
+    }
 
+    private String stripMarkdownFences(String text) {
+        String trimmed = text.trim();
+        if (trimmed.startsWith("```")) {
+            trimmed = trimmed.replaceFirst("^```[a-zA-Z]*\\r?\\n?", "");
+            if (trimmed.endsWith("```")) {
+                trimmed = trimmed.substring(0, trimmed.length() - 3);
+            }
+        }
+        return trimmed.trim();
     }
 
 
-
     private String invokeClaude (String url) throws IOException {
-        var modelId = "anthropic.claude-3-haiku-20240307-v1:0";
+        var modelId = "us.anthropic.claude-sonnet-4-5-20250929-v1:0";
         String text = extractText(url);
         String nativeRequest = buildClaudeRequest(text);
 
@@ -173,7 +179,7 @@ public class JobInfoExtractorAgent {
     private JSONObject buildRequestBody(String postingText) {
         JSONObject body = new JSONObject();
         body.put("anthropic_version", "bedrock-2023-05-31");
-        body.put("max_tokens", 600);
+        body.put("max_tokens", 2000);
         body.put("temperature", 0.1);
 
         JSONObject userMessage = new JSONObject();

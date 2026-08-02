@@ -55,8 +55,6 @@ public class JobPostingService {
     @Transactional
     public JobPostingResponse createJobPosting(CreateJobPostingRequest request) throws IOException {
         JobExtractionResponse rp = agent.generateJobDetails(request.getPostingUrl());
-
-
         Company company;
         if (companyRepository.existsByName(rp.getCompanyName())){
              company = companyRepository.findByName(rp.getCompanyName()).orElseThrow(() -> new EntityNotFoundException("This company doesn't exist"));
