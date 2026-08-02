@@ -151,25 +151,21 @@ public class JobInfoExtractorAgent {
 
 
         if (host == null){
-            throw new IllegalArgumentException("A valid url is required");
+            throw new JobParseException("A valid url is required");
         }
 
         return switch (host) {
-            case "boards.greenhouse.io", "job-boards.greenhouse.io" -> this.greenhouseExtractor.extract(URL);
-            case "jobs.lever.co" -> this.leverExtractor.extract(URL);
-            case "jobs.ashbyhq.com" -> this.ashbyExtractor.extract(URL);
-            default -> throw new JobParseException( //default will be updated to use a playwright for webscraping.
-                    "Unsupported job provider: " + host
-            );
+            case "boards.greenhouse.io", "job-boards.greenhouse.io" -> this.greenhouseExtractor.extract(URL); //returns a string in json format
+            case "jobs.lever.co" -> this.leverExtractor.extract(URL); //returns a string in json format
+            case "jobs.ashbyhq.com" -> this.ashbyExtractor.extract(URL); //returns a string in json format
+            default -> this.playwrightExtractor.extract(URL); //returns a plain string, main fallback.
         };
 
     }
 
-
     private String buildClaudeRequest(String postingText) {
 
         JSONObject body = buildRequestBody(postingText);
-
 
         return body.toString();
     }
