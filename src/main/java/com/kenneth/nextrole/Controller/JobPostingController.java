@@ -1,6 +1,5 @@
 package com.kenneth.nextrole.Controller;
 
-import com.kenneth.nextrole.Model.JobPosting;
 import com.kenneth.nextrole.Service.JobPostingService;
 import com.kenneth.nextrole.dto.jobposting.CreateJobPostingRequest;
 import com.kenneth.nextrole.dto.jobposting.JobPostingResponse;

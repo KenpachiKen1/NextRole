@@ -1,12 +1,9 @@
 package com.kenneth.nextrole.dto.jobposting;
 
-import com.kenneth.nextrole.Model.Keyword;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.Set;
 
 @Getter

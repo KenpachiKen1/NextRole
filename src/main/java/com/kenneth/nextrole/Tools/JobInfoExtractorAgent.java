@@ -4,9 +4,6 @@ package com.kenneth.nextrole.Tools;
 import com.kenneth.nextrole.Tools.dto.JobExtractionResponse;
 import com.kenneth.nextrole.exception.JobParseException;
 import org.json.JSONArray;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 import java.io.IOException;
 import java.net.URI;
 
