@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,10 +22,13 @@ public class JobPosting {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String title;
+    @Column(nullable = true)
     private Double salary;
     private String location;
+    @Column(length = 1000)
     private String postingUrl;
     private String requisitionCode;
+    @Column(columnDefinition = "TEXT")
     private String description;
 
 

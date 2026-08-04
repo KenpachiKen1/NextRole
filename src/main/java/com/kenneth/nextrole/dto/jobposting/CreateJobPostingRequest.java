@@ -14,9 +14,6 @@ public class CreateJobPostingRequest {
     private Double salary;
     private String postingUrl;
     private String employmentType;
-
     @Nullable
     private Long companyId; //if null then the company was not in the database
-    private String requisitionCode;
-
 }

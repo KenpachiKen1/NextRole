@@ -21,7 +21,7 @@ public class AshbyExtractor implements JobExtractor {
     private static final String ASHBY_HOST = "jobs.ashbyhq.com";
     private static final String ASHBY_API_BASE = "https://api.ashbyhq.com/posting-api/job-board/";
 
-    private static final Pattern GET_COMPANY_NAME = Pattern.compile("^/([^/]+)/([^/]+)/?$");
+    private static final Pattern GET_COMPANY_NAME = Pattern.compile("^/([^/]+)/([^/]+?)(?:/application)?/?$");
 
     private final RestClient restClient;
     private final ObjectMapper mapper;

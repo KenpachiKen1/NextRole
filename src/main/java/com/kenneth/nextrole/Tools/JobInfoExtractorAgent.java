@@ -86,7 +86,7 @@ public class JobInfoExtractorAgent {
                 - Preserve wording where reasonable.
                 - Do not invent information.
                 - Extract only information that exists in the posting.
-                - jobDescription should be a concise summary (2-4 paragraphs), not the entire posting.
+                - jobDescription should be a concise summary (2 paragraphs), not the entire posting. Only keep relevant information stuff like relocation or Sponsorship does not matter. Mainly highlight the responsibilities.
                 - requiredSkills should contain technologies, programming languages, frameworks, and tools.
                 - Give only one salary amount not a range, also omit the currency symbol just the plain number.
                 - employmentType should be values like:

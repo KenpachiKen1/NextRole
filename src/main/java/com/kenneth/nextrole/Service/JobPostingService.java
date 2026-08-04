@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JobPostingService {
@@ -43,8 +44,16 @@ public class JobPostingService {
                 .postingUrl(jp.getPostingUrl())
                 .companyId(jp.getCompany().getId())
                 .companyName(jp.getCompany().getName())
-                .reqCode(jp.getRequisitionCode())
-                .build();
+                .reqCode(jp.getRequisitionCode()).jobDescription(jp.getDescription()).
+                preferredSkills(jp.getPreferredKeywords()
+                        .stream()
+                        .map(Keyword::getKeyword)
+                        .collect(Collectors.toSet())).requiredSkills(
+                        jp.getRequiredKeywords()
+                                .stream()
+                                .map(Keyword::getKeyword)
+                                .collect(Collectors.toSet())
+                ).build();
     }
 
 
@@ -67,7 +76,7 @@ public class JobPostingService {
                 title(rp.getJobTitle()).
                 salary(rp.getSalary()).
                 company(company).location(rp.getLocation()).postingUrl(request.getPostingUrl()).
-                requisitionCode(rp.getRequisitionCode())
+                requisitionCode(rp.getRequisitionCode()).description(rp.getJobDescription())
                 .build();
 
         for (String word : rp.getPreferredSkills()){
