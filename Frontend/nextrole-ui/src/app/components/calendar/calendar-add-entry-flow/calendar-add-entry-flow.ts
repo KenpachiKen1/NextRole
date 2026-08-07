@@ -4,6 +4,10 @@ import { JobStatus } from '../../../enums/jobEntry-status.enums';
 import { JobStatusInfo } from '../../../utilities/job-status-lookup';
 import { ResumeService } from '../../../services/resumeService';
 import { ResumeResponse } from '../../../models/resume.model';
+import { JobPostingService } from '../../../services/jobPosting';
+import { JobPostingResponse } from '../../../models/job-posting.model';
+import { FormsModule } from '@angular/forms';
+import { CurrencyPipe } from '@angular/common'; 
 
 export interface NewJobEntryPayload {
   jobPostingId: number;
@@ -16,6 +20,7 @@ export interface NewJobEntryPayload {
 type FlowStep =
   | 'choose-posting'
   | 'search-posting'
+  | 'posting-details' 
   | 'add-posting-method'
   | 'manual-posting-form'
   | 'scrape-loading'
@@ -25,13 +30,13 @@ type FlowStep =
 
 @Component({
   selector: 'app-calendar-add-entry-flow',
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule, CurrencyPipe],
   templateUrl: './calendar-add-entry-flow.html',
   styleUrl: './calendar-add-entry-flow.css',
 })
 export class CalendarAddEntryFlow implements OnInit {
   private resumeService = inject(ResumeService);
-
+  private postingService = inject(JobPostingService);
   @Input() initialDate: Date | null = null;
 
   @Output() close = new EventEmitter<void>();
@@ -48,11 +53,14 @@ export class CalendarAddEntryFlow implements OnInit {
 
   resumes: ResumeResponse[] = [];
 
+  searchResults = signal<JobPostingResponse[]>([]);
+
   jobStatuses = Object.entries(JobStatusInfo).map(([key, info]) => ({
     key: key as JobStatus,
     ...info,
   }));
 
+  searchTitle: string = '';
   ngOnInit() {
     // needed once the user reaches pick-resume — fetched up front so it's
     // ready by the time they get there, same pattern as the edit form
@@ -64,6 +72,20 @@ export class CalendarAddEntryFlow implements OnInit {
     });
   }
 
+  selectedPosting = signal<JobPostingResponse | null>(null);
+
+  viewPostingDetails(job: JobPostingResponse) {
+    this.selectedPosting.set(job);
+    this.goTo('posting-details');
+  }
+
+  confirmPostingSelection() {
+    const job = this.selectedPosting();
+    if (!job) return;
+    this.jobPostingId.set(job.id);
+    this.goTo('pick-resume');
+  }
+
   goTo(step: FlowStep) {
     this.currentStep.set(step);
   }
@@ -72,6 +94,19 @@ export class CalendarAddEntryFlow implements OnInit {
     this.close.emit();
   }
 
+  searchJobPostings() {
+    this.postingService.searchByTitle(this.searchTitle).subscribe({
+      next: (response) => {
+        console.log(response);
+        Array.isArray(response)
+          ? this.searchResults.set(response)
+          : this.searchResults.set([response]); //should always be an array but checking to be sure
+      },
+      error: (err) => {
+        console.error('Searching for jobs error: ', err);
+      },
+    });
+  }
   selectExistingPosting(id: number) {
     this.jobPostingId.set(id);
     this.goTo('pick-resume');

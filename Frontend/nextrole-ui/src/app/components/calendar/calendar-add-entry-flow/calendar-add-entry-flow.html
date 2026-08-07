@@ -29,9 +29,98 @@
 
         <input
           type="text"
+          [(ngModel)]="searchTitle"
           placeholder="e.g. Meridian Analytics"
           class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-3"/>
-        <p class="text-xs text-[#8A8F99] italic">Search results will appear here.</p>
+
+        <button
+          class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg mt-2 mb-5"
+          (click)="searchJobPostings()">
+          Search
+        </button>
+
+        @for (job of searchResults(); track job.id) {
+          <button
+            type="button"
+            (click)="viewPostingDetails(job)"
+            class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5 hover:border-[#B9932A] hover:shadow-sm transition-colors">
+            <p class="text-sm font-semibold text-[#1B2430]">{{ job.title }}</p>
+            <p class="text-xs text-[#5B6270] mt-0.5">{{ job.companyName }}</p>
+            <div class="flex items-center justify-between mt-2">
+              <span class="text-xs text-[#8A8F99]">{{ job.location }}</span>
+              @if (job.salary) {
+                <span class="text-xs font-medium text-[#B9932A]">
+                  {{ job.salary | currency:'USD':'symbol':'1.0-0' }}
+                </span>
+              }
+            </div>
+          </button>
+        } @empty {
+          <p class="text-xs text-[#8A8F99] italic">Search results will appear here.</p>
+        }
+      }
+
+      @case ('posting-details') {
+        @if (selectedPosting(); as job) {
+          <button
+            class="text-xs text-black font-bold mb-3 hover:text-[#1B2430] hover:scale-y-110 hover:scale-x-110 hover: cursor-pointer transition-colors"
+            (click)="goTo('search-posting')">
+            ← Back to results
+          </button>
+
+          <h3 class="text-base font-semibold text-[#1B2430] leading-snug">{{ job.title }}</h3>
+          <p class="text-sm text-[#5B6270] mt-0.5">{{ job.companyName }}</p>
+
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2.5 mb-4">
+            @if (job.location) {
+              <span class="text-xs text-[#8A8F99]">{{ job.location }}</span>
+            }
+            @if (job.salary) {
+              <span class="text-xs font-medium text-[#B9932A]">
+                {{ job.salary | currency:'USD':'symbol':'1.0-0' }}
+              </span>
+            }
+            @if (job.reqCode) {
+              <span class="text-xs text-[#8A8F99]">Req {{ job.reqCode }}</span>
+            }
+          </div>
+
+          @if (job.requiredSkills?.length) {
+            <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Required</p>
+            <div class="flex flex-wrap gap-1.5 mb-3.5">
+              @for (skill of job.requiredSkills; track skill) {
+                <span class="text-xs px-2 py-0.5 rounded-full bg-[#1B2430] text-[#F3E9CD]">{{ skill }}</span>
+              }
+            </div>
+          }
+
+          @if (job.preferredSkills?.length) {
+            <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Preferred</p>
+            <div class="flex flex-wrap gap-1.5 mb-4">
+              @for (skill of job.preferredSkills; track skill) {
+                <span class="text-xs px-2 py-0.5 rounded-full bg-white border border-[#E4DDCC] text-[#5B6270]">{{ skill }}</span>
+              }
+            </div>
+          }
+
+          @if (job.jobDescription) {
+            <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Description</p>
+            <p class="text-xs text-[#5B6270] leading-relaxed whitespace-pre-line mb-4">{{ job.jobDescription }}</p>
+          }
+
+          @if (job.postingUrl) {
+            <a [href]="job.postingUrl" target="_blank" rel="noopener"
+               class="block text-xs text-[#B9932A] hover:underline mb-4">
+              View original posting ↗
+            </a>
+          }
+
+          <button
+            class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg"
+            (click)="confirmPostingSelection()">
+            Use this posting
+          </button>
+        }
       }
 
       @case ('add-posting-method') {

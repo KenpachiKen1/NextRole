@@ -17,6 +17,9 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
     List<JobPosting> findByTitleContainingIgnoreCase(String title);
 
 
+    @Query(value = "SELECT * FROM job_posting ORDER BY RANDOM() LIMIT 10", nativeQuery = true)
+    List<JobPosting> findRandom10();
+
     @Query("SELECT DISTINCT r FROM JobPosting r JOIN r.preferredKeywords k WHERE k.keyword IN :keywords")
     List<JobPosting> findByPreferredKeywords(@Param("keywords") List<String> keywords);
 

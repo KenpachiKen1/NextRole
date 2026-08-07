@@ -20,9 +20,12 @@ export interface JobPostingResponse {
   id: number;
   title: string;
   location: string;
-  salary: number;
+  salary: number | null;
   postingUrl: string;
-  companyId: number;
-  companyName: string;
+  companyId: number | null;
+  companyName: string | null;
   reqCode: string;
+  requiredSkills: string[];
+  preferredSkills: string[];
+  jobDescription: string;
 }
