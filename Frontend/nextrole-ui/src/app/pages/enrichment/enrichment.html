@@ -1,1 +1,73 @@
-<p>enrichment works!</p>
+<div class="p-8">
+
+  <h1 class="text-3xl font-semibold text-[#1B2430] mb-1" style="font-family:'Fraunces',serif;">
+    AI Hub
+  </h1>
+  <p class="text-sm text-[#5B6270] mb-8">
+    @if (jobPostingId()) {
+      Pick how you'd like to prepare for this role.
+    } @else {
+      Pick how you'd like to sharpen your applications or your resume!.
+    }
+  </p>
+
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+    @for (option of options; track option.key) {
+      <div
+        class="enrichment-card flex flex-col bg-white border border-[#E4DDCC] rounded-2xl p-6 min-h-120"
+        [style.--accent]="option.color">
+
+        <span
+          class="self-start text-white text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-4"
+          [style.background-color]="option.color">
+          {{ option.title }}
+        </span>
+
+        <p class="text-sm text-[#5B6270] leading-relaxed mb-5">
+          {{ option.description }}
+        </p>
+
+        <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2.5">What it does</p>
+        <ul class="flex flex-col gap-2 mb-5">
+          @for (feature of option.features; track feature) {
+            <li class="flex gap-2 text-sm text-[#5B6270] leading-snug">
+              <span class="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full" [style.background-color]="option.color"></span>
+              {{ feature }}
+            </li>
+          }
+        </ul>
+
+        <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2.5">What it won't do</p>
+        <ul class="flex flex-col gap-2 mb-6">
+          @for (limitation of option.limitations; track limitation) {
+            <li class="flex gap-2 text-sm text-[#8A8F99] leading-snug">
+              <span class="shrink-0 text-[#C4C8CF] leading-snug">—</span>
+              {{ limitation }}
+            </li>
+          }
+        </ul>
+
+        <button
+          type="button"
+          (click)="start(option)"
+          class="mt-auto w-full py-3 rounded-xl text-white text-sm font-semibold transition-opacity hover:opacity-90"
+          [style.background-color]="option.color">
+          Start
+        </button>
+
+      </div>
+    }
+
+  </div>
+
+  <div class="mt-8 rounded-xl border border-[#E4DDCC] bg-[#FAF8F2] px-5 py-4">
+    <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Before you use this</p>
+    <p class="text-sm text-[#5B6270] leading-relaxed">
+      AI can make mistakes. Always read the output carefully and verify anything before you
+      send it to an employer. The resume you submit is yours, not the model's.
+      If agent output looks wrong, misleading, or malicious, please report it and I'll fix it as soon as possible!
+    </p>
+  </div>
+
+</div>

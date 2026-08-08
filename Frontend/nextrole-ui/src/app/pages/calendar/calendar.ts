@@ -7,6 +7,7 @@ import {
   CreateJobEntryRequest,
   UpdateJobEntryRequest,
 } from '../../models/job-entry.model';
+import { JobStatus } from '../../enums/jobEntry-status.enums';
 import { Button } from '../../components/global/button/button';
 import { DatePipe, NgClass } from '@angular/common';
 import { JobStatusInfo } from '../../utilities/job-status-lookup';
@@ -14,15 +15,22 @@ import { CalendarEntryPopup } from '../../components/calendar/calendar-entry-pop
 import {
   CalendarAddEntryFlow,
   NewJobEntryPayload,
-} from '../../components/calendar/calendar-add-entry-flow/calendar-add-entry-flow'
+} from '../../components/calendar/calendar-add-entry-flow/calendar-add-entry-flow';
 import {
   CalendarEditEntryForm,
   UpdateJobEntryPayload,
-} from '../../components/calendar/calendar-edit-entry-flow/calendar-edit-entry-flow'
-
+} from '../../components/calendar/calendar-edit-entry-flow/calendar-edit-entry-flow';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-calendar',
-  imports: [Button, DatePipe, NgClass, CalendarEntryPopup, CalendarAddEntryFlow, CalendarEditEntryForm],
+  imports: [
+    Button,
+    DatePipe,
+    NgClass,
+    CalendarEntryPopup,
+    CalendarAddEntryFlow,
+    CalendarEditEntryForm,
+  ],
   templateUrl: './calendar.html',
   styleUrl: './calendar.css',
 })
@@ -37,6 +45,13 @@ export class Calendar implements OnInit {
     ...info,
   }));
 
+  private router = inject(Router);
+  handleEnrichEntry(entry: JobEntryResponse) {
+    this.closeDayPopup();
+    this.router.navigate(['/ai-hub'], {
+      queryParams: { entryId: entry.id, jobPostingId: entry.jobPostingId },
+    });
+  }
   year = signal(this.today.getFullYear());
   month = signal(this.today.getMonth());
 
@@ -52,11 +67,24 @@ export class Calendar implements OnInit {
   // non-null while the edit form is open; the entry being edited
   editingEntry = signal<JobEntryResponse | null>(null);
 
+  daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
   ngOnInit() {
     this.loadMonth();
   }
 
-  daysOfTheWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  // local-date key so entries land on the cell the user actually sees
+  private dateKey(d: Date | string): string {
+    const date = typeof d === 'string' ? new Date(d) : d;
+    const y = date.getFullYear();
+    const m = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${y}-${m}-${day}`;
+  }
+
+  statusColor(status: JobStatus): string {
+    return JobStatusInfo[status].color;
+  }
 
   nextMonth() {
     if (this.month() === 11) {
@@ -82,7 +110,29 @@ export class Calendar implements OnInit {
 
   loadMonth() {
     const days = this.calendarService.getGridCalendarDays(this.year(), this.month());
+
+    // render the grid immediately, then fill in entries when they arrive
     this.grid.set(days);
+
+    this.jobEntryService.getEntries().subscribe({
+      next: (entries) => {
+        const byDate = new Map<string, JobEntryResponse[]>();
+
+        for (const entry of entries) {
+          const key = this.dateKey(entry.appliedAt);
+          const bucket = byDate.get(key);
+          bucket ? bucket.push(entry) : byDate.set(key, [entry]);
+        }
+
+        this.grid.set(
+          days.map((day) => ({
+            ...day,
+            jobEntries: byDate.get(this.dateKey(day.date)) ?? [],
+          })),
+        );
+      },
+      error: (err) => console.error('getEntries() failed:', err),
+    });
   }
 
   openDay(day: CalendarDay) {

@@ -1,0 +1,14 @@
+.enrichment-card {
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease;
+}
+
+.enrichment-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent);
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 18px 40px -12px color-mix(in srgb, var(--accent) 55%, transparent);
+}

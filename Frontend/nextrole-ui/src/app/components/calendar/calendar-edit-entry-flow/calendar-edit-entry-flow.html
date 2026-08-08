@@ -1,9 +1,9 @@
 @if (entry) {
   <div class="fixed inset-0 bg-[#1B2430]/55 flex items-center justify-center z-50" (click)="close.emit()">
 
-    <div class="bg-white rounded-2xl p-6 w-96 shadow-2xl" (click)="$event.stopPropagation()">
+    <div class="bg-white rounded-2xl p-7 w-120 shadow-2xl" (click)="$event.stopPropagation()">
 
-      <h2 class="text-xl font-bold text-[#1B2430] mb-4" style="font-family:'Fraunces',serif;">
+      <h2 class="text-xl font-bold text-[#1B2430] mb-5" style="font-family:'Fraunces',serif;">
         Edit {{ entry.jobTitle }}
       </h2>
 
@@ -29,12 +29,22 @@
 
         <div>
           <label class="block text-sm font-medium text-[#5B6270] mb-1">Notes</label>
-          <textarea formControlName="notes" rows="3" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm"></textarea>
+          <textarea formControlName="notes" rows="4" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm"></textarea>
         </div>
 
-        <div class="flex gap-2 mt-2">
-          <app-button variant="secondary" (click)="close.emit()">Cancel</app-button>
-          <app-button variant="primary" (click)="submit()">Save</app-button>
+        <div class="flex gap-3 mt-3">
+          <button
+            type="button"
+            (click)="close.emit()"
+            class="flex-1 py-2.5 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
+            Cancel
+          </button>
+          <button
+            type="button"
+            (click)="submit()"
+            class="flex-1 py-2.5 rounded-lg bg-[#1B2430] text-sm font-medium text-[#F3E9CD] hover:bg-[#2A3543] transition-colors">
+            Save
+          </button>
         </div>
 
       </div>

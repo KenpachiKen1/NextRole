@@ -62,7 +62,7 @@ export class CalendarAddEntryFlow implements OnInit {
 
   searchTitle: string = '';
   ngOnInit() {
-    // needed once the user reaches pick-resume — fetched up front so it's
+    // needed once the user reaches pick-resume, fetched up front so it's
     // ready by the time they get there, same pattern as the edit form
     this.resumeService.resumeList().subscribe({
       next: (response) => {

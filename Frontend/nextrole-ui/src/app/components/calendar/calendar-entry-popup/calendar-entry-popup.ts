@@ -16,6 +16,5 @@ export class CalendarEntryPopup {
   @Output() editEntry = new EventEmitter<JobEntryResponse>();
   @Output() deleteEntry = new EventEmitter<number>();
   @Output() addEntry = new EventEmitter<Date>();
-
-  
+  @Output() enrichEntry = new EventEmitter<JobEntryResponse>();
 }

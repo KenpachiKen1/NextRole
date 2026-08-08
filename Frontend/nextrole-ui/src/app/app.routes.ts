@@ -6,6 +6,8 @@ import { DashboardLayout } from './layout/dashboard-layout/dashboard-layout';
 import { Calendar } from './pages/calendar/calendar';
 import { Profile } from './pages/profile/profile';
 import { Login } from './pages/login/login';
+import { Enrichment } from './pages/enrichment/enrichment';
+
 export const routes: Routes = [
   {
     path: '',
@@ -13,6 +15,7 @@ export const routes: Routes = [
     children: [
       { path: 'calendar', component: Calendar },
       { path: 'resume', component: Resume },
+      { path: 'ai-hub', component: Enrichment },
       { path: 'settings', component: Profile },
     ],
   },

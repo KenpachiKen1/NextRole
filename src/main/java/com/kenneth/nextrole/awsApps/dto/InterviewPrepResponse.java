@@ -2,6 +2,8 @@ package com.kenneth.nextrole.awsApps.dto;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @Builder
@@ -9,7 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 public class InterviewPrepResponse {
 
-    private String question;
+    private List<TechnicalQuestions> technicalQuestions;
 
-    private String category;
+    private List<BehavioralQuestions> behavioralQuestions;
 }

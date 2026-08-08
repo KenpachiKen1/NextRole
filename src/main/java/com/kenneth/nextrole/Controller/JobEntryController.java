@@ -61,7 +61,7 @@ public class JobEntryController {
 
 
     @GetMapping("/jobEntryList")
-    public ResponseEntity <List<JobEntryResponse>> getEntries(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal, @RequestParam JobStatus status, @RequestParam String title){
+    public ResponseEntity <List<JobEntryResponse>> getEntries(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal, @RequestParam(required = false) JobStatus status , @RequestParam(required = false) String title){
         User user = customUserPrincipal.getUser();
 
         // GET /job-entries/filter?title=engineer&status=SUBMITTED
