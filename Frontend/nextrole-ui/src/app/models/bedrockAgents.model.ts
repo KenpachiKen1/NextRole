@@ -1,6 +1,6 @@
 
 export interface ResumeFeedbackResponse {
-  overrallResumeScore: number;
+  overallResumeScore: number;
   strengths: string[];
   weaknesses: string[];
   atsWarnings: string[];

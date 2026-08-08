@@ -1,1 +1,173 @@
-<p>resume-feedback works!</p>
+<div class="fixed inset-0 bg-[#1B2430]/55 flex items-center justify-center z-50 p-6" (click)="cancel()">
+  <div
+    class="bg-[#F6F2E9] rounded-2xl shadow-2xl w-full max-w-6xl h-[92vh] min-h-160 flex flex-col overflow-hidden"
+    (click)="$event.stopPropagation()">
+
+    <!-- HEADER -->
+    <div class="flex items-start justify-between px-7 py-5 border-b border-[#E4DDCC] bg-white shrink-0">
+      <div>
+        <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-0.5">AI Hub</p>
+        <h2 class="text-xl font-semibold text-[#1B2430]" style="font-family:'Fraunces',serif;">
+          Resume Feedback
+        </h2>
+      </div>
+      <button
+        type="button"
+        (click)="cancel()"
+        class="text-[#8A8F99] hover:text-[#1B2430] text-2xl leading-none transition-colors">
+        &times;
+      </button>
+    </div>
+
+    <!-- BODY -->
+    <div class="flex flex-1 gap-6 p-7 overflow-hidden min-h-0">
+
+      <!-- LEFT: resume preview -->
+      <div class="w-1/2 flex flex-col min-h-0">
+        <app-resume-previewer
+          class="h-1/2 min-h-0"
+          [previewUrl]="previewUrl()"
+          [isLoading]="previewLoading()">
+        </app-resume-previewer>
+      </div>
+
+      <!-- RIGHT: picker / loading / results -->
+      <div class="w-1/2 overflow-y-auto pr-1 min-h-0">
+
+        <!-- resume picker -->
+        <div class="mb-5">
+          <label class="block text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2">Resume</label>
+          <div class="relative">
+            <select
+              class="w-full appearance-none px-4 py-3.5 pr-12 rounded-lg border border-[#E4DDCC] bg-white text-sm text-[#1B2430] cursor-pointer focus:outline-none focus:border-[#B9932A]"
+              (change)="chooseResumeId(+$any($event.target).value)">
+              <option [value]="null" disabled [selected]="resumeId() === null">Choose a resume…</option>
+              @for (resume of resumes; track resume.id) {
+                <option [value]="resume.id">{{ resume.resumeTitle }}</option>
+              }
+            </select>
+            <svg
+              class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A8F99]"
+              fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+        </div>
+
+        @if (errorMessage()) {
+          <div class="rounded-lg border border-[#B7412C] bg-[#FDECEA] px-4 py-3 mb-5">
+            <p class="text-sm text-[#8C1D18]">{{ errorMessage() }}</p>
+          </div>
+        }
+
+        @if (!agentResponse()) {
+          <button
+            type="button"
+            (click)="invokeResumeFeedbackAgent()"
+            [disabled]="!canSubmit()"
+            class="w-full py-3 rounded-xl bg-[#9F1239] text-white text-sm font-semibold transition-opacity hover:opacity-90 disabled:opacity-40 disabled:cursor-not-allowed">
+            @if (loading()) { Reviewing your resume… } @else { Get feedback }
+          </button>
+
+          @if (loading()) {
+            <p class="text-xs text-[#8A8F99] text-center mt-3">This usually takes a few seconds.</p>
+          }
+        }
+
+        <!-- RESULTS -->
+        @if (agentResponse(); as feedback) {
+
+          <!-- score -->
+          <div class="flex flex-col items-center py-6 mb-5">
+            <nz-progress
+              nzType="circle"
+              [nzPercent]="progressValue()"
+              [nzWidth]="170"
+              [nzStrokeWidth]="9"
+              [nzStrokeColor]="progressColor()"
+              nzStatus="active">
+            </nz-progress>
+            <p class="text-sm font-semibold text-[#1B2430] mt-3">{{ scoreLabel() }}</p>
+            <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mt-0.5">Overall score</p>
+          </div>
+
+          <!-- best bullet: gold box, title on the border -->
+          @if (feedback.bestResumeBullet) {
+            <div class="relative border-2 border-[#B9932A] rounded-xl px-5 pt-5 pb-4 mb-5 bg-[#FDFAF2] cursor-pointer transition-shadow hover:shadow-md">
+              <span class="absolute -top-2.5 left-4 px-2 bg-[#F6F2E9] text-[11px] font-semibold uppercase tracking-wider text-[#B9932A]">
+                Strongest bullet
+              </span>
+              <p class="text-sm text-[#5B6270] leading-relaxed italic">{{ feedback.bestResumeBullet }}</p>
+            </div>
+          }
+
+          <!-- strengths -->
+          @if (feedback.strengths?.length) {
+            <div class="rounded-xl border border-[#7CB342] bg-[#F2F8EE] px-5 py-4 mb-4 cursor-pointer transition-shadow hover:shadow-md">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-[#2E7D32] mb-2.5">Strengths</p>
+              <ul class="flex flex-col gap-2">
+                @for (item of feedback.strengths; track item) {
+                  <li class="flex gap-2 text-sm text-[#41603A] leading-snug">
+                    <span class="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-[#7CB342]"></span>
+                    {{ item }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+
+          <!-- weaknesses -->
+          @if (feedback.weaknesses?.length) {
+            <div class="rounded-xl border border-[#E8A33D] bg-[#FDF6EC] px-5 py-4 mb-4 cursor-pointer transition-shadow hover:shadow-md">
+              <p class="text-[11px] font-semibold uppercase tracking-wider text-[#B4761A] mb-2.5">Weaknesses</p>
+              <ul class="flex flex-col gap-2">
+                @for (item of feedback.weaknesses; track item) {
+                  <li class="flex gap-2 text-sm text-[#7A5518] leading-snug">
+                    <span class="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-[#E8A33D]"></span>
+                    {{ item }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+
+          <!-- ATS warnings -->
+          @if (feedback.atsWarnings?.length) {
+            <div class="rounded-xl border-2 border-[#B7412C] bg-[#FDECEA] px-5 py-4 mb-4 shadow-sm cursor-pointer transition-shadow hover:shadow-md">
+              <p class="text-[11px] font-bold uppercase tracking-wider text-[#8C1D18] mb-2.5">⚠ ATS Warnings</p>
+              <ul class="flex flex-col gap-2">
+                @for (item of feedback.atsWarnings; track item) {
+                  <li class="flex gap-2 text-sm font-medium text-[#8C1D18] leading-snug">
+                    <span class="shrink-0 mt-1.5 w-1.5 h-1.5 rounded-full bg-[#B7412C]"></span>
+                    {{ item }}
+                  </li>
+                }
+              </ul>
+            </div>
+          }
+
+          <div class="flex gap-3 mt-5">
+            <button
+              type="button"
+              (click)="reset()"
+              class="flex-1 py-2.5 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
+              Run again
+            </button>
+            <button
+              type="button"
+              (click)="cancel()"
+              class="flex-1 py-2.5 rounded-lg bg-[#1B2430] text-sm font-medium text-[#F3E9CD] hover:bg-[#2A3543] transition-colors">
+              Done
+            </button>
+          </div>
+
+          <p class="text-[11px] text-[#8A8F99] leading-relaxed mt-4">
+            AI can make mistakes — double-check anything before you send it to an employer.
+          </p>
+        }
+
+      </div>
+    </div>
+
+  </div>
+</div>

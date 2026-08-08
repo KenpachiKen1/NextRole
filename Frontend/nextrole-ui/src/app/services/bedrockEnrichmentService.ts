@@ -15,7 +15,7 @@ export class bedrockEnrichmentService {
   }
   tailorResume(resumeId: number | null, jobPostingId: number | null) {
     return this.http.post<ResumeTailoringResponse>(
-      `${this.apiUrl}/resumeTailoring-agent/`,
+      `${this.apiUrl}/resumeTailoring-agent`,
       { resumeId, jobPostingId },
       { headers: this.getHeaders() },
     );
@@ -23,7 +23,7 @@ export class bedrockEnrichmentService {
 
     InvokeInterviewPrep(resumeId: number, jobPostingId: number) { 
          return this.http.post<InterviewPrepResponse>(
-           `${this.apiUrl}/interviewPrep-agent/`,
+           `${this.apiUrl}/interviewPrep-agent`,
            { resumeId, jobPostingId },
            { headers: this.getHeaders() },
          );
@@ -31,8 +31,8 @@ export class bedrockEnrichmentService {
 
 
     resumeFeedback(resumeId: number) {
-        return this.http.post<InterviewPrepResponse>(
-          `${this.apiUrl}/resumeFeedback-agent/`,
+        return this.http.post<ResumeFeedbackResponse>(
+          `${this.apiUrl}/resumeFeedback-agent`,
           { resumeId },
           { headers: this.getHeaders() },
         );

@@ -1,8 +1,13 @@
 import { Component, inject, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { ResumeFeedback } from '../../components/enrichmentFeatures/resume-feedback/resume-feedback';
+import { ResumeTailoring } from '../../components/enrichmentFeatures/resume-tailoring/resume-tailoring';
+import { InterviewPrep } from '../../components/enrichmentFeatures/interview-prep/interview-prep';
+
+type EnrichmentKey = 'tailoring' | 'interview-prep' | 'feedback';
 
 interface EnrichmentOption {
-  key: 'tailoring' | 'interview-prep' | 'feedback';
+  key: EnrichmentKey;
   title: string;
   description: string;
   color: string;
@@ -12,17 +17,18 @@ interface EnrichmentOption {
 
 @Component({
   selector: 'app-enrichment',
-  imports: [],
+  imports: [ResumeFeedback, ResumeTailoring, InterviewPrep],
   templateUrl: './enrichment.html',
   styleUrl: './enrichment.css',
 })
 export class Enrichment {
   private route = inject(ActivatedRoute);
-  private router = inject(Router);
 
   // set when arriving from a calendar entry; null on direct navigation
   entryId = signal<number | null>(null);
   jobPostingId = signal<number | null>(null);
+
+  activeModal = signal<EnrichmentKey | null>(null);
 
   options: EnrichmentOption[] = [
     {
@@ -33,14 +39,14 @@ export class Enrichment {
       color: '#5B21B6',
       features: [
         'Reframes existing bullets toward the posting',
+        "Shows which of the posting's keywords your resume is missing",
         "Suggests stronger phrasing for what you've written",
         'Highlights experience worth moving higher',
-        "Aligns your wording with the posting's language",
       ],
       limitations: [
-        "Will not suggest adding keywords you don't already have",
-        "Will not invent or recommend experience you haven't listed",
-        'Works purely from your resume as written',
+        'Will not add keywords or experience to your resume for you',
+        "Will not claim skills you haven't listed",
+        'Works purely from your resume as written — gaps are yours to fill',
       ],
     },
     {
@@ -80,6 +86,7 @@ export class Enrichment {
       ],
     },
   ];
+
   constructor() {
     const params = this.route.snapshot.queryParamMap;
     const entry = params.get('entryId');
@@ -90,7 +97,10 @@ export class Enrichment {
   }
 
   start(option: EnrichmentOption) {
-    // TODO: wire to the backend enrichment endpoints
-    console.log('start', option.key, this.entryId(), this.jobPostingId());
+    this.activeModal.set(option.key);
+  }
+
+  closeModal() {
+    this.activeModal.set(null);
   }
 }
