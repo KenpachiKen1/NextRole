@@ -6,9 +6,17 @@ import { ResumeService } from '../../../services/resumeService';
 import { JobEntryResponse } from '../../../models/job-entry.model';
 import { JobEntryService } from '../../../services/jobEntry';
 
+import { JobPostingService } from '../../../services/jobPosting';
+import { JobPostingResponse } from '../../../models/job-posting.model';
+import { ResumePreviewer } from '../../resume/resume-previewer/resume-previewer';
+import { CurrencyPipe } from '@angular/common';
+
+// in @Component imports: [ResumePreviewer]
+
+
 @Component({
   selector: 'app-resume-tailoring',
-  imports: [],
+  imports: [ResumePreviewer, CurrencyPipe],
   templateUrl: './resume-tailoring.html',
   styleUrl: './resume-tailoring.css',
 })
@@ -16,6 +24,14 @@ export class ResumeTailoring implements OnInit {
   private enrichmentService = inject(bedrockEnrichmentService);
   private resumeService = inject(ResumeService);
   private jobEntryService = inject(JobEntryService);
+
+  private jobPostingService = inject(JobPostingService);
+
+  previewUrl = signal<string | null>(null);
+  previewLoading = signal(false);
+
+  selectedPosting = signal<JobPostingResponse | null>(null);
+  postingLoading = signal(false);
 
   @Output() close = new EventEmitter<void>();
 
@@ -51,12 +67,51 @@ export class ResumeTailoring implements OnInit {
 
   chooseResume(id: number) {
     this.resumeId.set(id);
+    this.reset();
+    this.loadPreview(id);
   }
 
   chooseJobPosting(id: number) {
     this.jobPostingId.set(id);
+    this.reset();
+    this.loadPosting(id);
   }
 
+  private loadPreview(id: number) {
+    this.previewLoading.set(true);
+    this.previewUrl.set(null);
+
+    this.resumeService.viewSingleResume(id).subscribe({
+      next: (response) => {
+        if (this.resumeId() !== id) return;
+        this.previewUrl.set(response.url);
+        this.previewLoading.set(false);
+      },
+      error: (err) => {
+        if (this.resumeId() !== id) return;
+        console.error('viewSingleResume() failed:', err);
+        this.previewLoading.set(false);
+      },
+    });
+  }
+
+  private loadPosting(id: number) {
+    this.postingLoading.set(true);
+    this.selectedPosting.set(null);
+
+    this.jobPostingService.getJobPostingById(id).subscribe({
+      next: (response) => {
+        if (this.jobPostingId() !== id) return;
+        this.selectedPosting.set(response);
+        this.postingLoading.set(false);
+      },
+      error: (err) => {
+        if (this.jobPostingId() !== id) return;
+        console.error('getJobPostingById() failed:', err);
+        this.postingLoading.set(false);
+      },
+    });
+  }
   reset() {
     this.agentResponse.set(null);
     this.errorMessage.set(null);

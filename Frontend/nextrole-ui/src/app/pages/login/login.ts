@@ -27,7 +27,8 @@ export class Login {
 
       this.authService.login(user).subscribe({
         next: (response) => {
-          console.log('login successful', response)
+          localStorage.setItem('access_token', response.token);
+          
         },
 
         error: (err) => {

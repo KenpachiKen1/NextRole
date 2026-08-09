@@ -1,21 +1,29 @@
-import { Component, inject, signal, computed, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { CurrencyPipe } from '@angular/common';
 import { bedrockEnrichmentService } from '../../../services/bedrockEnrichmentService';
 import { InterviewPrepResponse } from '../../../models/bedrockAgents.model';
 import { ResumeResponse } from '../../../models/resume.model';
 import { ResumeService } from '../../../services/resumeService';
 import { JobEntryResponse } from '../../../models/job-entry.model';
 import { JobEntryService } from '../../../services/jobEntry';
+import { JobPostingResponse } from '../../../models/job-posting.model';
+import { JobPostingService } from '../../../services/jobPosting';
+import { ResumePreviewer } from '../../resume/resume-previewer/resume-previewer';
+
+
+import { NzProgressModule } from 'ng-zorro-antd/progress';
 
 @Component({
   selector: 'app-interview-prep',
-  imports: [],
+  imports: [ResumePreviewer, CurrencyPipe, NzProgressModule],
   templateUrl: './interview-prep.html',
   styleUrl: './interview-prep.css',
 })
-export class InterviewPrep implements OnInit {
+export class InterviewPrep implements OnInit, OnDestroy {
   private enrichmentService = inject(bedrockEnrichmentService);
   private resumeService = inject(ResumeService);
   private jobEntryService = inject(JobEntryService);
+  private jobPostingService = inject(JobPostingService);
 
   @Output() close = new EventEmitter<void>();
 
@@ -24,6 +32,12 @@ export class InterviewPrep implements OnInit {
 
   resumeId = signal<number | null>(null);
   jobPostingId = signal<number | null>(null);
+
+  previewUrl = signal<string | null>(null);
+  previewLoading = signal(false);
+
+  selectedPosting = signal<JobPostingResponse | null>(null);
+  postingLoading = signal(false);
 
   agentResponse = signal<InterviewPrepResponse | null>(null);
   loading = signal(false);
@@ -55,11 +69,49 @@ export class InterviewPrep implements OnInit {
   chooseResume(id: number) {
     this.resumeId.set(id);
     this.reset();
+    this.loadPreview(id);
   }
 
   chooseJobPosting(id: number) {
     this.jobPostingId.set(id);
     this.reset();
+    this.loadPosting(id);
+  }
+
+  private loadPreview(id: number) {
+    this.previewLoading.set(true);
+    this.previewUrl.set(null);
+
+    this.resumeService.viewSingleResume(id).subscribe({
+      next: (response) => {
+        if (this.resumeId() !== id) return; // user switched before this landed
+        this.previewUrl.set(response.url);
+        this.previewLoading.set(false);
+      },
+      error: (err) => {
+        if (this.resumeId() !== id) return;
+        console.error('viewSingleResume() failed:', err);
+        this.previewLoading.set(false);
+      },
+    });
+  }
+
+  private loadPosting(id: number) {
+    this.postingLoading.set(true);
+    this.selectedPosting.set(null);
+
+    this.jobPostingService.getJobPostingById(id).subscribe({
+      next: (response) => {
+        if (this.jobPostingId() !== id) return; // user switched before this landed
+        this.selectedPosting.set(response);
+        this.postingLoading.set(false);
+      },
+      error: (err) => {
+        if (this.jobPostingId() !== id) return;
+        console.error('getJobPostingById() failed:', err);
+        this.postingLoading.set(false);
+      },
+    });
   }
 
   reset() {
@@ -75,6 +127,7 @@ export class InterviewPrep implements OnInit {
   invokeInterviewPrepAgent() {
     const resume = this.resumeId();
     const posting = this.jobPostingId();
+    
 
     if (resume === null || posting === null) {
       this.errorMessage.set('A resume and a job posting are required to use this.');
@@ -84,14 +137,16 @@ export class InterviewPrep implements OnInit {
     const key = `${resume}:${posting}`;
 
     this.loading.set(true);
+    this.startProgress();
     this.errorMessage.set(null);
     this.pendingKey = key;
 
     this.enrichmentService.InvokeInterviewPrep(resume, posting).subscribe({
       next: (response) => {
-        if (this.pendingKey !== key) return; 
+        if (this.pendingKey !== key) return; // stale — selection changed mid-flight
         this.agentResponse.set(response);
         this.loading.set(false);
+        this.finishProgress();
       },
       error: (err) => {
         if (this.pendingKey !== key) return;
@@ -102,5 +157,40 @@ export class InterviewPrep implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  progressPercent = signal(0);
+  private progressTimer: ReturnType<typeof setInterval> | null = null;
+
+  progressColor = { '0%': '#5B21B6', '100%': '#2E7D32' };
+
+  private startProgress() {
+    this.stopProgress();
+    this.progressPercent.set(0);
+
+    // eases toward 90% — the last 10% lands when the response does
+    this.progressTimer = setInterval(() => {
+      const current = this.progressPercent();
+      if (current >= 90) return;
+      const step = current < 60 ? 2 : 1;
+      this.progressPercent.set(Math.min(90, current + step));
+    }, 470);
+  }
+
+  private finishProgress() {
+    this.stopProgress();
+    this.progressPercent.set(100);
+    setTimeout(() => this.progressPercent.set(0), 600);
+  }
+
+  private stopProgress() {
+    if (this.progressTimer) {
+      clearInterval(this.progressTimer);
+      this.progressTimer = null;
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.stopProgress();
   }
 }
