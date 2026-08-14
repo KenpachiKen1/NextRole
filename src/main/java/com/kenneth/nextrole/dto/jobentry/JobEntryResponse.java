@@ -17,6 +17,7 @@ public class JobEntryResponse {
 
     private Long jobPostingId;
     private String jobTitle;
+    private String companyName;
 
     private Long resumeId;
     private String resumeTitle;

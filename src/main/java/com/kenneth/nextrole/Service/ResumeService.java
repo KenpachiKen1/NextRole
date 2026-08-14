@@ -3,6 +3,7 @@ package com.kenneth.nextrole.Service;
 
 import com.kenneth.nextrole.Model.Resume;
 import com.kenneth.nextrole.Model.User;
+import com.kenneth.nextrole.Repository.JobEntryRepository;
 import com.kenneth.nextrole.Repository.ResumeRepository;
 import com.kenneth.nextrole.awsApps.S3Service;
 import com.kenneth.nextrole.dto.resume.CreateResumeRequest;
@@ -23,11 +24,13 @@ import java.util.UUID;
 public class ResumeService {
 
     private final ResumeRepository resumeRepository;
+    private final JobEntryRepository jobEntryRepository;
     private final S3Service service;
 
 
-    public ResumeService (ResumeRepository resumeRepository, S3Service service){
+    public ResumeService (ResumeRepository resumeRepository, JobEntryRepository jobEntryRepository, S3Service service){
         this.resumeRepository = resumeRepository;
+        this.jobEntryRepository = jobEntryRepository;
         this.service = service;
     }
 
@@ -141,6 +144,7 @@ public class ResumeService {
         }
 
         service.deleteResume(resume.getS3ObjectKey());
+        jobEntryRepository.clearResumeReference(id);
         resumeRepository.deleteByIdAndUserId(id, user.getId());
 
         return resumeRepository.findByUserId(user.getId())

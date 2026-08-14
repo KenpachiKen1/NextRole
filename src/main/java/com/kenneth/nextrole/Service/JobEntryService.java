@@ -43,6 +43,9 @@ public class JobEntryService {
                         ? je.getResumeUsed().getId()
                         : null). //in case they didn't upload a resume
                 appliedAt(je.getAppliedAt()).jobTitle(je.getJobPosting().getTitle()).
+                companyName(je.getJobPosting().getCompany() != null
+                        ? je.getJobPosting().getCompany().getName()
+                        : null).
                 status(je.getStatus()).notes(je.getNotes()).
                 resumeTitle(
                         je.getResumeUsed() != null

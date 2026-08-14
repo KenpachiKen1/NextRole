@@ -1,11 +1,11 @@
 export interface CreateJobPostingRequest {
-  title: string;
-  location: string;
-  salary: number;
   postingUrl: string;
-  employmentType: string;
-  companyId: number;
-  requisitionCode: string;
+  title?: string;
+  location?: string;
+  salary?: number;
+  employmentType?: string;
+  companyId?: number;
+  requisitionCode?: string;
 }
 
 export interface UpdateJobPostingRequest {

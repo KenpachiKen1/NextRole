@@ -1,5 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/authService';
 import { LoginRequest } from '../../models/auth.models';
 
@@ -15,6 +16,7 @@ import { LoginRequest } from '../../models/auth.models';
 export class Login {
   private authService = inject(AuthService);
   private fb = inject(FormBuilder)
+  private router = inject(Router);
 
   loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
@@ -28,7 +30,7 @@ export class Login {
       this.authService.login(user).subscribe({
         next: (response) => {
           localStorage.setItem('access_token', response.token);
-          
+          this.router.navigate(['/calendar']);
         },
 
         error: (err) => {

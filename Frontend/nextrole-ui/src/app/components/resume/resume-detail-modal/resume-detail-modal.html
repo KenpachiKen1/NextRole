@@ -1,4 +1,4 @@
-<app-modal>
+<app-modal (close)="closeModal()">
 
 
 <div class="flex w-225 h-150 gap-6">
@@ -69,16 +69,6 @@
 
 
             <app-button
-                variant="secondary"
-                (click)="previewResume()">
-
-                Preview
-
-            </app-button>
-
-
-
-            <app-button
                 variant="create"
                 (click)="editResume()">
 
@@ -93,16 +83,6 @@
                 (click)="deleteResume()">
 
                 Delete
-
-            </app-button>
-
-
-
-            <app-button
-                variant="secondary"
-                (click)="tailorResume()">
-
-                AI Tailor
 
             </app-button>
 

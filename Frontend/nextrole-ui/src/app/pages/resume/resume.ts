@@ -4,6 +4,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { ResumeService } from '../../services/resumeService';
 
 import { Button } from '../../components/global/button/button';
+import { Inputs } from '../../components/global/input/input';
+import { Modal } from '../../components/global/modal/modal';
 import { CreateResumeModal } from '../../components/resume/create-resume-modal/create-resume-modal';
 import { ResumeCard } from '../../components/resume/resume-card/resume-card';
 import { ResumeDetailModal } from '../../components/resume/resume-detail-modal/resume-detail-modal';
@@ -12,7 +14,7 @@ import { ResumeResponse, UpdateResumeRequest } from '../../models/resume.model';
 
 @Component({
   selector: 'app-resume',
-  imports: [Button, CreateResumeModal, ResumeCard, ResumeDetailModal],
+  imports: [Button, Inputs, Modal, CreateResumeModal, ResumeCard, ResumeDetailModal],
   templateUrl: './resume.html',
   styleUrl: './resume.css',
 })
@@ -31,6 +33,7 @@ export class Resume implements OnInit {
   isLoadingPreview = signal(false);
 
   showCreateResumeModal = false;
+  showEditResumeModal = signal(false);
 
   updateResumeForm = this.fb.nonNullable.group({
     resumeTitle: ['', Validators.required],
@@ -93,6 +96,8 @@ export class Resume implements OnInit {
     this.openEditResume(resume);
 
     this.closeResumeDetail();
+
+    this.showEditResumeModal.set(true);
   }
 
   openEditResume(resume: ResumeResponse) {
@@ -101,6 +106,10 @@ export class Resume implements OnInit {
     this.updateResumeForm.patchValue({
       resumeTitle: resume.resumeTitle,
     });
+  }
+
+  closeEditResumeModal() {
+    this.showEditResumeModal.set(false);
   }
 
   handleDeleteFromModal(resumeId: number) {
@@ -113,16 +122,13 @@ export class Resume implements OnInit {
     this.resumeService.deleteResume(this.selectedResumeId).subscribe({
       next: (response) => {
         this.user_resume_list.set(response);
+        this.closeResumeDetail();
       },
 
       error: (err) => {
         console.error(err);
       },
     });
-  }
-
-  handleTailorFromModal(resume: ResumeResponse) {
-    console.log('Tailor requested:', resume.resumeTitle);
   }
 
   updateResume() {
@@ -132,6 +138,7 @@ export class Resume implements OnInit {
       this.resumeService.updateResume(this.selectedResumeId, request).subscribe({
         next: () => {
           this.loadResumes();
+          this.closeEditResumeModal();
         },
 
         error: (err) => {

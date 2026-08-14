@@ -20,11 +20,11 @@ export interface NewJobEntryPayload {
 type FlowStep =
   | 'choose-posting'
   | 'search-posting'
-  | 'posting-details' 
+  | 'posting-details'
   | 'add-posting-method'
   | 'manual-posting-form'
+  | 'paste-url'
   | 'scrape-loading'
-  | 'scrape-review'
   | 'pick-resume'
   | 'notes-and-status';
 
@@ -61,6 +61,10 @@ export class CalendarAddEntryFlow implements OnInit {
   }));
 
   searchTitle: string = '';
+  postingUrl: string = '';
+  scrapeError = signal('');
+  // tracks how we got to 'posting-details' so its back button returns to the right step
+  postingSource = signal<'search' | 'scrape'>('search');
   ngOnInit() {
     // needed once the user reaches pick-resume, fetched up front so it's
     // ready by the time they get there, same pattern as the edit form
@@ -75,6 +79,7 @@ export class CalendarAddEntryFlow implements OnInit {
   selectedPosting = signal<JobPostingResponse | null>(null);
 
   viewPostingDetails(job: JobPostingResponse) {
+    this.postingSource.set('search');
     this.selectedPosting.set(job);
     this.goTo('posting-details');
   }
@@ -107,13 +112,35 @@ export class CalendarAddEntryFlow implements OnInit {
       },
     });
   }
+  submitPostingUrl() {
+    if (!this.postingUrl.trim()) return;
+
+    this.scrapeError.set('');
+    this.goTo('scrape-loading');
+
+    this.postingService.createJobPosting({ postingUrl: this.postingUrl }).subscribe({
+      next: (job) => {
+        this.postingSource.set('scrape');
+        this.selectedPosting.set(job);
+        this.goTo('posting-details');
+      },
+      error: (err) => {
+        console.error('createJobPosting() failed:', err);
+        this.scrapeError.set(
+          "Couldn't pull details from that URL. Double check the link, or enter the posting manually.",
+        );
+        this.goTo('paste-url');
+      },
+    });
+  }
+
   selectExistingPosting(id: number) {
     this.jobPostingId.set(id);
     this.goTo('pick-resume');
   }
 
-  // TODO: real handoff once manual-posting-form / scrape-review actually
-  // create a posting server-side and get back a real id
+  // TODO: real handoff once manual-posting-form actually
+  // creates a posting server-side and gets back a real id
   confirmNewPosting(id: number) {
     this.jobPostingId.set(id);
     this.goTo('pick-resume');

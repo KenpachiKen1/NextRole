@@ -1,0 +1,90 @@
+<div class="max-w-5xl mx-auto">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-[#1B2430]">Job Postings</h1>
+    <p class="text-sm text-[#8A8F99] mt-1">
+      @if (searchQuery()) {
+        Results for "{{ searchQuery() }}"
+      } @else {
+        Browse job postings
+      }
+    </p>
+  </div>
+
+  @if (isLoading()) {
+    <p class="text-sm text-[#8A8F99]">Loading postings...</p>
+  } @else if (postings().length === 0) {
+    <p class="text-sm text-[#8A8F99]">No job postings found.</p>
+  } @else {
+    <div class="flex flex-col gap-4">
+      @for (job of postings(); track job.id) {
+        <div
+          class="w-full bg-white border border-[#E4DDCC] rounded-xl p-5 cursor-pointer hover:border-[#B9932A] hover:shadow-sm transition-colors"
+          (click)="toggleExpanded(job.id)">
+
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <h3 class="text-lg font-bold text-[#1B2430]">{{ job.title }}</h3>
+              <p class="text-sm text-[#5B6270] mt-0.5">{{ job.companyName }}</p>
+            </div>
+
+            @if (job.salary) {
+              <span class="text-sm font-semibold text-[#B9932A] whitespace-nowrap">
+                {{ job.salary | currency: 'USD' : 'symbol' : '1.0-0' }}
+              </span>
+            }
+          </div>
+
+          <div class="flex items-center gap-3 mt-3">
+            @if (job.location) {
+              <span class="text-xs text-[#8A8F99]">{{ job.location }}</span>
+            }
+            @if (job.reqCode) {
+              <span class="text-xs text-[#8A8F99]">Req {{ job.reqCode }}</span>
+            }
+          </div>
+
+          @if (expandedId() === job.id) {
+            <div class="mt-4 pt-4 border-t border-[#E4DDCC]" (click)="$event.stopPropagation()">
+
+              @if (job.requiredSkills?.length) {
+                <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Required</p>
+                <div class="flex flex-wrap gap-1.5 mb-3.5">
+                  @for (skill of job.requiredSkills; track skill) {
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-[#1B2430] text-[#F3E9CD]">{{ skill }}</span>
+                  }
+                </div>
+              }
+
+              @if (job.preferredSkills?.length) {
+                <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Preferred</p>
+                <div class="flex flex-wrap gap-1.5 mb-3.5">
+                  @for (skill of job.preferredSkills; track skill) {
+                    <span class="text-xs px-2 py-0.5 rounded-full bg-white border border-[#E4DDCC] text-[#5B6270]">{{ skill }}</span>
+                  }
+                </div>
+              }
+
+              @if (job.jobDescription) {
+                <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Description</p>
+                <p class="text-xs text-[#5B6270] leading-relaxed whitespace-pre-line mb-3.5">{{ job.jobDescription }}</p>
+              }
+
+              @if (job.postingUrl) {
+                <a
+                  [href]="job.postingUrl"
+                  target="_blank"
+                  rel="noopener"
+                  class="text-xs text-[#B9932A] hover:underline">
+                  View original posting ↗
+                </a>
+              }
+            </div>
+          }
+
+        </div>
+      }
+    </div>
+  }
+
+</div>

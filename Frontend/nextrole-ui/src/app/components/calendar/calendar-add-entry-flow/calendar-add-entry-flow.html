@@ -64,8 +64,8 @@
         @if (selectedPosting(); as job) {
           <button
             class="text-xs text-black font-bold mb-3 hover:text-[#1B2430] hover:scale-y-110 hover:scale-x-110 hover: cursor-pointer transition-colors"
-            (click)="goTo('search-posting')">
-            ← Back to results
+            (click)="goTo(postingSource() === 'scrape' ? 'paste-url' : 'search-posting')">
+            ← Back
           </button>
 
           <h3 class="text-base font-semibold text-[#1B2430] leading-snug">{{ job.title }}</h3>
@@ -134,8 +134,35 @@
 
         <button
           class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 text-sm font-medium text-[#1B2430]"
-          (click)="goTo('scrape-loading')">
+          (click)="goTo('paste-url')">
           Paste a job URL
+        </button>
+      }
+
+      @case ('paste-url') {
+        <button
+          class="text-xs text-black font-bold mb-3 hover:text-[#1B2430] hover:scale-y-110 hover:scale-x-110 hover: cursor-pointer transition-colors"
+          (click)="goTo('add-posting-method')">
+          ← Back
+        </button>
+
+        <p class="text-sm text-[#5B6270] mb-3">Paste the link to the job posting</p>
+
+        @if (scrapeError()) {
+          <p class="text-xs text-[#B7412C] bg-[#B7412C]/10 rounded-lg px-3 py-2 mb-3">{{ scrapeError() }}</p>
+        }
+
+        <input
+          type="url"
+          [(ngModel)]="postingUrl"
+          placeholder="https://company.com/careers/job-id"
+          class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-4"/>
+
+        <button
+          class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg disabled:opacity-50"
+          [disabled]="!postingUrl.trim()"
+          (click)="submitPostingUrl()">
+          Continue
         </button>
       }
 
@@ -155,21 +182,8 @@
 
       @case ('scrape-loading') {
         <div class="flex flex-col items-center justify-center py-10 text-sm text-[#8A8F99]">
-          Scraping posting details…
+          Reading the posting and extracting details…
         </div>
-      }
-
-      @case ('scrape-review') {
-        <p class="text-sm text-[#5B6270] mb-3">Review before continuing</p>
-
-        <input type="text" placeholder="Company" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-2.5"/>
-        <input type="text" placeholder="Job title" class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm mb-4"/>
-
-        <button
-          class="w-full bg-[#1B2430] text-[#F3E9CD] text-sm font-medium py-2.5 rounded-lg"
-          (click)="confirmNewPosting(0)">
-          Confirm
-        </button>
       }
 
       @case ('pick-resume') {

@@ -15,6 +15,7 @@ public interface JobPostingRepository extends JpaRepository<JobPosting, Long> {
 
     List<JobPosting> findByCompanyId (Long Id); //List all job postings by the job, should include jobs that the user hasn't applied to either.
     List<JobPosting> findByTitleContainingIgnoreCase(String title);
+    List<JobPosting> findByTitleContainingIgnoreCaseOrCompany_NameContainingIgnoreCase(String title, String companyName);
 
 
     @Query(value = "SELECT * FROM job_posting ORDER BY RANDOM() LIMIT 10", nativeQuery = true)

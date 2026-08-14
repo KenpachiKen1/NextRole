@@ -27,23 +27,13 @@ export class ResumeDetailModal {
   close = new EventEmitter<void>();
 
   @Output()
-  preview = new EventEmitter<ResumeResponse>();
-
-  @Output()
   edit = new EventEmitter<ResumeResponse>();
 
   @Output()
   delete = new EventEmitter<number>();
 
-  @Output()
-  tailor = new EventEmitter<ResumeResponse>();
-
   closeModal() {
     this.close.emit();
-  }
-
-  previewResume() {
-    this.preview.emit(this.resume);
   }
 
   editResume() {
@@ -52,9 +42,5 @@ export class ResumeDetailModal {
 
   deleteResume() {
     this.delete.emit(this.resume.id);
-  }
-
-  tailorResume() {
-    this.tailor.emit(this.resume);
   }
 }

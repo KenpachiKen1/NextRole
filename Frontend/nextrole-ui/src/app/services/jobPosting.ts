@@ -1,6 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { JobPostingResponse, UpdateJobPostingRequest } from '../models/job-posting.model'
+import {
+  JobPostingResponse,
+  UpdateJobPostingRequest,
+  CreateJobPostingRequest,
+} from '../models/job-posting.model'
 
 @Injectable({
   providedIn: 'root',
@@ -39,6 +43,12 @@ export class JobPostingService {
     return this.http.get<JobPostingResponse[]>(`${this.apiUrl}/search`, {
       headers: this.getHeaders(),
       params,
+    });
+  }
+
+  createJobPosting(request: CreateJobPostingRequest) {
+    return this.http.post<JobPostingResponse>(`${this.apiUrl}/create-job-posting`, request, {
+      headers: this.getHeaders(),
     });
   }
 

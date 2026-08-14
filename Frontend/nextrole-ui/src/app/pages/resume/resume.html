@@ -80,14 +80,48 @@
 
         [isLoading]="isLoadingPreview()"
 
-        (preview)="previewResume($event)"
+        (close)="closeResumeDetail()"
 
         (edit)="handleEditFromModal($event)"
 
-        (delete)="handleDeleteFromModal($event)"
-
-        (tailor)="handleTailorFromModal($event)">
+        (delete)="handleDeleteFromModal($event)">
 
     </app-resume-detail-modal>
+
+}
+
+@if(showEditResumeModal()){
+
+    <app-modal (close)="closeEditResumeModal()">
+
+        <div class="w-96 flex flex-col gap-5">
+
+            <h2 class="text-xl font-bold text-[#1B2430]">
+                Edit Resume
+            </h2>
+
+            <app-input
+                label="Resume Name"
+                placeholder="Enter resume name"
+                [control]="updateResumeForm.controls.resumeTitle">
+            </app-input>
+
+            <div class="flex gap-3">
+                <app-button
+                    variant="secondary"
+                    (click)="closeEditResumeModal()">
+                    Cancel
+                </app-button>
+
+                <app-button
+                    variant="create"
+                    (click)="updateResume()">
+                    Save
+                </app-button>
+            </div>
+
+        </div>
+
+    </app-modal>
 
 }

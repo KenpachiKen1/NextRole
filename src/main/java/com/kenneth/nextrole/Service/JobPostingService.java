@@ -176,7 +176,7 @@ public class JobPostingService {
                     .toList();
         }
 
-        return jobPostingRepository.findByTitleContainingIgnoreCase(title)
+        return jobPostingRepository.findByTitleContainingIgnoreCaseOrCompany_NameContainingIgnoreCase(title, title)
                 .stream()
                 .map(this::toResponse)
                 .toList();

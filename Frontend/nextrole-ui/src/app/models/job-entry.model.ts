@@ -17,8 +17,9 @@ export interface JobEntryResponse {
   id: number;
   jobPostingId: number;
   jobTitle: string;
-  resumeId: number;
-  resumeTitle: string;
+  companyName: string;
+  resumeId: number | null;
+  resumeTitle: string | null;
   notes: string;
   status: JobStatus;
   appliedAt: string;

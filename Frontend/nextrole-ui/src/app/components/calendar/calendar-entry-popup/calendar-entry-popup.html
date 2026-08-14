@@ -8,9 +8,12 @@
                 {{ selectedDay.date | date: 'MMMM d, y' }}
             </h2>
              @for (entry of selectedDay.jobEntries; track entry.id) {
-                <div class="bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5">
+                <div
+                    class="bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5 cursor-pointer hover:border-[#B9932A] transition-colors"
+                    (click)="editEntry.emit(entry)">
 
-                <p class="font-semibold text-sm text-[#1B2430] mb-1.5">{{ entry.jobTitle }}</p>
+                <p class="font-semibold text-sm text-[#1B2430] mb-0.5">{{ entry.jobTitle }}</p>
+                <p class="text-xs text-[#5B6270] mb-1.5">{{ entry.companyName }}</p>
 
                 <span
                     class="text-white text-[11px] font-medium px-2.5 py-0.5 rounded-full inline-block"
@@ -18,13 +21,19 @@
                     {{ jobStatusInfo[entry.status].label }}
                 </span>
 
-                <p class="font-mono text-[11px] text-[#8A8F99] mt-2">
-                    Resume: {{ entry.resumeTitle }}
-                </p>
+                @if (entry.resumeTitle) {
+                    <p class="font-mono text-[11px] text-[#8A8F99] mt-2">
+                        Resume: {{ entry.resumeTitle }}
+                    </p>
+                } @else {
+                    <span class="inline-block mt-2 text-[11px] font-medium px-2 py-0.5 rounded-full bg-[#F44336]/10 text-[#F44336]">
+                        Resume missing
+                    </span>
+                }
 
                 <button
                     type="button"
-                    (click)="enrichEntry.emit(entry)"
+                    (click)="enrichEntry.emit(entry); $event.stopPropagation()"
                     class="group block w-full rounded-lg p-[1.5px] bg-linear-to-r from-[#6366F1] to-[#A855F7] mt-3 transition-shadow hover:shadow-md">
                     <span class="flex items-center justify-center gap-1.5 w-full rounded-md bg-white px-3 py-2 text-xs font-medium text-[#6366F1] transition-colors group-hover:bg-transparent group-hover:text-white">
                         Enrich with AI
@@ -32,8 +41,8 @@
                 </button>
 
                 <div class="flex gap-3 mt-2.5">
-                    <button class="text-[11px] text-[#C97F0A] font-medium" (click)="editEntry.emit(entry)">Edit</button>
-                    <button class="text-[11px] text-[#B7412C] font-medium" (click)="deleteEntry.emit(entry.id)">Delete</button>
+                    <button class="text-[11px] text-[#C97F0A] font-medium" (click)="editEntry.emit(entry); $event.stopPropagation()">Edit</button>
+                    <button class="text-[11px] text-[#B7412C] font-medium" (click)="deleteEntry.emit(entry.id); $event.stopPropagation()">Delete</button>
                 </div>
 
                 </div>

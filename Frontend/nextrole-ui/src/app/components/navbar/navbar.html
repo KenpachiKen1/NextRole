@@ -1,10 +1,12 @@
 <header class="h-16 bg-white border-b border-[#E4DDCC] flex items-center justify-between px-7">
 
     <div class="flex items-center gap-2 bg-[#F6F2E9] border border-[#E4DDCC] rounded-lg px-3 py-2 w-72">
-        <span class="text-[#8A8F99] text-sm">&#128269;</span>
+        <span class="text-[#8A8F99] text-sm"></span>
         <input
             type="text"
-            placeholder="Search..."
+            [(ngModel)]="searchTerm"
+            (keyup.enter)="search()"
+            placeholder="Search company or job title..."
             class="bg-transparent border-none outline-none text-sm text-[#1B2430] placeholder-[#8A8F99] w-full"/>
     </div>
 

@@ -35,7 +35,7 @@ public class JobEntryController {
     }
     @PostMapping("/create-entry/{jobPostingID}/{resumeId}/")
     public ResponseEntity <JobEntryResponse> createJobEntry(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
-                                                            CreateJobEntryRequest request,
+                                                            @Valid @RequestBody CreateJobEntryRequest request,
                                                             @PathVariable Long jobPostingID, @PathVariable Long resumeId){
         User user = customUserPrincipal.getUser();
         JobEntryResponse response = js.createEntry(request, user, resumeId, jobPostingID);
@@ -44,7 +44,7 @@ public class JobEntryController {
 
     @PutMapping("/updateJobEntry/{entryId}")
     public ResponseEntity <JobEntryResponse> updateEntry(@AuthenticationPrincipal CustomUserPrincipal customUserPrincipal,
-                                                         @PathVariable Long entryId, UpdateJobEntryRequest request){
+                                                         @PathVariable Long entryId, @Valid @RequestBody UpdateJobEntryRequest request){
         User user = customUserPrincipal.getUser();
         JobEntryResponse response = js.updateEntry(entryId, request, user);
         return ResponseEntity.status(HttpStatus.OK).body(response);

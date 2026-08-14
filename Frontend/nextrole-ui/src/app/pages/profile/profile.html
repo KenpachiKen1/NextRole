@@ -1,1 +1,247 @@
-<p>profile works!</p>
+<div class="max-w-3xl mx-auto">
+
+  <div class="mb-6">
+    <h1 class="text-2xl font-bold text-[#1B2430]">Settings</h1>
+    <p class="text-sm text-[#8A8F99] mt-1">Manage your profile, subscription, and account.</p>
+  </div>
+
+  <div class="flex flex-col gap-6">
+
+    <!-- Profile Information -->
+    <div class="bg-white border border-[#E4DDCC] rounded-xl p-6">
+      <h2 class="font-semibold text-lg text-[#1B2430] mb-4" style="font-family:'Fraunces',serif;">
+        Profile Information
+      </h2>
+
+      <div class="flex items-center gap-3 mb-5">
+        <div class="w-14 h-14 rounded-full bg-[#1B2430] text-[#F3E9CD] flex items-center justify-center text-lg font-medium">
+          {{ currentUser()?.username?.charAt(0)?.toUpperCase() }}
+        </div>
+        <div>
+          <p class="font-semibold text-sm text-[#1B2430]">{{ currentUser()?.username }}</p>
+          <p class="text-xs text-[#8A8F99]">{{ currentUser()?.email }}</p>
+        </div>
+      </div>
+
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="flex flex-col gap-4">
+
+        <div>
+          <label class="block text-sm font-medium text-[#5B6270] mb-1">Username</label>
+          <input
+            formControlName="username"
+            type="text"
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#5B6270] mb-1">Email</label>
+          <input
+            formControlName="email"
+            type="email"
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]" />
+        </div>
+
+        <div class="flex items-center gap-3 mt-1">
+          <button
+            type="submit"
+            [disabled]="isSavingProfile()"
+            class="py-2.5 px-5 rounded-lg bg-[#1B2430] text-sm font-medium text-[#F3E9CD] hover:bg-[#2A3543] transition-colors disabled:opacity-50">
+            {{ isSavingProfile() ? 'Saving...' : 'Save Changes' }}
+          </button>
+
+          @if (profileSaved()) {
+            <span class="text-sm text-[#4CAF50] font-medium">Saved!</span>
+          }
+
+          @if (profileError()) {
+            <span class="text-sm text-[#B7412C] font-medium">{{ profileError() }}</span>
+          }
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Subscription -->
+    <div class="bg-white border border-[#E4DDCC] rounded-xl p-6">
+      <h2 class="font-semibold text-lg text-[#1B2430] mb-4" style="font-family:'Fraunces',serif;">
+        Subscription
+      </h2>
+
+      @if (subscription(); as sub) {
+        <div class="flex items-center gap-2 mb-2">
+          <span
+            class="w-2.5 h-2.5 rounded-full shrink-0"
+            [style.background-color]="subscriptionStatusInfo[sub.subscriptionStatus].color">
+          </span>
+          <span class="font-semibold text-sm text-[#1B2430]">
+            {{ subscriptionStatusInfo[sub.subscriptionStatus].label }}
+          </span>
+        </div>
+
+        <p class="text-sm text-[#8A8F99] mb-1">{{ subscriptionStatusInfo[sub.subscriptionStatus].description }}</p>
+        <p class="text-xs text-[#8A8F99] mb-4">Plan: {{ sub.planName }}</p>
+
+        @if (sub.currentPeriodEnd) {
+          <p class="text-xs text-[#8A8F99] mb-4">
+            {{ sub.cancelAtPeriodEnd ? 'Access ends' : 'Renews' }} on {{ sub.currentPeriodEnd | date: 'MMMM d, y' }}
+          </p>
+        }
+
+        <div class="flex items-center gap-3">
+          @if (sub.subscriptionStatus === SubscriptionStatus.FREE || sub.subscriptionStatus === SubscriptionStatus.CANCELED) {
+            <app-button variant="create" (click)="upgradeToPremium()">
+              Upgrade to Premium
+            </app-button>
+          } @else {
+            <button
+              type="button"
+              [disabled]="isBillingBusy()"
+              (click)="showCancelModal.set(true)"
+              class="py-2.5 px-5 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#B7412C] hover:bg-[#FAF8F2] transition-colors disabled:opacity-50">
+              Cancel Subscription
+            </button>
+          }
+
+          @if (billingError()) {
+            <span class="text-sm text-[#B7412C] font-medium">{{ billingError() }}</span>
+          }
+        </div>
+      } @else {
+        <p class="text-sm text-[#8A8F99]">Loading subscription details...</p>
+      }
+    </div>
+
+    <!-- Report an Issue -->
+    <div class="bg-white border border-[#E4DDCC] rounded-xl p-6">
+      <h2 class="font-semibold text-lg text-[#1B2430] mb-1" style="font-family:'Fraunces',serif;">
+        Report an Issue
+      </h2>
+      <p class="text-sm text-[#8A8F99] mb-4">Run into a bug or have feedback? Let us know.</p>
+
+      <form [formGroup]="issueForm" (ngSubmit)="sendIssueReport()" class="flex flex-col gap-4">
+
+        <div>
+          <label class="block text-sm font-medium text-[#5B6270] mb-1">Subject</label>
+          <input
+            formControlName="subject"
+            type="text"
+            placeholder="Brief summary of the issue"
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]" />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#5B6270] mb-1">Description</label>
+          <textarea
+            formControlName="description"
+            rows="4"
+            placeholder="What happened? Steps to reproduce, if any."
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]"></textarea>
+        </div>
+
+        <div class="flex items-center gap-3 mt-1">
+          <button
+            type="submit"
+            class="py-2.5 px-5 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
+            Send Report
+          </button>
+
+          @if (issueSent()) {
+            <span class="text-sm text-[#4CAF50] font-medium">Thanks — your email client should have opened.</span>
+          }
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Danger Zone -->
+    <div class="bg-white border border-[#F44336]/30 rounded-xl p-6">
+      <h2 class="font-semibold text-lg text-[#B7412C] mb-1" style="font-family:'Fraunces',serif;">
+        Danger Zone
+      </h2>
+      <p class="text-sm text-[#8A8F99] mb-4">
+        Deleting your account permanently removes your applications, resumes, and subscription. This cannot be undone.
+      </p>
+
+      <button
+        type="button"
+        (click)="showDeleteModal.set(true)"
+        class="py-2.5 px-5 rounded-lg border-2 border-[#F44336] text-sm font-medium text-[#F44336] hover:text-white hover:bg-[#F44336] transition-colors">
+        Delete Account
+      </button>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Cancel Subscription Modal -->
+@if (showCancelModal()) {
+  <app-modal (close)="showCancelModal.set(false)">
+    <div class="w-100">
+      <h2 class="text-xl font-bold text-[#1B2430] mb-3" style="font-family:'Fraunces',serif;">
+        Cancel Subscription
+      </h2>
+      <p class="text-sm text-[#5B6270] mb-4">
+        You'll lose access to Premium features at the end of your current billing period. Mind telling us why?
+      </p>
+
+      <form [formGroup]="cancelForm" class="flex flex-col gap-4">
+        <textarea
+          formControlName="comment"
+          rows="3"
+          placeholder="Optional feedback"
+          class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm"></textarea>
+
+        <div class="flex gap-3">
+          <button
+            type="button"
+            (click)="showCancelModal.set(false)"
+            class="flex-1 py-2.5 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
+            Keep Subscription
+          </button>
+          <button
+            type="button"
+            [disabled]="isBillingBusy()"
+            (click)="confirmCancelSubscription()"
+            class="flex-1 py-2.5 rounded-lg bg-[#B7412C] text-sm font-medium text-white hover:bg-[#9c3624] transition-colors disabled:opacity-50">
+            {{ isBillingBusy() ? 'Canceling...' : 'Confirm Cancel' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </app-modal>
+}
+
+<!-- Delete Account Modal -->
+@if (showDeleteModal()) {
+  <app-modal (close)="showDeleteModal.set(false)">
+    <div class="w-100">
+      <h2 class="text-xl font-bold text-[#B7412C] mb-3" style="font-family:'Fraunces',serif;">
+        Delete Account
+      </h2>
+      <p class="text-sm text-[#5B6270] mb-4">
+        This will permanently delete your account and all associated data. This action cannot be undone.
+      </p>
+
+      @if (deleteError()) {
+        <p class="text-sm text-[#B7412C] font-medium mb-3">{{ deleteError() }}</p>
+      }
+
+      <div class="flex gap-3">
+        <button
+          type="button"
+          (click)="showDeleteModal.set(false)"
+          class="flex-1 py-2.5 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
+          Cancel
+        </button>
+        <button
+          type="button"
+          [disabled]="isDeletingAccount()"
+          (click)="confirmDeleteAccount()"
+          class="flex-1 py-2.5 rounded-lg bg-[#F44336] text-sm font-medium text-white hover:bg-[#d63a2f] transition-colors disabled:opacity-50">
+          {{ isDeletingAccount() ? 'Deleting...' : 'Delete Forever' }}
+        </button>
+      </div>
+    </div>
+  </app-modal>
+}
