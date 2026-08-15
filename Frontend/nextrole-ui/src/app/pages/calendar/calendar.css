@@ -1,0 +1,14 @@
+.status-chip {
+  background-color: transparent;
+}
+
+.status-chip:hover {
+  background-color: color-mix(in srgb, var(--status-color) 14%, transparent);
+  box-shadow: 0 0 0 6px color-mix(in srgb, var(--status-color) 18%, transparent);
+}
+
+.status-chip.active {
+  background-color: color-mix(in srgb, var(--status-color) 18%, transparent);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--status-color) 24%, transparent);
+  font-weight: 600;
+}

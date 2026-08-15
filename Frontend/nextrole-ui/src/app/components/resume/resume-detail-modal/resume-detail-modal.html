@@ -43,7 +43,7 @@
             <p class="text-sm text-gray-500 mt-2">
 
                 Uploaded:
-                {{resume.uploadedAt}}
+                {{resume.uploadedAt | date: 'medium'}}
 
             </p>
 
@@ -52,7 +52,7 @@
             <p class="text-sm text-gray-500">
 
                 Size:
-                {{resume.fileSize / 1024 / 1024}}
+                {{resume.fileSize / 1024 / 1024 | number: '1.2-2' }}
                 MB
 
             </p>

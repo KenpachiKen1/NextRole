@@ -142,6 +142,8 @@
         }
 
         @if (!agentResponse()) {
+          <label class="block text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2">Run Agent</label>
+
           <button
             type="button"
             (click)="invokeTailoringAgent()"
@@ -227,7 +229,7 @@
           </div>
 
           <p class="text-[11px] text-[#8A8F99] leading-relaxed mt-4">
-            AI can make mistakes — gaps are yours to fill, and only claim experience you actually have.
+            AI can make mistakes. Gaps of information are yours to fill and only claim experience you actually have!
           </p>
         }
 

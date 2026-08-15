@@ -6,7 +6,7 @@
       @if (searchQuery()) {
         Results for "{{ searchQuery() }}"
       } @else {
-        Browse job postings
+        Browse job postings added by yourself or by other people!
       }
     </p>
   </div>
@@ -41,6 +41,11 @@
             }
             @if (job.reqCode) {
               <span class="text-xs text-[#8A8F99]">Req {{ job.reqCode }}</span>
+            }
+            @if (addedPostingIds().has(job.id)) {
+              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-[#B9932A]/10 text-[#B9932A]">
+                Added to calendar already
+              </span>
             }
           </div>
 

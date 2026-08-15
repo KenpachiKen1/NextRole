@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { UserService } from '../../services/userService';
 
 @Component({
   selector: 'app-navbar',
@@ -10,6 +11,9 @@ import { Router } from '@angular/router';
 })
 export class Navbar {
   private router = inject(Router);
+  private userService = inject(UserService);
+
+  currentUser = this.userService.currentUser;
 
   searchTerm = '';
 

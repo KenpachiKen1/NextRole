@@ -38,6 +38,7 @@ export class CalendarAddEntryFlow implements OnInit {
   private resumeService = inject(ResumeService);
   private postingService = inject(JobPostingService);
   @Input() initialDate: Date | null = null;
+  @Input() existingJobPostingIds: Set<number> = new Set();
 
   @Output() close = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<NewJobEntryPayload>();

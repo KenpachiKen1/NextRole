@@ -41,16 +41,20 @@ export class Calendar implements OnInit {
   private today = new Date();
 
   jobStatuses = Object.entries(JobStatusInfo).map(([key, info]) => ({
-    key,
+    key: key as JobStatus,
     ...info,
   }));
+
+  activeStatusFilter = signal<JobStatus | null>(null);
+
+  toggleStatusFilter(status: JobStatus) {
+    this.activeStatusFilter.set(this.activeStatusFilter() === status ? null : status);
+  }
 
   private router = inject(Router);
   handleEnrichEntry(entry: JobEntryResponse) {
     this.closeDayPopup();
-    this.router.navigate(['/ai-hub'], {
-      queryParams: { entryId: entry.id, jobPostingId: entry.jobPostingId },
-    });
+    this.router.navigate(['/ai-hub']);
   }
   year = signal(this.today.getFullYear());
   month = signal(this.today.getMonth());
@@ -58,6 +62,33 @@ export class Calendar implements OnInit {
   displayDate = computed(() => new Date(this.year(), this.month(), 1));
 
   grid = signal<CalendarDay[]>([]);
+
+  // every entry for the user, independent of the displayed grid range
+  allEntries = signal<JobEntryResponse[]>([]);
+
+  // count of entries applied to during the displayed month
+  monthEntryCount = computed(
+    () =>
+      this.allEntries().filter((entry) => {
+        const date = new Date(entry.appliedAt);
+        return date.getFullYear() === this.year() && date.getMonth() === this.month();
+      }).length,
+  );
+
+  // job postings the user has already added an entry for, so the add-entry
+  // flow can grey them out instead of allowing a duplicate
+  existingJobPostingIds = computed(() => new Set(this.allEntries().map((entry) => entry.jobPostingId)));
+
+  // grid filtered down to entries matching activeStatusFilter, unfiltered when no filter is set
+  filteredGrid = computed(() => {
+    const filter = this.activeStatusFilter();
+    if (!filter) return this.grid();
+
+    return this.grid().map((day) => ({
+      ...day,
+      jobEntries: day.jobEntries.filter((entry) => entry.status === filter),
+    }));
+  });
 
   selectedDay = signal<CalendarDay | null>(null);
 
@@ -116,6 +147,8 @@ export class Calendar implements OnInit {
 
     this.jobEntryService.getEntries().subscribe({
       next: (entries) => {
+        this.allEntries.set(entries);
+
         const byDate = new Map<string, JobEntryResponse[]>();
 
         for (const entry of entries) {

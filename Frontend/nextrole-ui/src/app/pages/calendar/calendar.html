@@ -1,7 +1,12 @@
 <div class="flex items-center justify-between text-white p-5 pl-5">
 
-    <div class="text-4xl font-semibold text-black">
-        {{ displayDate() | date: 'MMMM y' }}    
+    <div class="flex items-baseline gap-3">
+        <div class="text-4xl font-semibold text-black">
+            {{ displayDate() | date: 'MMMM y' }}
+        </div>
+        <span class="text-sm font-medium text-[#8A8F99]">
+            {{ monthEntryCount() }} {{ monthEntryCount() === 1 ? 'entry' : 'entries' }}
+        </span>
     </div>
 
     <div class="flex gap-2">
@@ -15,16 +20,23 @@
     </div>
 
 </div>
-<div class="flex"> 
- <ul class="flex flex-wrap gap-x-6 gap-y-2 list-none m-2 p-0">
+<div class="flex">
+ <ul class="flex flex-wrap gap-x-2 gap-y-2 list-none m-2 p-0">
   @for (status of jobStatuses; track status.key) {
-    <li class="flex items-center gap-2">
-      <span
-        class="w-3 h-3 rounded-full shrink-0"
-        [style.background-color]="status.color">
-      </span>
+    <li>
+      <button
+        type="button"
+        (click)="toggleStatusFilter(status.key)"
+        [style.--status-color]="status.color"
+        [class.active]="activeStatusFilter() === status.key"
+        class="status-chip flex items-center gap-2 px-2 py-1 rounded-full text-sm text-[#1B2430] cursor-pointer transition-all duration-150">
+        <span
+          class="w-3 h-3 rounded-full shrink-0"
+          [style.background-color]="status.color">
+        </span>
 
-      <span>{{ status.label }}</span>
+        <span>{{ status.label }}</span>
+      </button>
     </li>
   }
 </ul>
@@ -38,7 +50,7 @@
         }
 </div>
 <div class="grid grid-cols-7">
-    @for (day of grid(); track day.date) {
+    @for (day of filteredGrid(); track day.date) {
       <div
         class="min-h-28 border-r border-b border-[#E4DDCC] p-2 nth-[7n]:border-r-0  hover:bg-[#FAF8F2] cursor-pointer"
         [ngClass]="{
@@ -89,6 +101,7 @@
 @if (newEntryDate()) {
   <app-calendar-add-entry-flow
       [initialDate]="newEntryDate()"
+      [existingJobPostingIds]="existingJobPostingIds()"
       (close)="closeAddEntryFlow()"
       (submitted)="addEntry($event)">
   </app-calendar-add-entry-flow>

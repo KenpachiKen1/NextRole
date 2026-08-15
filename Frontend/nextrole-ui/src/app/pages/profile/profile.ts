@@ -10,13 +10,12 @@ import { SubscriptionResponse } from '../../models/billing.model';
 import { SubscriptionStatus } from '../../enums/subscription-status.enums';
 import { SubscriptionStatusInfo } from '../../utilities/subscription-status-lookup';
 
-import { Button } from '../../components/global/button/button';
 import { Modal } from '../../components/global/modal/modal';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe, Button, Modal],
+  imports: [ReactiveFormsModule, DatePipe, Modal],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -156,6 +155,12 @@ export class Profile implements OnInit {
         this.deleteError.set('Could not delete your account. Please try again.');
       },
     });
+  }
+
+  logout() {
+    localStorage.removeItem('access_token');
+    this.currentUser.set(null);
+    this.router.navigate(['/login']);
   }
 
   sendIssueReport() {

@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { CurrencyPipe } from '@angular/common';
 
 import { JobPostingService } from '../../services/jobPosting';
+import { JobEntryService } from '../../services/jobEntry';
 import { JobPostingResponse } from '../../models/job-posting.model';
 
 @Component({
@@ -15,13 +16,20 @@ import { JobPostingResponse } from '../../models/job-posting.model';
 export class JobPostings implements OnInit {
   private route = inject(ActivatedRoute);
   private postingService = inject(JobPostingService);
+  private jobEntryService = inject(JobEntryService);
 
   postings = signal<JobPostingResponse[]>([]);
   isLoading = signal(false);
   searchQuery = signal('');
   expandedId = signal<number | null>(null);
+  addedPostingIds = signal<Set<number>>(new Set());
 
   ngOnInit() {
+    this.jobEntryService.getEntries().subscribe({
+      next: (entries) => this.addedPostingIds.set(new Set(entries.map((entry) => entry.jobPostingId))),
+      error: (err) => console.error('getEntries() failed:', err),
+    });
+
     this.route.queryParamMap.subscribe((params) => {
       const q = params.get('q') ?? '';
       this.searchQuery.set(q);

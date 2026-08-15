@@ -71,11 +71,9 @@ export class CreateResumeModal {
 
       this.resumeService.createResume(resume).subscribe({
         next: () => {
-          setTimeout(() => {
-            //JUST FOR STATE TESTING REMOVE
-            this.isCreatingResume = false;
-            this.resumeCreated.emit();
-          }, 3000);
+          this.isCreatingResume = false;
+          this.resumeCreated.emit();
+          this.closeModal();
         },
 
         error: (err) => {

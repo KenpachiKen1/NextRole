@@ -155,6 +155,8 @@
         }
 
         @if (!agentResponse()) {
+          <label class="block text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2">Run Agent</label>
+
           <button
             type="button"
             (click)="invokeInterviewPrepAgent()"
@@ -212,7 +214,7 @@
           </div>
 
           <p class="text-[11px] text-[#8A8F99] leading-relaxed mt-4">
-            AI can make mistakes — these are starting points, not the questions you'll actually be asked.
+            AI can make mistakes. These are starting points, not the questions you'll actually be asked.
           </p>
         }
 

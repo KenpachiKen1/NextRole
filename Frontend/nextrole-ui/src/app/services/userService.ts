@@ -20,7 +20,7 @@ export class UserService {
   }
   updateUser(user: UpdateUserRequest) {
     const headers = this.getHeaders();
-    return this.http.post<UserResponse>(`${this.apiUrl}/updateAccount`, user, { headers });
+    return this.http.put<UserResponse>(`${this.apiUrl}/updateAccount`, user, { headers });
   }
 
   getCurrUserProfile() {

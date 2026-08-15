@@ -42,9 +42,17 @@
         @for (job of searchResults(); track job.id) {
           <button
             type="button"
+            [disabled]="existingJobPostingIds.has(job.id)"
             (click)="viewPostingDetails(job)"
-            class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5 hover:border-[#B9932A] hover:shadow-sm transition-colors">
-            <p class="text-sm font-semibold text-[#1B2430]">{{ job.title }}</p>
+            class="w-full text-left bg-white border border-[#E4DDCC] rounded-lg p-3.5 mb-2.5 hover:border-[#B9932A] hover:shadow-sm transition-colors disabled:opacity-50 disabled:hover:border-[#E4DDCC] disabled:hover:shadow-none disabled:cursor-not-allowed">
+            <div class="flex items-center justify-between gap-2">
+              <p class="text-sm font-semibold text-[#1B2430]">{{ job.title }}</p>
+              @if (existingJobPostingIds.has(job.id)) {
+                <span class="shrink-0 text-[10px] font-medium uppercase tracking-wider text-[#8A8F99]">
+                  Already added
+                </span>
+              }
+            </div>
             <p class="text-xs text-[#5B6270] mt-0.5">{{ job.companyName }}</p>
             <div class="flex items-center justify-between mt-2">
               <span class="text-xs text-[#8A8F99]">{{ job.location }}</span>

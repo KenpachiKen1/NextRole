@@ -1,8 +1,16 @@
 <div class="max-w-3xl mx-auto">
 
-  <div class="mb-6">
-    <h1 class="text-2xl font-bold text-[#1B2430]">Settings</h1>
-    <p class="text-sm text-[#8A8F99] mt-1">Manage your profile, subscription, and account.</p>
+  <div class="mb-6 flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl font-bold text-[#1B2430]">Settings</h1>
+      <p class="text-sm text-[#8A8F99] mt-1">Manage your profile, subscription, and account.</p>
+    </div>
+    <button
+      type="button"
+      (click)="logout()"
+      class="py-2.5 px-5 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
+      Log Out
+    </button>
   </div>
 
   <div class="flex flex-col gap-6">
@@ -89,9 +97,13 @@
 
         <div class="flex items-center gap-3">
           @if (sub.subscriptionStatus === SubscriptionStatus.FREE || sub.subscriptionStatus === SubscriptionStatus.CANCELED) {
-            <app-button variant="create" (click)="upgradeToPremium()">
-              Upgrade to Premium
-            </app-button>
+            <button
+              type="button"
+              [disabled]="isBillingBusy()"
+              (click)="upgradeToPremium()"
+              class="py-2.5 px-5 rounded-lg bg-[#B9932A] text-sm font-medium text-white hover:bg-[#a37f22] transition-colors disabled:opacity-50">
+              {{ isBillingBusy() ? 'Redirecting...' : 'Upgrade to Premium' }}
+            </button>
           } @else {
             <button
               type="button"

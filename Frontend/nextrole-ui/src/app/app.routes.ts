@@ -8,6 +8,7 @@ import { Profile } from './pages/profile/profile';
 import { Login } from './pages/login/login';
 import { Enrichment } from './pages/enrichment/enrichment';
 import { JobPostings } from './pages/job-postings/job-postings';
+import { Subscription } from './pages/subscription/subscription';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -24,6 +25,7 @@ export const routes: Routes = [
       { path: 'job-postings', component: JobPostings },
       { path: 'ai-hub', component: Enrichment },
       { path: 'settings', component: Profile },
+      { path: 'subscription', component: Subscription },
     ],
   },
 ];

@@ -5,11 +5,13 @@ import { ResumeResponse } from '../../../models/resume.model';
 import { Modal } from '../../global/modal/modal';
 import { Button } from '../../global/button/button';
 import { ResumePreviewer } from '../resume-previewer/resume-previewer';
+import { DatePipe } from '@angular/common';
+import { DecimalPipe } from '@angular/common'; 
 
 @Component({
   selector: 'app-resume-detail-modal',
   standalone: true,
-  imports: [Modal, Button, ResumePreviewer],
+  imports: [Modal, Button, ResumePreviewer, DatePipe, DecimalPipe],
   templateUrl: './resume-detail-modal.html',
   styleUrl: './resume-detail-modal.css',
 })

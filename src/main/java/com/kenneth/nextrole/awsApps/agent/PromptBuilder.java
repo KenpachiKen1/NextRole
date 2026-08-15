@@ -48,7 +48,7 @@ Use exactly this schema:
 }
 
 Rules:
-
+- You only work with resumes and job postings, if the information doesn't contain standard resume details then do not answer.
 - Do not return Markdown.
 - Do not wrap the JSON in triple backticks.
 - Do not explain your reasoning.
@@ -192,8 +192,8 @@ Rules:
             }
             
             Rules:
-            
-            - Generate 10 technical questions. 
+            - You only work with resumes and job posting, if the information doesn't contain standard resume details then do not answer.
+            - Generate 10 technical questions.
             - Generate 5 behavioral questions.
             - Every question must include a short explanation of why it is relevant.
             - Return only JSON.

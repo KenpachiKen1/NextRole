@@ -20,7 +20,7 @@ public class PlaywrightExtractor implements JobExtractor {
                     page.waitForLoadState(LoadState.NETWORKIDLE,
                             new Page.WaitForLoadStateOptions().setTimeout(5000));
                 } catch (TimeoutError e) {
-                    // page never went idle (chat widget, polling, etc.) — proceed anyway
+                    // page never went idle (chat widget, polling, etc.) proceeding anyway with downloading page text
                 }
                 return page.locator("body").innerText();
             }
