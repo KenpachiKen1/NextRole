@@ -14,6 +14,8 @@
       <button
         type="button"
         (click)="cancel()"
+        aria-label="Close"
+        title="Close"
         class="text-[#8A8F99] hover:text-[#1B2430] text-2xl leading-none transition-colors">
         &times;
       </button>
@@ -36,6 +38,7 @@
             }
           </select>
           <svg
+            aria-hidden="true"
             class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A8F99]"
             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -64,6 +67,7 @@
             }
           </select>
           <svg
+            aria-hidden="true"
             class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A8F99]"
             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -95,7 +99,7 @@
               </div>
             </div>
 
-            @if (job.requiredSkills?.length) {
+            @if (job.requiredSkills.length) {
               <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mt-4 mb-2">Required</p>
               <div class="flex flex-wrap gap-1.5">
                 @for (skill of job.requiredSkills; track skill) {
@@ -104,7 +108,7 @@
               </div>
             }
 
-            @if (job.preferredSkills?.length) {
+            @if (job.preferredSkills.length) {
               <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mt-4 mb-2">Preferred</p>
               <div class="flex flex-wrap gap-1.5">
                 @for (skill of job.preferredSkills; track skill) {
@@ -173,7 +177,7 @@
           </div>
 
           <!-- strengths -->
-          @if (tailoring.strengths?.length) {
+          @if (tailoring.strengths.length) {
             <div class="rounded-xl border border-[#7CB342] bg-[#F2F8EE] px-5 py-4 mb-4 cursor-pointer transition-shadow hover:shadow-md">
               <p class="text-[11px] font-semibold uppercase tracking-wider text-[#2E7D32] mb-2.5">What already fits</p>
               <ul class="flex flex-col gap-2">
@@ -188,7 +192,7 @@
           }
 
           <!-- missing keywords -->
-          @if (tailoring.missingKeywords?.length) {
+          @if (tailoring.missingKeywords.length) {
             <div class="rounded-xl border border-[#E8A33D] bg-[#FDF6EC] px-5 py-4 mb-4 cursor-pointer transition-shadow hover:shadow-md">
               <p class="text-[11px] font-semibold uppercase tracking-wider text-[#B4761A] mb-1">Missing keywords</p>
               <p class="text-[11px] text-[#B4761A]/80 mb-2.5 leading-snug">
@@ -203,7 +207,7 @@
           }
 
           <!-- recommendations -->
-          @if (tailoring.recommendations?.length) {
+          @if (tailoring.recommendations.length) {
             <p class="text-[11px] font-semibold uppercase tracking-wider text-[#5B21B6] mt-5 mb-2.5">Recommendations</p>
             @for (rec of tailoring.recommendations; track rec.title) {
               <div class="rounded-xl border border-[#5B21B6] bg-[#F3EFFA] px-4 py-3.5 mb-3 cursor-pointer transition-shadow hover:shadow-md">

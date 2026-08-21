@@ -14,6 +14,8 @@
       <button
         type="button"
         (click)="cancel()"
+        aria-label="Close"
+        title="Close"
         class="text-[#8A8F99] hover:text-[#1B2430] text-2xl leading-none transition-colors">
         &times;
       </button>
@@ -47,6 +49,7 @@
               }
             </select>
             <svg
+              aria-hidden="true"
               class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A8F99]"
               fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
@@ -102,7 +105,7 @@
           }
 
           <!-- strengths -->
-          @if (feedback.strengths?.length) {
+          @if (feedback.strengths.length) {
             <div class="rounded-xl border border-[#7CB342] bg-[#F2F8EE] px-5 py-4 mb-4 cursor-pointer transition-shadow hover:shadow-md">
               <p class="text-[11px] font-semibold uppercase tracking-wider text-[#2E7D32] mb-2.5">Strengths</p>
               <ul class="flex flex-col gap-2">
@@ -117,7 +120,7 @@
           }
 
           <!-- weaknesses -->
-          @if (feedback.weaknesses?.length) {
+          @if (feedback.weaknesses.length) {
             <div class="rounded-xl border border-[#E8A33D] bg-[#FDF6EC] px-5 py-4 mb-4 cursor-pointer transition-shadow hover:shadow-md">
               <p class="text-[11px] font-semibold uppercase tracking-wider text-[#B4761A] mb-2.5">Weaknesses</p>
               <ul class="flex flex-col gap-2">
@@ -132,7 +135,7 @@
           }
 
           <!-- ATS warnings -->
-          @if (feedback.atsWarnings?.length) {
+          @if (feedback.atsWarnings.length) {
             <div class="rounded-xl border-2 border-[#B7412C] bg-[#FDECEA] px-5 py-4 mb-4 shadow-sm cursor-pointer transition-shadow hover:shadow-md">
               <p class="text-[11px] font-bold uppercase tracking-wider text-[#8C1D18] mb-2.5">⚠ ATS Warnings</p>
               <ul class="flex flex-col gap-2">

@@ -1,0 +1,115 @@
+<div class="min-h-screen bg-white flex items-center justify-center px-4">
+  <div class="w-full max-w-md">
+
+    <div class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-[#1B2430]" style="font-family:'Fraunces',serif;">
+        NextRole
+      </h1>
+      <p class="text-gray-500 mt-2 text-sm">
+        Enter the code we emailed you and choose a new password
+      </p>
+    </div>
+
+
+    <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-8">
+
+      @if (!success()) {
+
+        <form
+          class="space-y-5"
+          [formGroup]="resetForm"
+          (ngSubmit)="onSubmit()">
+
+          <div>
+            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+              Email
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              placeholder="Enter your account email"
+              class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#B9932A] focus:border-transparent transition"/>
+          </div>
+
+
+          <div>
+            <label for="code" class="block text-sm font-medium text-gray-700 mb-1">
+              Reset code
+            </label>
+
+            <input
+              id="code"
+              type="text"
+              formControlName="code"
+              placeholder="6-character code"
+              class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#B9932A] focus:border-transparent transition"/>
+          </div>
+
+
+          <div>
+            <label for="newPassword" class="block text-sm font-medium text-gray-700 mb-1">
+              New password
+            </label>
+
+            <input
+              id="newPassword"
+              type="password"
+              formControlName="newPassword"
+              placeholder="Enter a new password"
+              class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#B9932A] focus:border-transparent transition"/>
+          </div>
+
+
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">
+              Confirm new password
+            </label>
+
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              placeholder="Re-enter your new password"
+              class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#B9932A] focus:border-transparent transition"/>
+
+            @if (resetForm.errors?.['passwordMismatch'] && resetForm.get('confirmPassword')?.dirty) {
+              <p class="text-xs text-red-600 mt-1">Passwords don't match</p>
+            }
+          </div>
+
+          @if (errorMessage()) {
+            <p class="text-sm text-red-600">{{ errorMessage() }}</p>
+          }
+
+          <button
+            type="submit"
+            [disabled]="resetForm.invalid || loading()"
+            class="w-full py-2.5 rounded-lg text-[#F3E9CD] font-medium bg-[#1B2430] hover:bg-[#242E3D] transition shadow-md shadow-gray-200 mt-4 disabled:opacity-50">
+            {{ loading() ? 'Resetting...' : 'Reset password' }}
+          </button>
+
+        </form>
+
+      } @else {
+
+        <div class="text-center space-y-5">
+          <p class="text-gray-600 text-sm">
+            Your password has been successfully reset. Redirecting you to sign in...
+          </p>
+        </div>
+
+      }
+
+      <p class="text-center text-sm text-gray-500 mt-6">
+        Need a new code?
+        <a routerLink="/forgot-password" class="text-[#1B2430] font-medium hover:text-[#B9932A] transition">
+          Request another
+        </a>
+      </p>
+
+    </div>
+
+  </div>
+</div>

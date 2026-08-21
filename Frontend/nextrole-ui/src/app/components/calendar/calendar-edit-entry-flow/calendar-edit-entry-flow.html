@@ -29,7 +29,7 @@
           }
         </div>
 
-        @if (job.requiredSkills?.length) {
+        @if (job.requiredSkills.length) {
           <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Required</p>
           <div class="flex flex-wrap gap-1.5 mb-3.5">
             @for (skill of job.requiredSkills; track skill) {
@@ -38,7 +38,7 @@
           </div>
         }
 
-        @if (job.preferredSkills?.length) {
+        @if (job.preferredSkills.length) {
           <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Preferred</p>
           <div class="flex flex-wrap gap-1.5 mb-4">
             @for (skill of job.preferredSkills; track skill) {

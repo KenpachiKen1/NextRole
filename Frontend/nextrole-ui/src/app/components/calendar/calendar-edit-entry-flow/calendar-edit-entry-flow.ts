@@ -18,7 +18,6 @@ import { ResumeService } from '../../../services/resumeService';
 import { ResumeResponse } from '../../../models/resume.model';
 import { JobPostingService } from '../../../services/jobPosting';
 import { JobPostingResponse } from '../../../models/job-posting.model';
-import { Button } from '../../global/button/button';
 
 export interface UpdateJobEntryPayload {
   entryId: number;
@@ -28,7 +27,7 @@ export interface UpdateJobEntryPayload {
 @Component({
   selector: 'app-edit-job-entry-form',
   standalone: true,
-  imports: [ReactiveFormsModule, Button, CurrencyPipe],
+  imports: [ReactiveFormsModule, CurrencyPipe],
   templateUrl: 'calendar-edit-entry-flow.html',
   styleUrl: 'calendar-edit-entry-flow.css',
 })

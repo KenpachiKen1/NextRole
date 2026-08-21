@@ -3,7 +3,13 @@
 
 @layer ng-zorro {
 
-  @import '../node_modules/ng-zorro-antd/ng-zorro-antd.less';
+  // Only pull in styles for the ng-zorro components we actually use —
+  // the full ng-zorro-antd.less bundle pulls in every component's styles
+  // (tables, trees, date pickers, etc.) and was bloating the CSS bundle.
+  @root-entry-name: default;
+  @import '../node_modules/ng-zorro-antd/style/entry.less';
+  @import '../node_modules/ng-zorro-antd/layout/style/entry.less';
+  @import '../node_modules/ng-zorro-antd/progress/style/entry.less';
 
   // Override less variables to here
   // View all variables: https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/components/style/themes/default.less

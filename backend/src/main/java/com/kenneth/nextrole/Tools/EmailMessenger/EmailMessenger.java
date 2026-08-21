@@ -3,9 +3,11 @@ package com.kenneth.nextrole.Tools.EmailMessenger;
 
 import com.kenneth.nextrole.Model.PasswordResetCode;
 import com.kenneth.nextrole.Repository.PasswordResetRespository;
-import lombok.Setter;
-import org.springframework.mail.MailSender;
-import org.springframework.mail.SimpleMailMessage;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+import org.springframework.mail.MailSendException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -14,14 +16,12 @@ import java.util.stream.Collectors;
 
 @Service
 public class EmailMessenger {
-    @Setter
-    private MailSender mailSender;
-    private final SimpleMailMessage msg;
+
+    private final JavaMailSender mailSender;
     private final PasswordResetRespository repo;
 
-    public EmailMessenger(SimpleMailMessage msg, MailSender sender, PasswordResetRespository repo) {
-        this.msg = msg;
-        this.mailSender = sender;
+    public EmailMessenger(JavaMailSender mailSender, PasswordResetRespository repo) {
+        this.mailSender = mailSender;
         this.repo = repo;
     }
 
@@ -38,17 +38,53 @@ public class EmailMessenger {
     public void sendCode(String email){
 
         String code = genCode();
-        msg.setFrom("nextroleadmin@gmail.com");
-        msg.setTo(email);
-        msg.setSubject("Requested NextRole Password Reset");
-        msg.setText("Here is your code: " + code + "\n" +"This code will expire in 20 minutes. After that you will need to request this code again");
 
         PasswordResetCode resetCode = repo.findByEmail(email).orElseGet(PasswordResetCode::new);
         resetCode.setEmail(email);
         resetCode.setCode(code);
         resetCode.setExpiresAt(LocalDateTime.now().plusMinutes(20));
         repo.save(resetCode);
-        this.mailSender.send(msg);
+
+        sendResetEmail(email, code);
+    }
+
+    private void sendResetEmail(String email, String code) {
+        try {
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, "utf-8");
+            helper.setFrom("nextroleadmin@gmail.com");
+            helper.setTo(email);
+            helper.setSubject("Requested NextRole Password Reset");
+            helper.setText(plainTextBody(code), htmlBody(code));
+            mailSender.send(message);
+        } catch (MessagingException e) {
+            throw new MailSendException("Failed to send password reset email", e);
+        }
+    }
+
+    private String plainTextBody(String code) {
+        return "Here is your code: " + code + "\n"
+                + "This code will expire in 20 minutes. After that you will need to request this code again";
+    }
+
+    private String htmlBody(String code) {
+        return """
+                <div style="font-family: Arial, Helvetica, sans-serif; max-width: 480px; margin: 0 auto; padding: 32px; color: #1B2430;">
+                  <h1 style="font-size: 20px; margin: 0 0 16px;">NextRole</h1>
+                  <p style="font-size: 14px; color: #4B5563; line-height: 1.5;">
+                    You requested to reset your password. Use the code below to continue:
+                  </p>
+                  <div style="background: #F6F2E9; border-left: 4px solid #B9932A; border-radius: 8px; padding: 16px 20px; margin: 20px 0; text-align: center;">
+                    <span style="font-size: 28px; font-weight: bold; letter-spacing: 6px; color: #1B2430;">%s</span>
+                  </div>
+                  <p style="font-size: 13px; color: #6B7280; line-height: 1.5;">
+                    This code will expire in 20 minutes. After that you will need to request a new one.
+                  </p>
+                  <p style="font-size: 12px; color: #9CA3AF; margin-top: 24px;">
+                    If you didn't request this, you can safely ignore this email.
+                  </p>
+                </div>
+                """.formatted(code);
     }
 
     public boolean verify(String email, String code) {

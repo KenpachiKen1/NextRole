@@ -1,11 +1,10 @@
 import { ResumeResponse } from '../../../models/resume.model';
-import { Button } from '../../global/button/button';
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-resume-card',
   standalone: true,
-  imports: [Button, CommonModule],
+  imports: [CommonModule],
   templateUrl: './resume-card.html',
   styleUrl: './resume-card.css',
 })
