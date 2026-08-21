@@ -1,8 +1,10 @@
 package com.kenneth.nextrole.Controller;
 
 import com.kenneth.nextrole.Service.CompanyService;
+import com.kenneth.nextrole.Service.JobPostingService;
 import com.kenneth.nextrole.dto.company.CompanyResponse;
 import com.kenneth.nextrole.dto.company.CreateCompanyRequest;
+import com.kenneth.nextrole.dto.jobposting.JobPostingResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +17,11 @@ import java.util.List;
 public class CompanyController {
 
     private final CompanyService companyService;
+    private final JobPostingService jobPostingService;
 
-    public CompanyController(CompanyService companyService) {
+    public CompanyController(CompanyService companyService, JobPostingService jobPostingService) {
         this.companyService = companyService;
+        this.jobPostingService = jobPostingService;
     }
 
     /**
@@ -60,5 +64,13 @@ public class CompanyController {
     @GetMapping("/search")
     public ResponseEntity<CompanyResponse> getCompanyByName(@RequestParam String name) {
         return ResponseEntity.status(HttpStatus.OK).body(companyService.findByName(name));
+    }
+
+    /**
+     * Get all job postings for a company
+     */
+    @GetMapping("/{companyId}/job-postings")
+    public ResponseEntity<List<JobPostingResponse>> getCompanyJobPostings(@PathVariable Long companyId) {
+        return ResponseEntity.status(HttpStatus.OK).body(jobPostingService.getByCompany(companyId));
     }
 }
