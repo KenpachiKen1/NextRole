@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+
     public UserService( UserRepository userRepository){
         this.userRepository = userRepository;
     }
@@ -66,6 +67,7 @@ public class UserService {
         user = userRepository.save(user);
         return toResponse(user);
     }
+
 
     public void deleteAccount(String email){
 

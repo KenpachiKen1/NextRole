@@ -1,4 +1,4 @@
-package com.kenneth.nextrole.Tools;
+package com.kenneth.nextrole.Tools.JobInfoExtractor;
 
 
 import com.kenneth.nextrole.Tools.dto.JobExtractionResponse;

@@ -6,7 +6,7 @@ import com.kenneth.nextrole.Model.Keyword;
 import com.kenneth.nextrole.Repository.CompanyRepository;
 import com.kenneth.nextrole.Repository.JobPostingRepository;
 import com.kenneth.nextrole.Repository.KeywordRepository;
-import com.kenneth.nextrole.Tools.JobInfoExtractorAgent;
+import com.kenneth.nextrole.Tools.JobInfoExtractor.JobInfoExtractorAgent;
 import com.kenneth.nextrole.Tools.dto.JobExtractionResponse;
 import com.kenneth.nextrole.dto.jobposting.CreateJobPostingRequest;
 import com.kenneth.nextrole.dto.jobposting.JobPostingResponse;

@@ -3,9 +3,13 @@ package com.kenneth.nextrole.Service;
 
 import com.kenneth.nextrole.Model.User;
 import com.kenneth.nextrole.Repository.UserRepository;
+import com.kenneth.nextrole.Tools.EmailMessenger.EmailMessenger;
 import com.kenneth.nextrole.dto.auth.AuthResponse;
+import com.kenneth.nextrole.dto.auth.ForgotPasswordRequest;
 import com.kenneth.nextrole.dto.auth.LoginRequest;
 import com.kenneth.nextrole.dto.auth.RegisterUserRequest;
+import com.kenneth.nextrole.dto.auth.ResetPasswordRequest;
+import com.kenneth.nextrole.exception.UserNotFoundException;
 import com.kenneth.nextrole.security.JwtService;
 import jakarta.transaction.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,11 +42,13 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
+    private final EmailMessenger emailMessenger;
 
     public AuthService(UserRepository userRepository,
                        JwtService jwtService, PasswordEncoder
                                passwordEncoder,
-                       AuthenticationManager authenticationManager
+                       AuthenticationManager authenticationManager,
+                       EmailMessenger emailMessenger
 
     ) {
 
@@ -50,6 +56,7 @@ public class AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.emailMessenger = emailMessenger;
     }
 
     /*
@@ -95,6 +102,32 @@ public class AuthService {
                 orElseThrow(() -> new RuntimeException("User not found"));
 
         return getAuthResponse(user);
+    }
+
+
+    public void forgotPassword(ForgotPasswordRequest request) {
+        if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+            emailMessenger.sendCode(request.getEmail());
+        }
+    }
+
+    @Transactional
+    public void resetPassword(ResetPasswordRequest request) {
+        if (!emailMessenger.verify(request.getEmail(), request.getCode())) {
+            throw new IllegalArgumentException("This code is invalid or has expired");
+        }
+
+        User user = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+
+        if (passwordEncoder.matches(request.getNewPassword(), user.getPassword())) {
+            throw new IllegalArgumentException("Your new password can't be the same as your current one");
+        }
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        userRepository.save(user);
+
+        emailMessenger.invalidateCode(request.getEmail());
     }
 
     private AuthResponse getAuthResponse(User user) {

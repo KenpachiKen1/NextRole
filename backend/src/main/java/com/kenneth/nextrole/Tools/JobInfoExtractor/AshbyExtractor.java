@@ -1,4 +1,4 @@
-package com.kenneth.nextrole.Tools;
+package com.kenneth.nextrole.Tools.JobInfoExtractor;
 
 import java.net.URI;
 import java.net.http.HttpClient;
