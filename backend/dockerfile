@@ -1,0 +1,20 @@
+FROM maven:3.9-eclipse-temurin-21 as build
+WORKDIR /build
+
+COPY pom.xml .
+RUN mvn -B dependency:go-offline
+
+COPY src ./src
+RUN mvn -B clean package -DskipTests
+
+FROM eclipse-temurin:21-jre-jammy
+WORKDIR /app
+
+RUN groupadd -r app && useradd -r -g app app
+COPY --from=build --chown=app:app /build/target/*.jar app.jar
+USER app
+
+EXPOSE 8080
+ENV JAVA_OPTS="-XX:MaxRAMPercentage=75"
+
+ENTRYPOINT ["sh", "-c", "exec java $JAVA_OPTS -jar /app/app.jar"]
