@@ -1,22 +1,28 @@
-<div class="flex items-center justify-between text-white p-5 pl-5">
+<div class="flex flex-wrap items-center justify-between gap-y-3 text-white p-5 pl-5">
 
-    <div class="flex items-baseline gap-3">
+    <div class="flex items-baseline gap-3 flex-wrap">
         <div class="text-4xl font-semibold text-black">
             {{ displayDate() | date: 'MMMM y' }}
         </div>
-        <span class="text-sm font-medium text-[#8A8F99]">
+        <span class="text-sm font-medium text-[#475569]">
             {{ monthEntryCount() }} {{ monthEntryCount() === 1 ? 'entry' : 'entries' }}
         </span>
     </div>
 
-    <div class="flex gap-2">
-        <app-button (click)="prevMonth()">
+    <div class="flex gap-2 shrink-0">
+        <button
+            type="button"
+            (click)="prevMonth()"
+            class="px-4 py-2 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
             Previous
-        </app-button>
+        </button>
 
-        <app-button (click)="nextMonth()">
+        <button
+            type="button"
+            (click)="nextMonth()"
+            class="px-4 py-2 rounded-lg bg-[#1B2430] text-sm font-medium text-[#F3E9CD] hover:bg-[#242E3D] transition-colors">
             Next
-        </app-button>
+        </button>
     </div>
 
 </div>
@@ -44,7 +50,7 @@
 <div class="bg-white border border-[#E4DDCC] rounded-xl overflow-hidden">
 <div class="grid grid-cols-7 border-b border-[#E4DDCC]">
         @for (day of daysOfTheWeek; track day) {
-            <div class="text-center text-[11px] font-medium uppercase tracking-wider text-[#8A8F99] py-2.5">
+            <div class="text-center text-[11px] font-medium uppercase tracking-wider text-[#475569] py-2.5">
             {{ day }}
             </div>
         }
@@ -63,7 +69,7 @@
           class="inline-flex items-center justify-center w-5 h-5 rounded-full font-mono text-xs"
           [ngClass]="{
             'bg-[#1B2430] text-[#F3E9CD]': day.isCurrentDay,
-            'text-[#8A8F99]': !day.isCurrentDay && !day.isCurrentMonth,
+            'text-[#475569]': !day.isCurrentDay && !day.isCurrentMonth,
             'text-[#1B2430]': !day.isCurrentDay && day.isCurrentMonth
           }">
           {{ day.date.getDate() }}
@@ -79,7 +85,7 @@
         }
 
         @if (day.jobEntries.length > 3) {
-          <p class="text-[10px] font-medium text-[#8A8F99] mt-1">
+          <p class="text-[10px] font-medium text-[#475569] mt-1">
             +{{ day.jobEntries.length - 3 }} more
           </p>
         }

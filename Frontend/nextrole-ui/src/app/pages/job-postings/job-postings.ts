@@ -5,11 +5,12 @@ import { CurrencyPipe } from '@angular/common';
 import { JobPostingService } from '../../services/jobPosting';
 import { JobEntryService } from '../../services/jobEntry';
 import { JobPostingResponse } from '../../models/job-posting.model';
+import { Skeleton } from '../../components/global/skeleton/skeleton';
 
 @Component({
   selector: 'app-job-postings',
   standalone: true,
-  imports: [CurrencyPipe],
+  imports: [CurrencyPipe, Skeleton],
   templateUrl: './job-postings.html',
   styleUrl: './job-postings.css',
 })

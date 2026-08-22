@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, EventEmitter, Output, OnInit, OnDestroy } from '@angular/core';
+import { Component, inject, signal, computed, EventEmitter, HostListener, Output, OnInit, OnDestroy } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
 import { bedrockEnrichmentService } from '../../../services/bedrockEnrichmentService';
 import { InterviewPrepResponse } from '../../../models/bedrockAgents.model';
@@ -9,13 +9,15 @@ import { JobEntryService } from '../../../services/jobEntry';
 import { JobPostingResponse } from '../../../models/job-posting.model';
 import { JobPostingService } from '../../../services/jobPosting';
 import { ResumePreviewer } from '../../resume/resume-previewer/resume-previewer';
+import { Skeleton } from '../../global/skeleton/skeleton';
+import { FocusTrapDirective } from '../../../directives/focus-trap';
 
 
 import { NzProgressModule } from 'ng-zorro-antd/progress';
 
 @Component({
   selector: 'app-interview-prep',
-  imports: [ResumePreviewer, CurrencyPipe, NzProgressModule],
+  imports: [ResumePreviewer, CurrencyPipe, NzProgressModule, Skeleton, FocusTrapDirective],
   templateUrl: './interview-prep.html',
   styleUrl: './interview-prep.css',
 })
@@ -26,6 +28,11 @@ export class InterviewPrep implements OnInit, OnDestroy {
   private jobPostingService = inject(JobPostingService);
 
   @Output() close = new EventEmitter<void>();
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.cancel();
+  }
 
   resumes: ResumeResponse[] = [];
   entries: JobEntryResponse[] = [];

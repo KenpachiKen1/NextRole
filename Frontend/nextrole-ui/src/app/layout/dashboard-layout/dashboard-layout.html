@@ -1,10 +1,16 @@
+<a
+    href="#main-content"
+    class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:top-3 focus:left-3 focus:px-4 focus:py-2 focus:rounded-lg focus:bg-[#1B2430] focus:text-[#F3E9CD] focus:text-sm focus:font-medium">
+    Skip to main content
+</a>
+
 <div class="grid grid-cols-[232px_1fr] grid-rows-[64px_1fr] min-h-screen">
 
     <app-sidebar class="row-span-2"></app-sidebar>
 
     <app-navbar></app-navbar>
 
-    <main class="bg-[#F6F2E9] overflow-y-auto p-7" style="view-transition-name: main-content">
+    <main id="main-content" tabindex="-1" class="bg-[#F6F2E9] overflow-y-auto p-7" style="view-transition-name: main-content">
         <router-outlet></router-outlet>
     </main>
 

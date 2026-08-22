@@ -11,11 +11,12 @@ import { SubscriptionStatus } from '../../enums/subscription-status.enums';
 import { SubscriptionStatusInfo } from '../../utilities/subscription-status-lookup';
 
 import { Modal } from '../../components/global/modal/modal';
+import { Skeleton } from '../../components/global/skeleton/skeleton';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe, Modal],
+  imports: [ReactiveFormsModule, DatePipe, Modal, Skeleton],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })

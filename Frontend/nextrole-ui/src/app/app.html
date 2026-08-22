@@ -1,1 +1,14 @@
-<router-outlet></router-outlet>
+@if (isScreenTooSmall()) {
+  <div class="min-h-screen w-full flex items-center justify-center bg-white px-6 text-center">
+    <div class="max-w-sm">
+      <h1 class="text-2xl font-bold text-[#1B2430] mb-3" style="font-family:'Fraunces',serif;">
+        NextRole
+      </h1>
+      <p class="text-gray-600 text-sm">
+        NextRole is best used on laptop/desktop devices. Mobile support will be coming soon.
+      </p>
+    </div>
+  </div>
+} @else {
+  <router-outlet></router-outlet>
+}

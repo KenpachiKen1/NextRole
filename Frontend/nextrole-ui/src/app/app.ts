@@ -1,5 +1,7 @@
-import { Component, signal } from '@angular/core';
+import { Component, HostListener, computed, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+
+const MIN_SUPPORTED_WIDTH = 768;
 
 @Component({
   selector: 'app-root',
@@ -10,4 +12,12 @@ import { RouterOutlet } from '@angular/router';
 })
 export class App {
   protected readonly title = signal('nextrole-ui');
+
+  protected screenWidth = signal(window.innerWidth);
+  protected isScreenTooSmall = computed(() => this.screenWidth() < MIN_SUPPORTED_WIDTH);
+
+  @HostListener('window:resize')
+  onResize() {
+    this.screenWidth.set(window.innerWidth);
+  }
 }

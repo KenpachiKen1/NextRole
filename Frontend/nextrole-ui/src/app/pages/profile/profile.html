@@ -3,7 +3,7 @@
   <div class="mb-6 flex items-center justify-between">
     <div>
       <h1 class="text-2xl font-bold text-[#1B2430]">Settings</h1>
-      <p class="text-sm text-[#8A8F99] mt-1">Manage your profile, subscription, and account.</p>
+      <p class="text-sm text-[#475569] mt-1">Manage your profile, subscription, and account.</p>
     </div>
     <button
       type="button"
@@ -27,7 +27,7 @@
         </div>
         <div>
           <p class="font-semibold text-sm text-[#1B2430]">{{ currentUser()?.username }}</p>
-          <p class="text-xs text-[#8A8F99]">{{ currentUser()?.email }}</p>
+          <p class="text-xs text-[#475569]">{{ currentUser()?.email }}</p>
         </div>
       </div>
 
@@ -62,7 +62,7 @@
           }
 
           @if (profileError()) {
-            <span class="text-sm text-[#B7412C] font-medium">{{ profileError() }}</span>
+            <span class="text-sm text-[#B7412C] font-medium" role="alert">{{ profileError() }}</span>
           }
         </div>
 
@@ -86,11 +86,11 @@
           </span>
         </div>
 
-        <p class="text-sm text-[#8A8F99] mb-1">{{ subscriptionStatusInfo[sub.subscriptionStatus].description }}</p>
-        <p class="text-xs text-[#8A8F99] mb-4">Plan: {{ sub.planName }}</p>
+        <p class="text-sm text-[#475569] mb-1">{{ subscriptionStatusInfo[sub.subscriptionStatus].description }}</p>
+        <p class="text-xs text-[#475569] mb-4">Plan: {{ sub.planName }}</p>
 
         @if (sub.currentPeriodEnd) {
-          <p class="text-xs text-[#8A8F99] mb-4">
+          <p class="text-xs text-[#475569] mb-4">
             {{ sub.cancelAtPeriodEnd ? 'Access ends' : 'Renews' }} on {{ sub.currentPeriodEnd | date: 'MMMM d, y' }}
           </p>
         }
@@ -115,11 +115,17 @@
           }
 
           @if (billingError()) {
-            <span class="text-sm text-[#B7412C] font-medium">{{ billingError() }}</span>
+            <span class="text-sm text-[#B7412C] font-medium" role="alert">{{ billingError() }}</span>
           }
         </div>
       } @else {
-        <p class="text-sm text-[#8A8F99]">Loading subscription details...</p>
+        <div class="flex items-center gap-2 mb-2">
+          <app-skeleton styleClass="w-2.5 h-2.5 rounded-full" />
+          <app-skeleton styleClass="w-28 h-4" />
+        </div>
+        <app-skeleton styleClass="w-56 h-3.5 mb-2" />
+        <app-skeleton styleClass="w-24 h-3 mb-4" />
+        <app-skeleton styleClass="w-36 h-9 rounded-lg" />
       }
     </div>
 
@@ -128,7 +134,7 @@
       <h2 class="font-semibold text-lg text-[#1B2430] mb-1" style="font-family:'Fraunces',serif;">
         Report an Issue
       </h2>
-      <p class="text-sm text-[#8A8F99] mb-4">Run into a bug or have feedback? Let us know.</p>
+      <p class="text-sm text-[#475569] mb-4">Run into a bug or have feedback? Let us know.</p>
 
       <form [formGroup]="issueForm" (ngSubmit)="sendIssueReport()" class="flex flex-col gap-4">
 
@@ -158,7 +164,7 @@
           </button>
 
           @if (issueSent()) {
-            <span class="text-sm text-[#4CAF50] font-medium">Thanks — your email client should have opened.</span>
+            <span class="text-sm text-[#4CAF50] font-medium">Thanks! Your email client should have opened.</span>
           }
         </div>
 
@@ -170,7 +176,7 @@
       <h2 class="font-semibold text-lg text-[#B7412C] mb-1" style="font-family:'Fraunces',serif;">
         Danger Zone
       </h2>
-      <p class="text-sm text-[#8A8F99] mb-4">
+      <p class="text-sm text-[#475569] mb-4">
         Deleting your account permanently removes your applications, resumes, and subscription. This cannot be undone.
       </p>
 

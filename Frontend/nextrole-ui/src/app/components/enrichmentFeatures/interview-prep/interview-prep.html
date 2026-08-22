@@ -1,13 +1,17 @@
 <div class="fixed inset-0 bg-[#1B2430]/55 flex items-center justify-center z-50 p-6" (click)="cancel()">
   <div
     class="bg-[#F6F2E9] rounded-2xl shadow-2xl w-full max-w-7xl h-[92vh] min-h-160 flex flex-col overflow-hidden"
-    (click)="$event.stopPropagation()">
+    (click)="$event.stopPropagation()"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="interview-prep-title"
+    appFocusTrap>
 
     <!-- HEADER -->
     <div class="flex items-start justify-between px-7 py-5 border-b border-[#E4DDCC] bg-white shrink-0">
       <div>
-        <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-0.5">AI Hub</p>
-        <h2 class="text-xl font-semibold text-[#1B2430]" style="font-family:'Fraunces',serif;">
+        <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-0.5">AI Hub</p>
+        <h2 id="interview-prep-title" class="text-xl font-semibold text-[#1B2430]" style="font-family:'Fraunces',serif;">
           Interview Prep
         </h2>
       </div>
@@ -16,7 +20,7 @@
         (click)="cancel()"
         aria-label="Close"
         title="Close"
-        class="text-[#8A8F99] hover:text-[#1B2430] text-2xl leading-none transition-colors">
+        class="text-[#475569] hover:text-[#1B2430] text-2xl leading-none transition-colors">
         &times;
       </button>
     </div>
@@ -40,7 +44,7 @@
       <!-- LEFT: resume picker + preview -->
       <div class="w-1/3 flex flex-col min-h-0 pr-5">
 
-        <label class="block text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2">Resume</label>
+        <label class="block text-[11px] text-[#475569] uppercase tracking-wider mb-2">Resume</label>
         <div class="relative mb-4 shrink-0">
           <select
             class="w-full appearance-none px-4 py-3 pr-11 rounded-lg border border-[#E4DDCC] bg-white text-sm text-[#1B2430] cursor-pointer focus:outline-none focus:border-[#0F766E]"
@@ -52,7 +56,7 @@
           </select>
           <svg
             aria-hidden="true"
-            class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A8F99]"
+            class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#475569]"
             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
@@ -69,7 +73,7 @@
       <!-- MIDDLE: job posting -->
       <div class="w-1/3 flex flex-col min-h-0 border-l border-[#E4DDCC] pl-5 pr-5">
 
-        <label class="block text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2">Job posting</label>
+        <label class="block text-[11px] text-[#475569] uppercase tracking-wider mb-2">Job posting</label>
         <div class="relative mb-4 shrink-0">
           <select
             class="w-full appearance-none px-4 py-3 pr-11 rounded-lg border border-[#E4DDCC] bg-white text-sm text-[#1B2430] cursor-pointer focus:outline-none focus:border-[#0F766E]"
@@ -81,7 +85,7 @@
           </select>
           <svg
             aria-hidden="true"
-            class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#8A8F99]"
+            class="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-[#475569]"
             fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
           </svg>
@@ -90,7 +94,20 @@
         <div class="flex-1 overflow-y-auto pr-1 min-h-0">
 
           @if (postingLoading()) {
-            <p class="text-sm text-[#8A8F99] text-center py-10">Loading posting…</p>
+            <div class="bg-white border border-[#E4DDCC] rounded-xl p-5">
+              <app-skeleton styleClass="w-3/4 h-4.5 mb-2" />
+              <app-skeleton styleClass="w-1/3 h-3.5" />
+              <div class="flex gap-2 mt-3">
+                <app-skeleton styleClass="w-16 h-3" />
+                <app-skeleton styleClass="w-14 h-3" />
+              </div>
+            </div>
+            <app-skeleton styleClass="w-20 h-3 mt-4 mb-1.5" />
+            <div class="flex flex-wrap gap-1.5">
+              <app-skeleton styleClass="w-16 h-5 rounded-full" />
+              <app-skeleton styleClass="w-20 h-5 rounded-full" />
+              <app-skeleton styleClass="w-14 h-5 rounded-full" />
+            </div>
           } @else if (selectedPosting(); as job) {
 
             <div class="bg-white border border-[#E4DDCC] rounded-xl p-5">
@@ -99,7 +116,7 @@
 
               <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2.5">
                 @if (job.location) {
-                  <span class="text-xs text-[#8A8F99]">{{ job.location }}</span>
+                  <span class="text-xs text-[#475569]">{{ job.location }}</span>
                 }
                 @if (job.salary) {
                   <span class="text-xs font-medium text-[#B9932A]">
@@ -107,13 +124,13 @@
                   </span>
                 }
                 @if (job.reqCode) {
-                  <span class="text-xs text-[#8A8F99]">Req {{ job.reqCode }}</span>
+                  <span class="text-xs text-[#475569]">Req {{ job.reqCode }}</span>
                 }
               </div>
             </div>
 
             @if (job.requiredSkills.length) {
-              <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mt-4 mb-2">Required</p>
+              <p class="text-[11px] text-[#475569] uppercase tracking-wider mt-4 mb-2">Required</p>
               <div class="flex flex-wrap gap-1.5">
                 @for (skill of job.requiredSkills; track skill) {
                   <span class="text-xs px-2 py-0.5 rounded-full bg-[#1B2430] text-[#F3E9CD]">{{ skill }}</span>
@@ -122,7 +139,7 @@
             }
 
             @if (job.preferredSkills.length) {
-              <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mt-4 mb-2">Preferred</p>
+              <p class="text-[11px] text-[#475569] uppercase tracking-wider mt-4 mb-2">Preferred</p>
               <div class="flex flex-wrap gap-1.5">
                 @for (skill of job.preferredSkills; track skill) {
                   <span class="text-xs px-2 py-0.5 rounded-full bg-white border border-[#E4DDCC] text-[#5B6270]">{{ skill }}</span>
@@ -131,7 +148,7 @@
             }
 
             @if (job.jobDescription) {
-              <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mt-4 mb-2">Description</p>
+              <p class="text-[11px] text-[#475569] uppercase tracking-wider mt-4 mb-2">Description</p>
               <p class="text-xs text-[#5B6270] leading-relaxed whitespace-pre-line">{{ job.jobDescription }}</p>
             }
 
@@ -143,7 +160,7 @@
             }
 
           } @else {
-            <p class="text-sm text-[#8A8F99] text-center py-10">Pick a posting to see its details.</p>
+            <p class="text-sm text-[#475569] text-center py-10">Pick a posting to see its details.</p>
           }
 
         </div>
@@ -154,12 +171,12 @@
 
         @if (errorMessage()) {
           <div class="rounded-lg border border-[#B7412C] bg-[#FDECEA] px-4 py-3 mb-5">
-            <p class="text-sm text-[#8C1D18]">{{ errorMessage() }}</p>
+            <p class="text-sm text-[#8C1D18]" role="alert">{{ errorMessage() }}</p>
           </div>
         }
 
         @if (!agentResponse()) {
-          <label class="block text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2">Run Agent</label>
+          <label class="block text-[11px] text-[#475569] uppercase tracking-wider mb-2">Run Agent</label>
 
           <button
             type="button"
@@ -170,9 +187,9 @@
           </button>
 
           @if (loading()) {
-            <p class="text-xs text-[#8A8F99] text-center mt-3">This usually takes a few seconds.</p>
+            <p class="text-xs text-[#475569] text-center mt-3">This usually takes a few seconds.</p>
           } @else if (!canSubmit()) {
-            <p class="text-xs text-[#8A8F99] text-center mt-3">
+            <p class="text-xs text-[#475569] text-center mt-3">
               Pick a resume and a posting to get started.
             </p>
           }
@@ -217,7 +234,7 @@
             </button>
           </div>
 
-          <p class="text-[11px] text-[#8A8F99] leading-relaxed mt-4">
+          <p class="text-[11px] text-[#475569] leading-relaxed mt-4">
             AI can make mistakes. These are starting points, not the questions you'll actually be asked.
           </p>
         }

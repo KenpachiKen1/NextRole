@@ -6,7 +6,7 @@
         NextRole
       </h1>
       <p class="text-gray-500 mt-2 text-sm">
-        Welcome back — let's get you to your applications
+        Welcome back. Let's get you to your applications
       </p>
     </div>
 
@@ -24,11 +24,12 @@
             Email
           </label>
 
-          <input 
+          <input
             id="email"
             type="email"
             formControlName="email"
             placeholder="Enter email"
+            aria-required="true"
             class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#B9932A] focus:border-transparent transition"/>
         </div>
 
@@ -48,23 +49,23 @@
             type="password"
             formControlName="password"
             placeholder="Enter password"
+            aria-required="true"
             class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#B9932A] focus:border-transparent transition"/>
         </div>
 
+        @if (errorMessage()) {
+          <p class="text-sm text-red-600" role="alert">{{ errorMessage() }}</p>
+        }
 
         <button
           type="submit"
-          class="w-full py-2.5 rounded-lg text-[#F3E9CD] font-medium bg-[#1B2430] hover:bg-[#242E3D] transition shadow-md shadow-gray-200 mt-4">
-          Sign in
+          [disabled]="loading()"
+          class="w-full py-2.5 rounded-lg text-[#F3E9CD] font-medium bg-[#1B2430] hover:bg-[#242E3D] transition shadow-md shadow-gray-200 mt-4 disabled:opacity-50">
+          {{ loading() ? 'Signing in...' : 'Sign in' }}
         </button>
 
 
       </form>
-
-
-      <div class="rounded-lg border-l-4 border-[#B9932A] bg-[#F6F2E9] px-4 py-3 text-sm text-gray-600 mt-6">
-        Pick up right where you left off.
-      </div>
 
 
       <p class="text-center text-sm text-gray-500 mt-6">
@@ -77,5 +78,23 @@
 
     </div>
 
+    <p class="text-center text-xs font-bold text-gray-400 mt-6 max-w-xs mx-auto">
+      NextRole uses AI to help tailor resumes and prep for interviews. AI-generated output can be inaccurate, so always review it before using it in a real application.
+    </p>
+
+    <p class="text-center text-xs text-gray-400 mt-2">
+      By using NextRole you agree to our
+      <button type="button" (click)="showTermsModal.set(true)" class="underline text-gray-500 hover:text-[#1B2430] transition">
+        Terms of Service
+      </button>.
+    </p>
+
   </div>
 </div>
+
+@if (showTermsModal()) {
+  <app-terms-modal
+    [readOnly]="true"
+    (closed)="showTermsModal.set(false)">
+  </app-terms-modal>
+}

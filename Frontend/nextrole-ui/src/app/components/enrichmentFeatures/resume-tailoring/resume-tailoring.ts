@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, EventEmitter, HostListener, Output, OnInit } from '@angular/core';
 import { bedrockEnrichmentService } from '../../../services/bedrockEnrichmentService';
 import { ResumeTailoringResponse } from '../../../models/bedrockAgents.model';
 import { ResumeResponse } from '../../../models/resume.model';
@@ -9,14 +9,13 @@ import { JobEntryService } from '../../../services/jobEntry';
 import { JobPostingService } from '../../../services/jobPosting';
 import { JobPostingResponse } from '../../../models/job-posting.model';
 import { ResumePreviewer } from '../../resume/resume-previewer/resume-previewer';
+import { Skeleton } from '../../global/skeleton/skeleton';
 import { CurrencyPipe } from '@angular/common';
-
-// in @Component imports: [ResumePreviewer]
-
+import { FocusTrapDirective } from '../../../directives/focus-trap';
 
 @Component({
   selector: 'app-resume-tailoring',
-  imports: [ResumePreviewer, CurrencyPipe],
+  imports: [ResumePreviewer, CurrencyPipe, Skeleton, FocusTrapDirective],
   templateUrl: './resume-tailoring.html',
   styleUrl: './resume-tailoring.css',
 })
@@ -34,6 +33,11 @@ export class ResumeTailoring implements OnInit {
   postingLoading = signal(false);
 
   @Output() close = new EventEmitter<void>();
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.cancel();
+  }
 
   resumeId = signal<number | null>(null);
   jobPostingId = signal<number | null>(null);

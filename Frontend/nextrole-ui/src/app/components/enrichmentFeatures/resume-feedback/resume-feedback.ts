@@ -1,14 +1,15 @@
-import { Component, inject, signal, computed, EventEmitter, Output, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, EventEmitter, HostListener, Output, OnInit } from '@angular/core';
 import { bedrockEnrichmentService } from '../../../services/bedrockEnrichmentService';
 import { ResumeFeedbackResponse } from '../../../models/bedrockAgents.model';
 import { ResumeResponse } from '../../../models/resume.model';
 import { ResumeService } from '../../../services/resumeService';
 import { ResumePreviewer } from '../../resume/resume-previewer/resume-previewer';
 import { NzProgressModule } from 'ng-zorro-antd/progress';
+import { FocusTrapDirective } from '../../../directives/focus-trap';
 
 @Component({
   selector: 'app-resume-feedback',
-  imports: [NzProgressModule, ResumePreviewer],
+  imports: [NzProgressModule, ResumePreviewer, FocusTrapDirective],
   templateUrl: './resume-feedback.html',
   styleUrl: './resume-feedback.css',
 })
@@ -17,6 +18,11 @@ export class ResumeFeedback implements OnInit {
   private resumeService = inject(ResumeService);
 
   @Output() close = new EventEmitter<void>();
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.cancel();
+  }
 
   resumes: ResumeResponse[] = [];
   resumeId = signal<number | null>(null);

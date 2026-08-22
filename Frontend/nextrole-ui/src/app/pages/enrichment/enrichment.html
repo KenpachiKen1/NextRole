@@ -7,12 +7,10 @@
     Pick how you'd like to sharpen your application.
   </p>
 
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 max-w-2xl xl:max-w-none">
 
     @for (option of options; track option.key) {
-      <div
-        class="enrichment-card flex flex-col bg-white border border-[#E4DDCC] rounded-2xl p-6 min-h-120"
-        [style.--accent]="option.color">
+      <div class="enrichment-card flex flex-col bg-white border border-[#E4DDCC] rounded-2xl p-6">
 
         <span
           class="self-start text-white text-xs font-semibold uppercase tracking-wider px-3 py-1.5 rounded-full mb-4"
@@ -24,7 +22,7 @@
           {{ option.description }}
         </p>
 
-        <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2.5">What it does</p>
+        <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-2.5">What it does</p>
         <ul class="flex flex-col gap-2 mb-5">
           @for (feature of option.features; track feature) {
             <li class="flex gap-2 text-sm text-[#5B6270] leading-snug">
@@ -34,10 +32,10 @@
           }
         </ul>
 
-        <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-2.5">What it won't do</p>
+        <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-2.5">What it won't do</p>
         <ul class="flex flex-col gap-2 mb-6">
           @for (limitation of option.limitations; track limitation) {
-            <li class="flex gap-2 text-sm text-[#8A8F99] leading-snug">
+            <li class="flex gap-2 text-sm text-[#475569] leading-snug">
               <span class="shrink-0 text-[#C4C8CF] leading-snug">—</span>
               {{ limitation }}
             </li>
@@ -58,7 +56,7 @@
   </div>
 
   <div class="mt-8 rounded-xl border border-[#E4DDCC] bg-[#FAF8F2] px-5 py-4">
-    <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Before you use this</p>
+    <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-1.5">Before you use this</p>
     <p class="text-sm text-[#5B6270] leading-relaxed">
       AI can make mistakes. Always read the output carefully and verify anything before you
       send it to an employer. The resume and answers you submit are yours, not the model's.

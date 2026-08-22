@@ -28,17 +28,31 @@
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
 
 
-        @for(resume of user_resume_list(); track resume.id){
+        @if (resumesLoading()) {
+
+            @for (i of [1, 2, 3]; track i) {
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <app-skeleton styleClass="w-2/3 h-5.5 mb-3" />
+                    <app-skeleton styleClass="w-1/2 h-3.5 mb-2" />
+                    <app-skeleton styleClass="w-1/3 h-3.5" />
+                </div>
+            }
+
+        } @else {
+
+            @for(resume of user_resume_list(); track resume.id){
 
 
-            <app-resume-card
+                <app-resume-card
 
-                [resume]="resume"
+                    [resume]="resume"
 
-                (selected)="openResumeDetail($event)">
+                    (selected)="openResumeDetail($event)">
 
-            </app-resume-card>
+                </app-resume-card>
 
+
+            }
 
         }
 

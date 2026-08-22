@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject, signal } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, OnInit, Output, inject, signal } from '@angular/core';
+import { FocusTrapDirective } from '../../../directives/focus-trap';
 import { DatePipe } from '@angular/common';
 import { JobStatus } from '../../../enums/jobEntry-status.enums';
 import { JobStatusInfo } from '../../../utilities/job-status-lookup';
@@ -30,7 +31,7 @@ type FlowStep =
 
 @Component({
   selector: 'app-calendar-add-entry-flow',
-  imports: [DatePipe, FormsModule, CurrencyPipe],
+  imports: [DatePipe, FormsModule, CurrencyPipe, FocusTrapDirective],
   templateUrl: './calendar-add-entry-flow.html',
   styleUrl: './calendar-add-entry-flow.css',
 })
@@ -42,6 +43,11 @@ export class CalendarAddEntryFlow implements OnInit {
 
   @Output() close = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<NewJobEntryPayload>();
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.cancel();
+  }
 
   currentStep = signal<FlowStep>('choose-posting');
 

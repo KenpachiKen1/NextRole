@@ -9,12 +9,13 @@ import { Modal } from '../../components/global/modal/modal';
 import { CreateResumeModal } from '../../components/resume/create-resume-modal/create-resume-modal';
 import { ResumeCard } from '../../components/resume/resume-card/resume-card';
 import { ResumeDetailModal } from '../../components/resume/resume-detail-modal/resume-detail-modal';
+import { Skeleton } from '../../components/global/skeleton/skeleton';
 
 import { ResumeResponse, UpdateResumeRequest } from '../../models/resume.model';
 
 @Component({
   selector: 'app-resume',
-  imports: [Button, Inputs, Modal, CreateResumeModal, ResumeCard, ResumeDetailModal],
+  imports: [Button, Inputs, Modal, CreateResumeModal, ResumeCard, ResumeDetailModal, Skeleton],
   templateUrl: './resume.html',
   styleUrl: './resume.css',
 })
@@ -23,6 +24,8 @@ export class Resume implements OnInit {
   private fb = inject(FormBuilder);
 
   user_resume_list = signal<ResumeResponse[]>([]);
+
+  resumesLoading = signal(false);
 
   selectedResumeForModal: ResumeResponse | null = null;
 
@@ -44,13 +47,17 @@ export class Resume implements OnInit {
   }
 
   loadResumes() {
+    this.resumesLoading.set(true);
+
     this.resumeService.resumeList().subscribe({
       next: (response) => {
         this.user_resume_list.set(Array.isArray(response) ? response : [response]);
+        this.resumesLoading.set(false);
       },
 
       error: (err) => {
         console.error(err);
+        this.resumesLoading.set(false);
       },
     });
   }

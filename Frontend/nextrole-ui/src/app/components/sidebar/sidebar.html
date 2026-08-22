@@ -7,36 +7,42 @@
         <span class="text-lg" style="font-family:'Fraunces',serif; font-weight:500;">NextRole</span>
     </div>
 
-    <nav class="flex flex-col gap-0.5">
-        <a routerLink="/calendar" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold"
+    <nav aria-label="Main" class="flex flex-col gap-0.5">
+        <a routerLink="/calendar" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold" #calendarLink="routerLinkActive"
+           [attr.aria-current]="calendarLink.isActive ? 'page' : null"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white font-bold hover:bg-white/6 transition">
-            <span class="w-4 text-center text-xs"></span> Calendar
+            <span class="w-4 text-center text-xs" aria-hidden="true"></span> Calendar
         </a>
-        <a routerLink="/resume" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold"
+        <a routerLink="/resume" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold" #resumeLink="routerLinkActive"
+           [attr.aria-current]="resumeLink.isActive ? 'page' : null"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white font-bold hover:bg-white/6 transition">
-            <span class="w-4 text-center text-xs"></span> Resumes
+            <span class="w-4 text-center text-xs" aria-hidden="true"></span> Resumes
         </a>
-        <a routerLink="/job-postings" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold"
+        <a routerLink="/job-postings" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold" #jobPostingsLink="routerLinkActive"
+           [attr.aria-current]="jobPostingsLink.isActive ? 'page' : null"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white font-bold hover:bg-white/6 transition">
-            <span class="w-4 text-center text-xs"></span> Job postings
+            <span class="w-4 text-center text-xs" aria-hidden="true"></span> Job postings
         </a>
-        <a routerLink="/ai-hub" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold"
+        <a routerLink="/ai-hub" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold" #aiHubLink="routerLinkActive"
+           [attr.aria-current]="aiHubLink.isActive ? 'page' : null"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white font-bold hover:bg-white/6 transition">
-            <span class="w-4 text-center text-xs"></span>AI Hub
+            <span class="w-4 text-center text-xs" aria-hidden="true"></span>AI Hub
         </a>
     </nav>
 
     <div class="h-px bg-white/8 my-4 mx-1"></div>
-    <div class="text-[11px] uppercase tracking-wider text-[#6D7280] px-3 pb-2">Workspace</div>
+    <div class="text-[11px] uppercase tracking-wider text-[#6D7280] px-3 pb-2" id="workspace-nav-heading">Workspace</div>
 
-    <nav class="flex flex-col gap-0.5">
-        <a routerLink="/settings" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold"
+    <nav aria-labelledby="workspace-nav-heading" class="flex flex-col gap-0.5">
+        <a routerLink="/settings" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold" #settingsLink="routerLinkActive"
+           [attr.aria-current]="settingsLink.isActive ? 'page' : null"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white font-bold hover:bg-white/6 transition">
-            <span class="w-4 text-center text-xs"></span> Settings
+            <span class="w-4 text-center text-xs" aria-hidden="true"></span> Settings
         </a>
-        <a routerLink="/subscription" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold"
+        <a routerLink="/subscription" routerLinkActive="bg-[#B9932A]/[.14] text-[#B9932A] font-bold" #subscriptionLink="routerLinkActive"
+           [attr.aria-current]="subscriptionLink.isActive ? 'page' : null"
            class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-white font-bold hover:bg-white/6 transition">
-            <span class="w-4 text-center text-xs"></span> Subscription
+            <span class="w-4 text-center text-xs" aria-hidden="true"></span> Subscription
         </a>
     </nav>
 

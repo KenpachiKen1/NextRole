@@ -11,7 +11,7 @@ export class Button {
 
   get buttonClasses() {
     const baseClasses =
-      'w-60 h-12 rounded-2xl text-2xl shadow-2xl transition-all duration-150 ease-in-out cursor-pointer hover:-translate-y-1 hover:shadow-xl';
+      'px-5 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap shadow-md transition-all duration-150 ease-in-out cursor-pointer hover:-translate-y-0.5 hover:shadow-lg';
 
     const variants = {
       primary: 'text-white bg-linear-to-r from-blue-600 to-indigo-600',

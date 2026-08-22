@@ -1,0 +1,66 @@
+<div class="fixed inset-0 bg-[#1B2430]/55 flex items-center justify-center z-50 p-6">
+  <div
+    class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl max-h-[85vh] flex flex-col overflow-hidden"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="terms-modal-title"
+    appFocusTrap>
+
+    <div class="flex items-center justify-between px-6 py-4 border-b border-[#E4DDCC] shrink-0">
+      <h2 id="terms-modal-title" class="text-lg font-bold text-[#1B2430]" style="font-family:'Fraunces',serif;">
+        Terms of Service
+      </h2>
+      <button
+        type="button"
+        (click)="closed.emit()"
+        aria-label="Close"
+        title="Close"
+        class="text-[#475569] hover:text-[#1B2430] text-2xl leading-none transition-colors">
+        &times;
+      </button>
+    </div>
+
+    <div
+      #scrollContainer
+      (scroll)="onScroll()"
+      class="flex-1 overflow-y-auto px-6 py-5 text-sm text-[#5B6270] leading-relaxed"
+      style="white-space: pre-line">{{ termsText }}</div>
+
+    @if (!readOnly) {
+      <div class="px-6 py-4 border-t border-[#E4DDCC] shrink-0 flex items-center justify-between gap-3">
+        <p class="text-xs text-[#475569]">
+          @if (!hasScrolledToEnd()) {
+            Scroll to the bottom to continue.
+          } @else {
+            You've reached the end.
+          }
+        </p>
+        <div class="flex gap-2 shrink-0">
+          <button
+            type="button"
+            (click)="closed.emit()"
+            class="px-4 py-2 rounded-lg border border-[#E4DDCC] bg-white text-sm font-medium text-[#5B6270] hover:bg-[#FAF8F2] transition-colors">
+            Decline
+          </button>
+          <button
+            type="button"
+            [disabled]="!hasScrolledToEnd()"
+            (click)="onAgree()"
+            class="px-4 py-2 rounded-lg bg-[#1B2430] text-sm font-medium text-[#F3E9CD] hover:bg-[#242E3D] transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            I Agree
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="px-6 py-4 border-t border-[#E4DDCC] shrink-0 flex justify-end">
+        <button
+          type="button"
+          (click)="closed.emit()"
+          class="px-4 py-2 rounded-lg bg-[#1B2430] text-sm font-medium text-[#F3E9CD] hover:bg-[#242E3D] transition-colors">
+          Close
+        </button>
+      </div>
+    }
+
+  </div>
+</div>

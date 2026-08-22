@@ -29,12 +29,13 @@
               id="email"
               type="email"
               formControlName="email"
+              aria-required="true"
               placeholder="Enter your account email"
               class="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#B9932A] focus:border-transparent transition"/>
           </div>
 
           @if (errorMessage()) {
-            <p class="text-sm text-red-600">{{ errorMessage() }}</p>
+            <p class="text-sm text-red-600" role="alert">{{ errorMessage() }}</p>
           }
 
           <button

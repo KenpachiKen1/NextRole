@@ -1,5 +1,11 @@
 @if (entry) {
-  <div class="fixed inset-0 bg-[#1B2430]/55 flex items-center justify-center gap-5 z-50" (click)="close.emit()">
+  <div
+    class="fixed inset-0 bg-[#1B2430]/55 flex items-center justify-center gap-5 z-50"
+    (click)="close.emit()"
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="'Edit ' + entry.jobTitle"
+    appFocusTrap>
 
     <div class="bg-white rounded-2xl p-7 w-96 max-h-[85vh] overflow-y-auto shadow-2xl" (click)="$event.stopPropagation()">
 
@@ -8,16 +14,30 @@
       </h2>
 
       @if (postingLoading()) {
-        <p class="text-sm text-[#8A8F99]">Loading posting details…</p>
+        <app-skeleton styleClass="w-3/4 h-4.5 mb-2" />
+        <app-skeleton styleClass="w-1/3 h-3.5 mb-4" />
+        <div class="flex gap-2 mb-4">
+          <app-skeleton styleClass="w-16 h-3" />
+          <app-skeleton styleClass="w-14 h-3" />
+        </div>
+        <app-skeleton styleClass="w-20 h-3 mb-1.5" />
+        <div class="flex flex-wrap gap-1.5 mb-4">
+          <app-skeleton styleClass="w-16 h-5 rounded-full" />
+          <app-skeleton styleClass="w-20 h-5 rounded-full" />
+          <app-skeleton styleClass="w-14 h-5 rounded-full" />
+        </div>
+        <app-skeleton styleClass="w-full h-3 mb-1.5" />
+        <app-skeleton styleClass="w-full h-3 mb-1.5" />
+        <app-skeleton styleClass="w-2/3 h-3" />
       } @else if (postingError()) {
-        <p class="text-sm text-[#B7412C]">{{ postingError() }}</p>
+        <p class="text-sm text-[#B7412C]" role="alert">{{ postingError() }}</p>
       } @else if (postingDetails(); as job) {
         <h3 class="text-base font-semibold text-[#1B2430] leading-snug">{{ job.title }}</h3>
         <p class="text-sm text-[#5B6270] mt-0.5">{{ job.companyName }}</p>
 
         <div class="flex flex-wrap items-center gap-x-3 gap-y-1 mt-2.5 mb-4">
           @if (job.location) {
-            <span class="text-xs text-[#8A8F99]">{{ job.location }}</span>
+            <span class="text-xs text-[#475569]">{{ job.location }}</span>
           }
           @if (job.salary) {
             <span class="text-xs font-medium text-[#B9932A]">
@@ -25,12 +45,12 @@
             </span>
           }
           @if (job.reqCode) {
-            <span class="text-xs text-[#8A8F99]">Req {{ job.reqCode }}</span>
+            <span class="text-xs text-[#475569]">Req {{ job.reqCode }}</span>
           }
         </div>
 
         @if (job.requiredSkills.length) {
-          <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Required</p>
+          <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-1.5">Required</p>
           <div class="flex flex-wrap gap-1.5 mb-3.5">
             @for (skill of job.requiredSkills; track skill) {
               <span class="text-xs px-2 py-0.5 rounded-full bg-[#1B2430] text-[#F3E9CD]">{{ skill }}</span>
@@ -39,7 +59,7 @@
         }
 
         @if (job.preferredSkills.length) {
-          <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Preferred</p>
+          <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-1.5">Preferred</p>
           <div class="flex flex-wrap gap-1.5 mb-4">
             @for (skill of job.preferredSkills; track skill) {
               <span class="text-xs px-2 py-0.5 rounded-full bg-white border border-[#E4DDCC] text-[#5B6270]">{{ skill }}</span>
@@ -48,7 +68,7 @@
         }
 
         @if (job.jobDescription) {
-          <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-1.5">Description</p>
+          <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-1.5">Description</p>
           <p class="text-xs text-[#5B6270] leading-relaxed whitespace-pre-line mb-4">{{ job.jobDescription }}</p>
         }
 

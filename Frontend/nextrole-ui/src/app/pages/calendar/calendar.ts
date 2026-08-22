@@ -8,7 +8,6 @@ import {
   UpdateJobEntryRequest,
 } from '../../models/job-entry.model';
 import { JobStatus } from '../../enums/jobEntry-status.enums';
-import { Button } from '../../components/global/button/button';
 import { DatePipe, NgClass } from '@angular/common';
 import { JobStatusInfo } from '../../utilities/job-status-lookup';
 import { CalendarEntryPopup } from '../../components/calendar/calendar-entry-popup/calendar-entry-popup';
@@ -24,7 +23,6 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-calendar',
   imports: [
-    Button,
     DatePipe,
     NgClass,
     CalendarEntryPopup,

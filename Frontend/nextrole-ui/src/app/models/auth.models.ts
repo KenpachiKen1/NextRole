@@ -4,6 +4,7 @@ export interface RegisterRequest {
   firstName: string;
     lastName: string;
     username: String
+  tosAccepted: boolean;
 }
 
 export interface LoginRequest {

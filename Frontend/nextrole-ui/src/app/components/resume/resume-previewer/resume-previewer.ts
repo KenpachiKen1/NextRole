@@ -2,9 +2,12 @@ import { Component, Input, inject } from '@angular/core';
 
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
+import { Skeleton } from '../../global/skeleton/skeleton';
+
 @Component({
   selector: 'app-resume-previewer',
   standalone: true,
+  imports: [Skeleton],
   templateUrl: './resume-previewer.html',
   styleUrl: './resume-previewer.css',
 })

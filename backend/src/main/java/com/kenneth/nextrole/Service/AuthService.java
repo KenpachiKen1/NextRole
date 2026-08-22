@@ -17,6 +17,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 public class AuthService {
 
@@ -37,6 +39,10 @@ public class AuthService {
 
 
      */
+
+    // Bump this whenever the Terms of Service text changes, so we know which
+    // version a given user actually agreed to.
+    private static final String CURRENT_TOS_VERSION = "2026-08-21";
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -82,7 +88,9 @@ public class AuthService {
                 .email(request.getEmail()).
                 username(request.getUsername()).
                 firstName(request.getFirstName()).lastName(request.getLastName()).
-                password(passwordEncoder.encode(request.getPassword())).build();
+                password(passwordEncoder.encode(request.getPassword())).
+                tosAcceptedAt(LocalDateTime.now()).
+                tosVersion(CURRENT_TOS_VERSION).build();
 
         user = userRepository.save(user);
 

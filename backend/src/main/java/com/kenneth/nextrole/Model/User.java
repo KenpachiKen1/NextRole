@@ -43,6 +43,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    private LocalDateTime tosAcceptedAt;
+    private String tosVersion;
+
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Customer customer; //each user will automatically have a customer account created

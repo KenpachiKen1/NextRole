@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { FocusTrapDirective } from '../../../directives/focus-trap';
 
 @Component({
   selector: 'app-modal',
   standalone: true,
-  imports: [],
+  imports: [FocusTrapDirective],
   templateUrl: './modal.html',
   styleUrl: './modal.css',
 })
@@ -17,5 +17,10 @@ export class Modal {
     setTimeout(() => {
       this.isVisible = true;
     });
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.close.emit();
   }
 }

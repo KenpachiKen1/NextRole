@@ -2,11 +2,11 @@
 
   <div class="mb-8">
     <h1 class="text-2xl font-bold text-[#1B2430]">Subscription</h1>
-    <p class="text-sm text-[#8A8F99] mt-1">Choose the plan that fits how you're job hunting.</p>
+    <p class="text-sm text-[#475569] mt-1">Choose the plan that fits how you're job hunting.</p>
   </div>
 
   @if (billingError()) {
-    <p class="text-sm text-[#B7412C] font-medium mb-4">{{ billingError() }}</p>
+    <p class="text-sm text-[#B7412C] font-medium mb-4" role="alert">{{ billingError() }}</p>
   }
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
@@ -25,7 +25,7 @@
       <h2 class="text-xl font-bold text-[#1B2430]" style="font-family:'Fraunces',serif;">
         Base
       </h2>
-      <p class="text-sm text-[#8A8F99] mt-1 mb-6">Free</p>
+      <p class="text-sm text-[#475569] mt-1 mb-6">Free</p>
 
       <ul class="flex flex-col gap-3 text-sm text-[#1B2430] mb-8">
         <li class="flex items-center gap-2">

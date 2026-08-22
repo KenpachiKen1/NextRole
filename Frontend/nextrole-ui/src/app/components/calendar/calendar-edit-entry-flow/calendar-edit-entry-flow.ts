@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  HostListener,
   Input,
   OnChanges,
   OnInit,
@@ -18,6 +19,8 @@ import { ResumeService } from '../../../services/resumeService';
 import { ResumeResponse } from '../../../models/resume.model';
 import { JobPostingService } from '../../../services/jobPosting';
 import { JobPostingResponse } from '../../../models/job-posting.model';
+import { Skeleton } from '../../global/skeleton/skeleton';
+import { FocusTrapDirective } from '../../../directives/focus-trap';
 
 export interface UpdateJobEntryPayload {
   entryId: number;
@@ -27,7 +30,7 @@ export interface UpdateJobEntryPayload {
 @Component({
   selector: 'app-edit-job-entry-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CurrencyPipe],
+  imports: [ReactiveFormsModule, CurrencyPipe, Skeleton, FocusTrapDirective],
   templateUrl: 'calendar-edit-entry-flow.html',
   styleUrl: 'calendar-edit-entry-flow.css',
 })
@@ -37,6 +40,11 @@ export class CalendarEditEntryForm implements OnInit, OnChanges {
   private jobPostingService = inject(JobPostingService);
 
   @Input() entry: JobEntryResponse | null = null;
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.close.emit();
+  }
 
   @Output() close = new EventEmitter<void>();
   @Output() submitted = new EventEmitter<UpdateJobEntryPayload>();

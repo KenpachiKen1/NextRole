@@ -1,10 +1,16 @@
 @if(selectedDay){
-    <div class="fixed inset-0 bg-[#1B2430]/55 flex justify-end z-50" (click)="close.emit()">
+    <div
+        class="fixed inset-0 bg-[#1B2430]/55 flex justify-end z-50"
+        (click)="close.emit()"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="entry-popup-title"
+        appFocusTrap>
         <div class="w-96 h-full bg-[#F6F2E9] p-6 shadow-[-8px_0_24px_rgba(0,0,0,0.12)] overflow-y-auto"  (click)="$event.stopPropagation()">
-            <p class="text-[11px] text-[#8A8F99] uppercase tracking-wider mb-0.5">
+            <p class="text-[11px] text-[#475569] uppercase tracking-wider mb-0.5">
                 {{selectedDay.date | date: 'EEEE'}}
             </p>
-             <h2 class="font-semibold text-xl text-[#1B2430] mb-4" style="font-family:'Fraunces',serif;">
+             <h2 id="entry-popup-title" class="font-semibold text-xl text-[#1B2430] mb-4" style="font-family:'Fraunces',serif;">
                 {{ selectedDay.date | date: 'MMMM d, y' }}
             </h2>
              @for (entry of selectedDay.jobEntries; track entry.id) {
@@ -22,7 +28,7 @@
                 </span>
 
                 @if (entry.resumeTitle) {
-                    <p class="font-mono text-[11px] text-[#8A8F99] mt-2">
+                    <p class="font-mono text-[11px] text-[#475569] mt-2">
                         Resume: {{ entry.resumeTitle }}
                     </p>
                 } @else {
