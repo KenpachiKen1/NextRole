@@ -6,6 +6,8 @@ AGREEMENT TO TERMS
 
 These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity ("you") and [business entity name] ("we," "us" or "our"), concerning your access to and use of the [website name.com] website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the "Site").
 
+NextRole is a job-search organization platform. It lets you track job applications through their lifecycle, from draft to offer or rejection, store and manage resumes, browse and save job postings, and use optional AI-assisted tools to tailor a resume to a specific posting, generate interview-preparation questions, and receive feedback on a resume's structure and clarity.
+
 You agree that by accessing the Site, you have read, understood, and agree to be bound by all of these Terms and Conditions. If you do not agree with all of these Terms and Conditions, then you are expressly prohibited from using the Site and you must discontinue use immediately.
 
 Supplemental terms and conditions or documents that may be posted on the Site from time to time are hereby expressly incorporated herein by reference. We reserve the right, in our sole discretion, to make changes or modifications to these Terms and Conditions at any time and for any reason.
@@ -18,11 +20,7 @@ The information provided on the Site is not intended for distribution to or use 
 
 Accordingly, those persons who choose to access the Site from other locations do so on their own initiative and are solely responsible for compliance with local laws, if and to the extent local laws are applicable.
 
-These terms and conditions were created by Termly's Terms and Conditions Generator.
-
-Option 1: The Site is intended for users who are at least 18 years old. Persons under the age of 18 are not permitted to register for the Site.
-
-Option 2: [The Site is intended for users who are at least 13 years of age.] All users who are minors in the jurisdiction in which they reside (generally under the age of 18) must have the permission of, and be directly supervised by, their parent or guardian to use the Site. If you are a minor, you must have your parent or guardian read and agree to these Terms and Conditions prior to you using the Site.
+The Site is intended for users who are at least 16 years old. By using the Site, you represent that you are at least 16 years of age. We do not knowingly allow anyone under the age of 16 to register for or use the Site.
 
 INTELLECTUAL PROPERTY RIGHTS
 
@@ -40,9 +38,7 @@ By using the Site, you represent and warrant that:
 
 (3) you have the legal capacity and you agree to comply with these Terms and Conditions;
 
-[(4) you are not under the age of 13;]
-
-(5) not a minor in the jurisdiction in which you reside [, or if a minor, you have received parental permission to use the Site];
+(4) you are at least 16 years of age;
 
 (6) you will not access the Site through automated or non-human means, whether through a bot, script, or otherwise;
 
@@ -55,6 +51,24 @@ If you provide any information that is untrue, inaccurate, not current, or incom
 USER REGISTRATION
 
 You may be required to register with the Site. You agree to keep your password confidential and will be responsible for all use of your account and password. We reserve the right to remove, reclaim, or change a username you select if we determine, in our sole discretion, that such username is inappropriate, obscene, or otherwise objectionable.
+
+SUBSCRIPTION AND BILLING
+
+The Site offers a free Base plan and a paid NextRole Plus (Premium) subscription. Paid subscriptions are billed in advance on a recurring basis through our payment processor, Stripe, and your payment is also subject to Stripe's own terms of service.
+
+By subscribing to NextRole Plus, you authorize us to charge your payment method on file for the applicable subscription fee each billing period until you cancel.
+
+You may cancel your subscription at any time from your account settings. Cancellation takes effect immediately: you will lose access to Premium features, including unlimited resume uploads and unlimited agent credits, as soon as the cancellation is processed, and we do not provide refunds or credits for any unused portion of a billing period.
+
+We reserve the right to change subscription pricing or features. If we change the price of your plan, we will make reasonable efforts to notify you before the change takes effect.
+
+AI-GENERATED CONTENT
+
+Certain features of the Site, including Resume Tailoring, Interview Prep, and Resume Feedback, use artificial intelligence to generate suggestions, rewritten resume content, practice interview questions, and feedback based on the information you provide. This AI-generated content is provided for informational and preparatory purposes only.
+
+We do not guarantee the accuracy, completeness, or suitability of any AI-generated content for any particular purpose, including for use in an actual job application or interview. AI-generated content may contain errors, omissions, or statements that do not accurately reflect your experience or qualifications. You are solely responsible for reviewing, editing, and verifying any AI-generated content before relying on it or submitting it to a prospective employer or any other third party.
+
+You should not treat AI-generated content as professional, legal, or career advice. Use of the AI features is optional, and you use them at your own risk.
 
 PROHIBITED ACTIVITIES
 
@@ -88,40 +102,15 @@ disparage, tarnish, or otherwise harm, in our opinion, us and/or the Site.
 use the Site in a manner inconsistent with any applicable laws or regulations.
 [other]
 
-USER GENERATED CONTRIBUTIONS
+YOUR CONTENT
 
-The Site may invite you to chat, contribute to, or participate in blogs, message boards, online forums, and other functionality, and may provide you with the opportunity to create, submit, post, display, transmit, perform, publish, distribute, or broadcast content and materials to us or on the Site, including but not limited to text, writings, video, audio, photographs, graphics, comments, suggestions, or personal information or other material (collectively, "Contributions").
+When you use the Site, you may upload or provide content such as resumes, job application details, notes, and other information ("Your Content"). You retain full ownership of Your Content.
 
-Contributions may be viewable by other users of the Site and through third-party websites. As such, any Contributions you transmit may be treated as non-confidential and non-proprietary. When you create or make available any Contributions, you thereby represent and warrant that:
+By uploading Your Content, you grant us a limited license to host, store, process, and display Your Content back to you solely as necessary to operate the Site and provide its features to you, including any AI-assisted features you choose to use. We do not sell Your Content, and we do not use Your Content to train AI models for any purpose beyond providing the Site's features back to you.
 
-the creation, distribution, transmission, public display, or performance, and the accessing, downloading, or copying of your Contributions do not and will not infringe the proprietary rights, including but not limited to the copyright, patent, trademark, trade secret, or moral rights of any third party.
-you are the creator and owner of or have the necessary licenses, rights, consents, releases, and permissions to use and to authorize us, the Site, and other users of the Site to use your Contributions in any manner contemplated by the Site and these Terms and Conditions.
-you have the written consent, release, and/or permission of each and every identifiable individual person in your Contributions to use the name or likeness of each and every such identifiable individual person to enable inclusion and use of your Contributions in any manner contemplated by the Site and these Terms and Conditions.
-your Contributions are not false, inaccurate, or misleading.
-your Contributions are not unsolicited or unauthorized advertising, promotional materials, pyramid schemes, chain letters, spam, mass mailings, or other forms of solicitation.
-your Contributions are not obscene, lewd, lascivious, filthy, violent, harassing, libelous, slanderous, or otherwise objectionable (as determined by us).
-your Contributions do not ridicule, mock, disparage, intimidate, or abuse anyone.
-your Contributions do not advocate the violent overthrow of any government or incite, encourage, or threaten physical harm against another.
-your Contributions do not violate any applicable law, regulation, or rule.
-your Contributions do not violate the privacy or publicity rights of any third party.
-your Contributions do not contain any material that solicits personal information from anyone under the age of 18 or exploits people under the age of 18 in a sexual or violent manner.
-your Contributions do not violate any federal or state law concerning child pornography, or otherwise intended to protect the health or well-being of minors;
-your Contributions do not include any offensive comments that are connected to race, national origin, gender, sexual preference, or physical handicap.
-your Contributions do not otherwise violate, or link to material that violates, any provision of these Terms and Conditions, or any applicable law or regulation.
+You represent that you have the right to upload Your Content and that it does not infringe the intellectual property, privacy, or other rights of any third party. You are solely responsible for the accuracy of Your Content, including anything you choose to submit to a prospective employer based on it.
 
-Any use of the Site in violation of the foregoing violates these Terms and Conditions and may result in, among other things, termination or suspension of your rights to use the Site.
-
-CONTRIBUTION LICENSE
-
-By posting your Contributions to any part of the Site [or making Contributions accessible to the Site by linking your account from the Site to any of your social networking accounts], you automatically grant, and you represent and warrant that you have the right to grant, to us an unrestricted, unlimited, irrevocable, perpetual, non-exclusive, transferable, royalty-free, fully-paid, worldwide right, and license to host, use, copy, reproduce, disclose, sell, resell, publish, broadcast, retitle, archive, store, cache, publicly perform, publicly display, reformat, translate, transmit, excerpt (in whole or in part), and distribute such Contributions (including, without limitation, your image and voice) for any purpose, commercial, advertising, or otherwise, and to prepare derivative works of, or incorporate into other works, such Contributions, and grant and authorize sublicenses of the foregoing. The use and distribution may occur in any media formats and through any media channels.
-
-This license will apply to any form, media, or technology now known or hereafter developed, and includes our use of your name, company name, and franchise name, as applicable, and any of the trademarks, service marks, trade names, logos, and personal and commercial images you provide. You waive all moral rights in your Contributions, and you warrant that moral rights have not otherwise been asserted in your Contributions.
-
-We do not assert any ownership over your Contributions. You retain full ownership of all of your Contributions and any intellectual property rights or other proprietary rights associated with your Contributions. We are not liable for any statements or representations in your Contributions provided by you in any area on the Site.
-
-You are solely responsible for your Contributions to the Site and you expressly agree to exonerate us from any and all responsibility and to refrain from any legal action against us regarding your Contributions.
-
-We have the right, in our sole and absolute discretion, (1) to edit, redact, or otherwise change any Contributions; (2) to re-categorize any Contributions to place them in more appropriate locations on the Site; and (3) to pre-screen or delete any Contributions at any time and for any reason, without notice. We have no obligation to monitor your Contributions.
+We have the right, in our sole discretion, to remove or disable access to any of Your Content that we reasonably believe violates these Terms and Conditions or applicable law.
 
 GUIDELINES FOR REVIEWS
 
@@ -326,6 +315,12 @@ These Terms and Conditions shall remain in full force and effect while you use t
 If we terminate or suspend your account for any reason, you are prohibited from registering and creating a new account under your name, a fake or borrowed name, or the name of any third party, even if you may be acting on behalf of the third party.
 
 In addition to terminating or suspending your account, we reserve the right to take appropriate legal action, including without limitation pursuing civil, criminal, and injunctive redress.
+
+ACCOUNT DELETION
+
+You may delete your account at any time from your account settings. When you delete your account, we immediately and permanently delete all information associated with your account, including your profile information, resumes, and job application data, and any active subscription is canceled immediately as part of that process.
+
+We do not retain a backup, archive, or copy of your data after deletion, and we do not hold it for any retention period. This action is immediate and cannot be undone, so you should make sure you no longer need any of your data before deleting your account.
 
 MODIFICATIONS AND INTERRUPTIONS
 

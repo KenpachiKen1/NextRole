@@ -190,7 +190,20 @@
 
   </div>
 
+  <p class="text-center text-xs text-gray-400 mt-6">
+    <button type="button" (click)="showTermsModal.set(true)" class="underline text-gray-500 hover:text-[#1B2430] transition">
+      Terms of Service
+    </button>
+  </p>
+
 </div>
+
+@if (showTermsModal()) {
+  <app-terms-modal
+    [readOnly]="true"
+    (closed)="showTermsModal.set(false)">
+  </app-terms-modal>
+}
 
 <!-- Cancel Subscription Modal -->
 @if (showCancelModal()) {

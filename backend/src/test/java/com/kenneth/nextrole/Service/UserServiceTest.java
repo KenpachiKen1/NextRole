@@ -1,9 +1,15 @@
 package com.kenneth.nextrole.Service;
 
 import com.kenneth.nextrole.Model.Customer;
+import com.kenneth.nextrole.Model.Resume;
 import com.kenneth.nextrole.Model.User;
+import com.kenneth.nextrole.Repository.JobEntryRepository;
+import com.kenneth.nextrole.Repository.PasswordResetRespository;
+import com.kenneth.nextrole.Repository.ResumeRepository;
 import com.kenneth.nextrole.Repository.UserRepository;
 import com.kenneth.nextrole.SubscriptionStatus;
+import com.kenneth.nextrole.awsApps.S3Service;
+import com.kenneth.nextrole.billing.StripeService;
 import com.kenneth.nextrole.dto.user.UpdateUserRequest;
 import com.kenneth.nextrole.dto.user.UserResponse;
 import com.kenneth.nextrole.exception.EmailAlreadyExistsException;
@@ -28,6 +34,21 @@ class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private ResumeRepository resumeRepository;
+
+    @Mock
+    private JobEntryRepository jobEntryRepository;
+
+    @Mock
+    private PasswordResetRespository passwordResetRepository;
+
+    @Mock
+    private S3Service s3Service;
+
+    @Mock
+    private StripeService stripeService;
 
     @InjectMocks
     private UserService userService;
@@ -141,5 +162,45 @@ class UserServiceTest {
                 .isInstanceOf(EntityNotFoundException.class);
 
         verify(userRepository, never()).delete(any());
+    }
+
+    @Test
+    void deleteAccount_deletesResumesFromS3AndDb_whenUserHasResumes() {
+        Resume resume = Resume.builder().id(9L).s3ObjectKey("resumes/kenneth-resume.pdf").build();
+
+        when(userRepository.findByEmail("kenneth@example.com")).thenReturn(Optional.of(existingUser));
+        when(resumeRepository.findByUserId(1L)).thenReturn(java.util.List.of(resume));
+
+        userService.deleteAccount("kenneth@example.com");
+
+        verify(s3Service).deleteResume("resumes/kenneth-resume.pdf");
+        verify(resumeRepository).deleteAll(java.util.List.of(resume));
+        verify(passwordResetRepository).deleteByEmail("kenneth@example.com");
+        verify(userRepository).delete(existingUser);
+    }
+
+    @Test
+    void deleteAccount_cancelsStripeSubscription_whenCustomerHasActiveSubscription() throws Exception {
+        Customer customerWithSub = Customer.builder()
+                .subscriptionStatus(SubscriptionStatus.SUBSCRIBED)
+                .stripeSubscriptionId("sub_123")
+                .build();
+        existingUser.setCustomer(customerWithSub);
+
+        when(userRepository.findByEmail("kenneth@example.com")).thenReturn(Optional.of(existingUser));
+
+        userService.deleteAccount("kenneth@example.com");
+
+        verify(stripeService).cancelSubscription(customerWithSub, "Account deleted by user");
+        verify(userRepository).delete(existingUser);
+    }
+
+    @Test
+    void deleteAccount_skipsStripeCall_whenNoActiveSubscription() throws Exception {
+        when(userRepository.findByEmail("kenneth@example.com")).thenReturn(Optional.of(existingUser));
+
+        userService.deleteAccount("kenneth@example.com");
+
+        verify(stripeService, never()).cancelSubscription(any(), any());
     }
 }

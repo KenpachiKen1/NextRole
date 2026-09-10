@@ -3,6 +3,8 @@ package com.kenneth.nextrole.awsApps;
 
 import com.kenneth.nextrole.Model.JobPosting;
 import com.kenneth.nextrole.Model.User;
+import com.kenneth.nextrole.awsApps.FeedbackDB.FeedbackRequest;
+import com.kenneth.nextrole.awsApps.FeedbackDB.FeedbackService;
 import com.kenneth.nextrole.awsApps.agent.BedrockService;
 import com.kenneth.nextrole.awsApps.agent.ResumeParserService;
 import com.kenneth.nextrole.awsApps.dto.*;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import jakarta.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -28,10 +31,11 @@ public class AWSController {
 
     private final ResumeParserService parser;
     private final BedrockService service;
-
-    public AWSController(ResumeParserService parser, BedrockService service){
+    private final FeedbackService feedbackService;
+    public AWSController(ResumeParserService parser, BedrockService service, FeedbackService fservice){
         this.parser = parser;
         this.service = service;
+        this.feedbackService = fservice;
     }
 
     @PostMapping("/resumeFeedback-agent")
@@ -68,6 +72,14 @@ public class AWSController {
 
         ParsedResume resume = parser.parseResumePDF(user, request.getResumeId());
         ResumeTailoringResponse response = service.tailorResume(resume, request.getJobPostingId());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    @PostMapping("/sendFeedback")
+    public ResponseEntity<String> userFeedback(@AuthenticationPrincipal CustomUserPrincipal principal, @Valid @RequestBody FeedbackRequest request){
+        User user = principal.getUser();
+        request.setUserId(user.getId());
+        String response = feedbackService.addFeedback(request);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 

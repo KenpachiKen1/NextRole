@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { UserService } from '../../services/userService';
 import { UserResponse } from '../../models/user.model';
@@ -15,6 +15,17 @@ export class Sidebar implements OnInit {
 
   currentUser = this.userService.currentUser;
   pageLoadError = '';
+
+  discordUsername = 'gojospupil';
+  discordCopied = signal(false);
+
+  copyDiscordUsername() {
+    navigator.clipboard.writeText(this.discordUsername).then(() => {
+      this.discordCopied.set(true);
+      setTimeout(() => this.discordCopied.set(false), 1500);
+    });
+  }
+
   ngOnInit() {
     this.userService.getCurrUserProfile().subscribe({
       next: (user) => {

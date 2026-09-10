@@ -12,11 +12,14 @@ import { SubscriptionStatusInfo } from '../../utilities/subscription-status-look
 
 import { Modal } from '../../components/global/modal/modal';
 import { Skeleton } from '../../components/global/skeleton/skeleton';
+import { TermsModal } from '../../components/global/terms-modal/terms-modal';
+import { MessageTypes } from '../../enums/messageTypes.enums';
 
+import { Dynamo } from '../../services/dyanmo';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [ReactiveFormsModule, DatePipe, Modal, Skeleton],
+  imports: [ReactiveFormsModule, DatePipe, Modal, Skeleton, TermsModal],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -25,6 +28,8 @@ export class Profile implements OnInit {
   private billingService = inject(BillingService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
+
+  showTermsModal = signal(false);
 
   currentUser = this.userService.currentUser;
   subscription = signal<SubscriptionResponse | null>(null);
@@ -57,6 +62,7 @@ export class Profile implements OnInit {
   issueForm = this.fb.nonNullable.group({
     subject: ['', Validators.required],
     description: ['', Validators.required],
+    type: [MessageTypes.FEEDBACK, Validators.required]
   });
 
   ngOnInit() {
