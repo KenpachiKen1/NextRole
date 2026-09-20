@@ -23,7 +23,7 @@ A job-search organization platform. NextRole lets you track job applications thr
 
 ## Status
 
-Actively in development, built solo. No public deployment yet — run locally against your own database, AWS, and Stripe credentials.
+Actively in development, building the application solo. Have not yet deoployed the application will be doing so soon.
 
 ## License
 
