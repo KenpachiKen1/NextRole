@@ -72,8 +72,6 @@ public class ResumeService {
      */
     @Transactional
     public ResumeResponse createResume (CreateResumeRequest request, User user){
-        System.out.println("Entered createResume()");
-
         String objectKey = genObjectKey(user, request.getFile());
 
         try {

@@ -2,12 +2,13 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CreateResumeRequest, UpdateResumeRequest, ViewSingleResumeResponse, ResumeResponse } from '../models/resume.model';
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class ResumeService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/resume';
+  private apiUrl = `${environment.apiUrl}/api/resume`;
 
   getHeaders() {
     const headers = new HttpHeaders({

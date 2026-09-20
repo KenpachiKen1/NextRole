@@ -2,12 +2,13 @@ import { Injectable, inject, signal} from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserResponse, UpdateUserRequest } from '../models/user.model';
 
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/user';
+  private apiUrl = `${environment.apiUrl}/api/user`;
   currentUser = signal<UserResponse | null>(null);
 
   

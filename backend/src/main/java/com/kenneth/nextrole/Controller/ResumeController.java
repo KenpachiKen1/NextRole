@@ -38,7 +38,6 @@ public class ResumeController {
 
         User user = principal.getUser();
 
-        System.out.println(user.getEmail());
         ResumeResponse response =
                 resumeService.createResume(request, user);
 
@@ -74,8 +73,6 @@ public class ResumeController {
                                                                @AuthenticationPrincipal CustomUserPrincipal customUserPrincipal){
         User user = customUserPrincipal.getUser();
 
-        System.out.println("in delete function");
-        System.out.println(user.getEmail());
         List< ResumeResponse > response =  resumeService.deleteUserResume(id,user);
 
         return ResponseEntity.status(HttpStatus.OK).body(response);

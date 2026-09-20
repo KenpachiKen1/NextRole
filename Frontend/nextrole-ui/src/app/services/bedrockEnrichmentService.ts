@@ -2,12 +2,13 @@ import { Injectable, inject } from "@angular/core";
 import { InterviewPrepResponse, ResumeTailoringResponse, ResumeFeedbackResponse } from "../models/bedrockAgents.model";
 
 import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class bedrockEnrichmentService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/aws-tools';
+  private apiUrl = `${environment.apiUrl}/api/aws-tools`;
   private getHeaders() {
     return new HttpHeaders({
       Authorization: `Bearer ${localStorage.getItem('access_token')}`,

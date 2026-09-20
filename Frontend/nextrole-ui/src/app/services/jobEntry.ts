@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CreateJobEntryRequest, JobEntryResponse, UpdateJobEntryRequest,} from '../models/job-entry.model';
 import { JobStatus } from '../enums/jobEntry-status.enums'
 
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class JobEntryService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/jobEntry';
+  private apiUrl = `${environment.apiUrl}/api/jobEntry`;
 
   private getHeaders() {
     return new HttpHeaders({

@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { CompanyResponse } from '../models/company.model';
 import { JobPostingResponse } from '../models/job-posting.model';
 
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class CompanyService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/companies';
+  private apiUrl = `${environment.apiUrl}/api/companies`;
 
   private getHeaders() {
     return new HttpHeaders({

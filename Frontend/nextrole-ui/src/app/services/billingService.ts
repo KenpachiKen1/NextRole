@@ -6,12 +6,13 @@ import {
   CreateCheckoutSessionResponse,
 } from '../models/billing.model';
 
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class BillingService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/billing';
+  private apiUrl = `${environment.apiUrl}/billing`;
 
   getHeaders() {
     return new HttpHeaders({

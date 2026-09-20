@@ -6,12 +6,13 @@ import {
   CreateJobPostingRequest,
 } from '../models/job-posting.model'
 
+import { environment } from '../../environments/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class JobPostingService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/job-postings';
+  private apiUrl = `${environment.apiUrl}/api/job-postings`;
 
   private getHeaders() {
     return new HttpHeaders({
