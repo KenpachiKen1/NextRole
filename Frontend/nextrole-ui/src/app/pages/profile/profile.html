@@ -38,7 +38,7 @@
           <input
             formControlName="username"
             type="text"
-            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]" />
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#8A6A1B] focus:border-[#8A6A1B]" />
         </div>
 
         <div>
@@ -46,7 +46,7 @@
           <input
             formControlName="email"
             type="email"
-            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]" />
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#8A6A1B] focus:border-[#8A6A1B]" />
         </div>
 
         <div class="flex items-center gap-3 mt-1">
@@ -58,7 +58,7 @@
           </button>
 
           @if (profileSaved()) {
-            <span class="text-sm text-[#4CAF50] font-medium">Saved!</span>
+            <span class="text-sm text-[#2E7D32] font-medium">Saved!</span>
           }
 
           @if (profileError()) {
@@ -101,7 +101,7 @@
               type="button"
               [disabled]="isBillingBusy()"
               (click)="upgradeToPremium()"
-              class="py-2.5 px-5 rounded-lg bg-[#B9932A] text-sm font-medium text-white hover:bg-[#a37f22] transition-colors disabled:opacity-50">
+              class="py-2.5 px-5 rounded-lg bg-[#8A6A1B] text-sm font-medium text-white hover:bg-[#6E5415] transition-colors disabled:opacity-50">
               {{ isBillingBusy() ? 'Redirecting...' : 'Upgrade to Premium' }}
             </button>
           } @else {
@@ -136,7 +136,7 @@
       </h2>
       <p class="text-sm text-[#475569] mb-4">Run into a bug or have feedback? Let us know.</p>
 
-      <form [formGroup]="issueForm" (ngSubmit)="sendIssueReport()" class="flex flex-col gap-4">
+      <form [formGroup]="feedbackForm" (ngSubmit)="sendFeedback()" class="flex flex-col gap-4">
 
         <div>
           <label class="block text-sm font-medium text-[#5B6270] mb-1">Subject</label>
@@ -144,7 +144,7 @@
             formControlName="subject"
             type="text"
             placeholder="Brief summary of the issue"
-            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]" />
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#8A6A1B] focus:border-[#8A6A1B]" />
         </div>
 
         <div>
@@ -153,7 +153,18 @@
             formControlName="description"
             rows="4"
             placeholder="What happened? Steps to reproduce, if any."
-            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#B9932A] focus:border-[#B9932A]"></textarea>
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] text-sm focus:outline-none focus:ring-1 focus:ring-[#8A6A1B] focus:border-[#8A6A1B]"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-[#5B6270] mb-1">Type</label>
+          <select
+            formControlName="type"
+            class="w-full px-3 py-2 rounded-lg border border-[#E4DDCC] bg-white text-sm text-[#1B2430] focus:outline-none focus:ring-1 focus:ring-[#8A6A1B] focus:border-[#8A6A1B]">
+            @for (option of messageTypeOptions; track option.value) {
+              <option [value]="option.value">{{ option.label }}</option>
+            }
+          </select>
         </div>
 
         <div class="flex items-center gap-3 mt-1">
@@ -163,10 +174,14 @@
             Send Report
           </button>
 
-          @if (issueSent()) {
-            <span class="text-sm text-[#4CAF50] font-medium">Thanks! Your email client should have opened.</span>
+          @if (feedbackSent()) {
+            <span class="text-sm text-[#2E7D32] font-medium">Thanks! Your feedback has been sent.</span>
           }
         </div>
+
+        @if (feedbackError()) {
+          <span class="text-sm text-[#B7412C] font-medium" role="alert">{{ feedbackError() }}</span>
+        }
 
       </form>
     </div>
@@ -183,7 +198,7 @@
       <button
         type="button"
         (click)="showDeleteModal.set(true)"
-        class="py-2.5 px-5 rounded-lg border-2 border-[#F44336] text-sm font-medium text-[#F44336] hover:text-white hover:bg-[#F44336] transition-colors">
+        class="py-2.5 px-5 rounded-lg border-2 border-[#B7412C] text-sm font-medium text-[#B7412C] hover:text-white hover:bg-[#B7412C] transition-colors">
         Delete Account
       </button>
     </div>
@@ -269,7 +284,7 @@
           type="button"
           [disabled]="isDeletingAccount()"
           (click)="confirmDeleteAccount()"
-          class="flex-1 py-2.5 rounded-lg bg-[#F44336] text-sm font-medium text-white hover:bg-[#d63a2f] transition-colors disabled:opacity-50">
+          class="flex-1 py-2.5 rounded-lg bg-[#B7412C] text-sm font-medium text-white hover:bg-[#9c3624] transition-colors disabled:opacity-50">
           {{ isDeletingAccount() ? 'Deleting...' : 'Delete Forever' }}
         </button>
       </div>

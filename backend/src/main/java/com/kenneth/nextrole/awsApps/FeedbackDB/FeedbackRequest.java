@@ -19,7 +19,7 @@ public class FeedbackRequest {
     private UUID id;
 
     @NotBlank
-    @Length(min = 20)
+    @Length(min = 15)
     private String feedbackMessage;
 
     private MessageTypes type;

@@ -1,8 +1,8 @@
 export enum MessageTypes{
-    SUGGESTION = 'Suggestion',
-    BUG = 'Bug',
-    FEEDBACK = 'Feedback',
-    QUESTION = 'Question',
-    FEATURE_REQUEST = 'Feature Request',
-    COMPLAINTS = 'Complaints'
+    SUGGESTION = 'SUGGESTION',
+    BUG = 'BUG',
+    FEEDBACK = 'FEEDBACK',
+    QUESTION = 'QUESTION',
+    FEATURE_REQUEST = 'FEATURE_REQUEST',
+    COMPLAINTS = 'COMPLAINTS'
 }

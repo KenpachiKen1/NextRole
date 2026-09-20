@@ -1,20 +1,20 @@
-<div 
-    class="bg-white rounded-xl shadow-lg p-6 cursor-pointer hover:shadow-xl transition"
+<div
+    class="bg-white border border-[#E4DDCC] rounded-xl p-5 cursor-pointer hover:border-[#B9932A] hover:shadow-sm transition-colors"
     (click)="openResume()">
 
 
-    <h2 class="text-xl font-semibold">
+    <h2 class="text-lg font-bold text-[#1B2430]">
         {{resume.resumeTitle}}
     </h2>
 
 
-    <p class="text-sm text-gray-500 mt-2">
+    <p class="text-sm text-[#5B6270] mt-2">
         Uploaded:
         {{resume.uploadedAt | date: 'MMMM dd, yyyy'}}
     </p>
 
 
-    <p class="text-sm text-gray-500">
+    <p class="text-xs text-[#475569] mt-0.5">
         Size:
         {{(resume.fileSize / 1024 / 1024) | number: '1.2-2' }} MB
     </p>

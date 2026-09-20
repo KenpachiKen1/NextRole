@@ -45,7 +45,7 @@
             </div>
 
             @if (job.salary) {
-              <span class="text-sm font-semibold text-[#B9932A] whitespace-nowrap">
+              <span class="text-sm font-semibold text-[#8A6A1B] whitespace-nowrap">
                 {{ job.salary | currency: 'USD' : 'symbol' : '1.0-0' }}
               </span>
             }
@@ -59,7 +59,7 @@
               <span class="text-xs text-[#475569]">Req {{ job.reqCode }}</span>
             }
             @if (addedPostingIds().has(job.id)) {
-              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-[#B9932A]/10 text-[#B9932A]">
+              <span class="text-xs font-medium px-2 py-0.5 rounded-full bg-[#B9932A]/10 text-[#8A6A1B]">
                 Added to calendar already
               </span>
             }
@@ -96,7 +96,7 @@
                   [href]="job.postingUrl"
                   target="_blank"
                   rel="noopener"
-                  class="text-xs text-[#B9932A] hover:underline">
+                  class="text-xs text-[#8A6A1B] hover:underline">
                   View original posting ↗
                 </a>
               }

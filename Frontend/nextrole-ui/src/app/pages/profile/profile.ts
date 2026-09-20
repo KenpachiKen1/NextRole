@@ -14,6 +14,8 @@ import { Modal } from '../../components/global/modal/modal';
 import { Skeleton } from '../../components/global/skeleton/skeleton';
 import { TermsModal } from '../../components/global/terms-modal/terms-modal';
 import { MessageTypes } from '../../enums/messageTypes.enums';
+import { MessageTypeInfo } from '../../utilities/message-type-lookup';
+import { FeedbackRequest } from '../../models/feedback.models';
 
 import { Dynamo } from '../../services/dyanmo';
 @Component({
@@ -28,6 +30,7 @@ export class Profile implements OnInit {
   private billingService = inject(BillingService);
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private dynamo = inject(Dynamo)
 
   showTermsModal = signal(false);
 
@@ -48,18 +51,24 @@ export class Profile implements OnInit {
   isDeletingAccount = signal(false);
   deleteError = signal('');
 
-  issueSent = signal(false);
+  feedbackSent = signal(false);
+  feedbackError = signal('');
+  messageTypeOptions = Object.values(MessageTypes).map((value) => ({
+    value,
+    label: MessageTypeInfo[value].label,
+  }));
 
   profileForm = this.fb.nonNullable.group({
     username: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
   });
 
+
   cancelForm = this.fb.nonNullable.group({
     comment: [''],
   });
 
-  issueForm = this.fb.nonNullable.group({
+  feedbackForm = this.fb.nonNullable.group({
     subject: ['', Validators.required],
     description: ['', Validators.required],
     type: [MessageTypes.FEEDBACK, Validators.required]
@@ -164,24 +173,40 @@ export class Profile implements OnInit {
     });
   }
 
+
   logout() {
     localStorage.removeItem('access_token');
     this.currentUser.set(null);
     this.router.navigate(['/login']);
-  }
+  } 
 
-  sendIssueReport() {
-    if (this.issueForm.invalid) {
+  sendFeedback() {
+    if (this.feedbackForm.invalid) {
       return;
     }
 
-    const { subject, description } = this.issueForm.getRawValue();
-    const email = this.currentUser()?.email ?? '';
-    const body = `${description}\n\n---\nReported by: ${email}`;
+    this.feedbackSent.set(false);
+    this.feedbackError.set('');
 
-    window.location.href = `mailto:support@nextrole.app?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    const { subject, description, type } = this.feedbackForm.getRawValue();
+    const request: FeedbackRequest = {
+      feedbackMessage: `${subject}\n\n${description}`,
+      type,
+    };
 
-    this.issueSent.set(true);
-    this.issueForm.reset({ subject: '', description: '' });
+    this.dynamo.sendFeedback(request).subscribe({
+      next: () => {
+        this.feedbackSent.set(true);
+        this.feedbackForm.reset({ subject: '', description: '', type: MessageTypes.FEEDBACK });
+      },
+      error: (err) => {
+        console.error('Failed to send feedback:', err);
+        this.feedbackError.set(
+          typeof err.error === 'string' && err.error
+            ? err.error
+            : 'Could not send your feedback. Please try again.'
+        );
+      },
+    });
   }
 }

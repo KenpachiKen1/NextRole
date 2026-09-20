@@ -25,10 +25,10 @@
 
             @if(selectedFile) {
 
-                <div class="text-sm text-gray-600 text-center">
+                <div class="text-sm text-[#5B6270] text-center">
 
                     Selected:
-                    <span class="font-medium text-gray-800">
+                    <span class="font-medium text-[#1B2430]">
                         {{ selectedFile.name }}
                     </span>
 
@@ -72,12 +72,12 @@
 
 
 
-                <ul class="text-sm text-gray-500 space-y-2 w-4/5 list-disc pl-5">
+                <ul class="text-sm text-[#475569] space-y-2 w-4/5 list-disc pl-5">
 
 
                     <li>
                         Free plan:
-                        <span class="font-semibold text-gray-700">
+                        <span class="font-semibold text-[#1B2430]">
                             3 resume uploads max
                         </span>
                         (deleting one doesn't free up a slot)
@@ -86,14 +86,14 @@
 
                     <li>
                         Each resume can't be more than
-                        <span class="font-semibold text-gray-700">
+                        <span class="font-semibold text-[#1B2430]">
                             5 MB
                         </span>
                     </li>
 
 
                     <li>
-                        <span class="text-indigo-600 font-semibold">
+                        <span class="text-[#8A6A1B] font-semibold">
                             NextRole Plus
                         </span>
                         gets you unlimited uploads and AI-tailored resumes
@@ -114,7 +114,7 @@
 
                 @if(createResumeError) {
 
-                    <p class="text-lg text-red-500">
+                    <p class="text-sm text-[#B7412C] font-medium" role="alert">
                         {{ createResumeErrorMessage }}
                     </p>
 

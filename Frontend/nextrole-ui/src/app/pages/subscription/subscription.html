@@ -17,7 +17,7 @@
       [class]="!isPremium() ? 'ring-2 ring-[#9E9E9E] ring-offset-2 shadow-lg' : ''">
 
       @if (!isPremium()) {
-        <span class="absolute -top-3 left-8 px-3 py-1 rounded-full bg-[#9E9E9E] text-white text-xs font-semibold uppercase tracking-wide">
+        <span class="absolute -top-3 left-8 px-3 py-1 rounded-full bg-[#757575] text-white text-xs font-semibold uppercase tracking-wide">
           Current Plan
         </span>
       }
@@ -29,15 +29,15 @@
 
       <ul class="flex flex-col gap-3 text-sm text-[#1B2430] mb-8">
         <li class="flex items-center gap-2">
-          <span class="text-[#9E9E9E] font-bold">✓</span>
+          <span class="text-[#757575] font-bold">✓</span>
           3 resume uploads
         </li>
         <li class="flex items-center gap-2">
-          <span class="text-[#9E9E9E] font-bold">✓</span>
+          <span class="text-[#757575] font-bold">✓</span>
           5 agent credits per week 
         </li>
         <li class="flex items-center gap-2">
-          <span class="text-[#9E9E9E] font-bold">✓</span>
+          <span class="text-[#757575] font-bold">✓</span>
           Unlimited job entries
         </li>
       </ul>
@@ -62,7 +62,7 @@
       [class]="isPremium() ? 'ring-2 ring-[#B9932A] ring-offset-2 shadow-lg' : ''">
 
       @if (isPremium()) {
-        <span class="absolute -top-3 left-8 px-3 py-1 rounded-full bg-[#B9932A] text-white text-xs font-semibold uppercase tracking-wide">
+        <span class="absolute -top-3 left-8 px-3 py-1 rounded-full bg-[#8A6A1B] text-white text-xs font-semibold uppercase tracking-wide">
           Current Plan
         </span>
       }
@@ -70,19 +70,19 @@
       <h2 class="text-xl font-bold text-[#1B2430]" style="font-family:'Fraunces',serif;">
         NextRole Plus
       </h2>
-      <p class="text-sm text-[#B9932A] font-semibold mt-1 mb-6">Premium</p>
+      <p class="text-sm text-[#8A6A1B] font-semibold mt-1 mb-6">Premium</p>
 
       <ul class="flex flex-col gap-3 text-sm text-[#1B2430] mb-8">
         <li class="flex items-center gap-2">
-          <span class="text-[#B9932A] font-bold">✓</span>
+          <span class="text-[#8A6A1B] font-bold">✓</span>
           Unlimited resume uploads
         </li>
         <li class="flex items-center gap-2">
-          <span class="text-[#B9932A] font-bold">✓</span>
+          <span class="text-[#8A6A1B] font-bold">✓</span>
           Unlimited agent credits
         </li>
         <li class="flex items-center gap-2">
-          <span class="text-[#B9932A] font-bold">✓</span>
+          <span class="text-[#8A6A1B] font-bold">✓</span>
           Unlimited job entries
         </li>
       </ul>
@@ -93,7 +93,7 @@
             type="button"
             [disabled]="isBillingBusy()"
             (click)="upgrade()"
-            class="w-full py-2.5 px-5 rounded-lg bg-[#B9932A] text-sm font-semibold text-white hover:bg-[#a37f22] transition-colors disabled:opacity-50">
+            class="w-full py-2.5 px-5 rounded-lg bg-[#8A6A1B] text-sm font-semibold text-white hover:bg-[#6E5415] transition-colors disabled:opacity-50">
             {{ isBillingBusy() ? 'Redirecting...' : 'Upgrade' }}
           </button>
         }

@@ -11,20 +11,18 @@ export class Button {
 
   get buttonClasses() {
     const baseClasses =
-      'px-5 py-2.5 rounded-lg text-sm font-semibold whitespace-nowrap shadow-md transition-all duration-150 ease-in-out cursor-pointer hover:-translate-y-0.5 hover:shadow-lg';
+      'px-5 py-2.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors duration-150 ease-in-out cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed';
 
     const variants = {
-      primary: 'text-white bg-linear-to-r from-blue-600 to-indigo-600',
+      primary: 'text-[#F3E9CD] bg-[#1B2430] hover:bg-[#2A3543]',
 
-      secondary: 'text-white bg-linear-to-r from-slate-500 to-slate-600',
+      secondary: 'border border-[#E4DDCC] bg-white text-[#5B6270] hover:bg-[#FAF8F2]',
 
-      danger:
-        'border-2 border-red-500 text-red-500 hover:text-white bg-linear-to-r from-red-500 to-rose-600 bg-size-[0%_100%] hover:bg-size-[100%_100%] bg-no-repeat bg-left',
+      danger: 'border-2 border-[#B7412C] text-[#B7412C] hover:text-white hover:bg-[#B7412C]',
 
-      create:
-        'border-2 border-emerald-500 text-emerald-500 hover:text-white bg-linear-to-r from-emerald-500 to-green-600 bg-size-[0%_100%] hover:bg-size-[100%_100%] bg-no-repeat bg-left',
+      create: 'text-white bg-[#8A6A1B] hover:bg-[#6E5415]',
 
-      edit: 'border-2 border-amber-500 text-amber-500 hover:text-white bg-linear-to-r from-amber-500 to-yellow-600 bg-size-[0%_100%] hover:bg-size-[100%_100%] bg-no-repeat bg-left',
+      edit: 'border border-[#B9932A] text-[#8A6A1B] bg-white hover:bg-[#B9932A]/10',
     };
 
     return `${baseClasses} ${variants[this.variant]}`;

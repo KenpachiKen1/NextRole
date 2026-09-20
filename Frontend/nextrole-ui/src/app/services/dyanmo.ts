@@ -13,6 +13,9 @@ export class Dynamo {
     });
   }
     sendFeedback(feedbackRequest: FeedbackRequest) {
-    return this.http.post<FeedbackRequest>(`${this.apiUrl}/sendFeedback`, feedbackRequest, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/sendFeedback`, feedbackRequest, {
+      headers: this.getHeaders(),
+      responseType: 'text',
+    });
   }
 }

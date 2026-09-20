@@ -63,7 +63,7 @@
             <div class="flex items-center justify-between mt-2">
               <span class="text-xs text-[#475569]">{{ job.location }}</span>
               @if (job.salary) {
-                <span class="text-xs font-medium text-[#B9932A]">
+                <span class="text-xs font-medium text-[#8A6A1B]">
                   {{ job.salary | currency:'USD':'symbol':'1.0-0' }}
                 </span>
               }
@@ -90,7 +90,7 @@
               <span class="text-xs text-[#475569]">{{ job.location }}</span>
             }
             @if (job.salary) {
-              <span class="text-xs font-medium text-[#B9932A]">
+              <span class="text-xs font-medium text-[#8A6A1B]">
                 {{ job.salary | currency:'USD':'symbol':'1.0-0' }}
               </span>
             }
@@ -124,7 +124,7 @@
 
           @if (job.postingUrl) {
             <a [href]="job.postingUrl" target="_blank" rel="noopener"
-               class="block text-xs text-[#B9932A] hover:underline mb-4">
+               class="block text-xs text-[#8A6A1B] hover:underline mb-4">
               View original posting ↗
             </a>
           }

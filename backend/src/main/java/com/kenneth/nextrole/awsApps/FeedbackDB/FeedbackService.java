@@ -23,11 +23,12 @@ public class FeedbackService {
     public String addFeedback(FeedbackRequest request) {
         request.setId(UUID.randomUUID());
         request.setCreatedAt(LocalDateTime.now());
-
+        
         try {
             this.feedbackTable.putItem(request);
             return "Feedback Sent!";
         } catch (DynamoDbException e) {
+            System.out.println("DynamoDB error while saving feedback: " + e.getMessage());
             throw new FeedbackStorageException("Failed to save feedback.", e);
         }
     }

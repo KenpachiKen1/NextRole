@@ -32,7 +32,7 @@
         <div>
 
 
-            <h2 class="text-2xl font-bold">
+            <h2 class="text-2xl font-bold text-[#1B2430]" style="font-family:'Fraunces',serif;">
 
                 {{resume.resumeTitle}}
 
@@ -40,7 +40,7 @@
 
 
 
-            <p class="text-sm text-gray-500 mt-2">
+            <p class="text-sm text-[#5B6270] mt-2">
 
                 Uploaded:
                 {{resume.uploadedAt | date: 'medium'}}
@@ -49,7 +49,7 @@
 
 
 
-            <p class="text-sm text-gray-500">
+            <p class="text-xs text-[#475569] mt-0.5">
 
                 Size:
                 {{resume.fileSize / 1024 / 1024 | number: '1.2-2' }}
